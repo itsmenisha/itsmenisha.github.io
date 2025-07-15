@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank QR Code Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/qr.css">
+    <body>
+      
+     
+<script src="js\loadhtml.js"></script>
+  <div id="navbar-placeholder" style="margin: 0.3vw"></div>
+  <script>
+    loadHTML("navbar-placeholder", "navbar.html");
+    loadHTML("footer-holder", "footer.html");
+    </script>
+<div class="container">
+  <h1>Bank QR Code Generator</h1>
+  <form id="qrForm" action="/" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required="" />
+
+    <label for="bank">Select Bank:</label>
+    <select id="bank" name="bank" required>
+      <!-- Class A - Commercial Banks -->
+      <option value="ADBLNPKA">Agricultural Development Bank Limited</option>
+      <option value="CTZNNPKA">Citizens Bank International Limited</option>
+      <option value="EVBLNPKA">Everest Bank Limited</option>
+      <option value="GLBBNPKA">Global IME Bank Limited</option>
+      <option value="HIMALNPKA">Himalayan Bank Limited</option>
+      <option value="KMBLNPKA">Kumari Bank Limited</option>
+      <option value="LXBLNPKA">Laxmi Sunrise Bank Limited</option>
+      <option value="MBLNNPKA">Machhapuchchhre Bank Limited</option>
+      <option value="NARBNPKA">Nabil Bank Limited</option>
+      <option value="NEBLNPKA">Nepal Bank Limited</option>
+      <option value="NIFRANPKA">Nepal Infrastructure Bank Limited</option>
+      <option value="NIMBNPKA">Nepal Investment Mega Bank Limited</option>
+      <option value="NRBLNPKA">Nepal Rastra Bank</option>
+      <option value="NSBINPKA">Nepal SBI Bank Limited</option>
+      <option value="NICENPKA">NIC Asia Bank Limited</option>
+      <option value="NMBBNPKA">NMB Bank Limited</option>
+      <option value="PRBHNPKA">Prabhu Bank Limited</option>
+      <option value="PCBLNPKA">Prime Commercial Bank Limited</option>
+      <option value="RBBANPKA">Rastriya Banijya Bank Limited</option>
+      <option value="SNMANPKA">Sanima Bank Limited</option>
+      <option value="SIDDNPKA">Siddhartha Bank Limited</option>
+      <option value="SCBLNPKA">Standard Chartered Bank Nepal Limited</option>
+      <option value="SRDBNPKA">Shine Resunga Development Bank Limited</option>
+
+      <!-- Class B - Development Banks -->
+      <option value="NABBC">Narayani Development Bank Ltd.</option>
+      <option value="KDBL">Karnali Development Bank Ltd.</option>
+      <option value="EDBL">Excel Development Bank Ltd.</option>
+      <option value="MDBL">Miteri Development Bank Ltd.</option>
+      <option value="MNBBL">Muktinath Bikas Bank Ltd.</option>
+      <option value="CORBL">Corporate Development Bank Ltd.</option>
+      <option value="SBBL">Sindhu Bikas Bank Ltd.</option>
+      <option value="SALBL">Salapa Bikas Bank Ltd.</option>
+      <option value="GRDBL">Green Development Bank Ltd.</option>
+      <option value="SADBL">Shangrila Development Bank Ltd.</option>
+      <option value="JBBL">Jyoti Bikas Bank Ltd.</option>
+      <option value="GBBL">Garima Bikas Bank Ltd.</option>
+      <option value="MLBL">Mahalaxmi Bikas Bank Ltd.</option>
+      <option value="LBBL">Lumbini Bikas Bank Ltd.</option>
+      <option value="KSBBL">Kamana Sewa Bikas Bank Ltd.</option>
+      <option value="SAPDBL">Saptakoshi Development Bank Ltd.</option>
+    </select>
+
+    <label for="accountNumber">Account Number:</label>
+    <input type="text" id="accountNumber" name="accountNumber" required="" />
+
+    <button type="submit">Generate QR Code</button>
+  </form>
+
+   <div id="qrCodeContainer">
+      {% if qr_img %}
+        <h2>Your QR Code:</h2>
+        <img id="qrImage" src="{{ qr_img }}" alt="QR Code" />
+        <br />
+        <!-- Download button -->
+        <a href="{{ qr_img }}" download="bank_qr_code.png">
+          <button type="button">Download QR Code</button>
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+  <div id="footer-holder"></div>
+</body>
+</html>
