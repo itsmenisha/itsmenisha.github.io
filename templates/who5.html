@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ne">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WHO-5 मानसिक भलाइ मापन (WHO-5 Well-being Index)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-size: larger;
+        background: #f5f7fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        color: #007b8f;
+        text-align: center;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        font-size: 1rem;
+      }
+
+      .question {
+        margin-top: 30px;
+      }
+
+      .options label,
+      select {
+        display: block;
+        background: #eaf7f9;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .options input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .btn {
+        background: #007b8f;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: #005f6b;
+      }
+
+      .result {
+        background: #eafbf8;
+        border-left: 6px solid #007b8f;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      input[type="text"],
+      input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+      }
+
+      .question-numbers {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .question-numbers .number {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        margin: 0 5px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        color: #333;
+        font-weight: bold;
+      }
+
+      .question-numbers .active {
+        background-color: #007b8f;
+        color: #fff;
+      }
+
+      .cards {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .card {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #007b8f;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .card:hover {
+        background: #007b8f;
+      }
+      a {
+        text-decoration: none;
+        color: black;
+      }
+
+      a:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "navbar.html" %}
+    <div class="container">
+      <h1>मानसिक भलाइ मापन प्रश्नावली</h1>
+      <h2>डब्लु एच ओ - ५ कल्याण सूचकाङ्क</h2>
+
+      <p>
+        पछिल्लो दुई हप्तामा तपाईंले कस्तो महसुस गर्नुभयो भन्ने सम्बन्धमा, कृपया
+        प्रत्येक प्रश्नको लागि एउटा उपयुक्त जवाफ छान्नुहोस।
+      </p>
+      <p style="text-align: justify; color: rgb(155, 2, 2)">
+        <strong
+          >हामी तपाईंको व्यक्तिगत जानकारीको गोपनीयता र सुरक्षामा पूर्ण प्रतिवद्ध
+          छौं।</strong
+        >
+      </p>
+
+      <div id="startScreen">
+        <label>हालको ठेगाना:</label>
+        <input type="text" id="address" placeholder="हालको ठेगाना लेख्नुहोस्" />
+
+        <label>लिङ्ग (Gender):</label>
+        <select id="gender" required>
+          <option value="">-- लिङ्ग छान्नुहोस् --</option>
+          <option value="पुरुष">पुरुष (Male)</option>
+          <option value="महिला">महिला (Female)</option>
+          <option value="अन्य">अन्य (Self-describe)</option>
+          <option value="प्रकट गर्न चाहन्न">
+            प्रकट गर्न चाहन्न (Prefer not to say)
+          </option>
+        </select>
+
+        <label>उमेर:</label>
+        <input type="text" id="age" placeholder="उमेर लेख्नुहोस्" />
+
+        <label>मिति:</label>
+        <input type="date" id="date" />
+
+        <script>
+          document.getElementById("date").value = new Date()
+            .toISOString()
+            .split("T")[0];
+        </script>
+        <button class="btn" onclick="startQuiz()">सुरु गर्नुहोस्</button>
+      </div>
+
+      <div id="quizContainer" class="hidden">
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <button class="btn" onclick="nextQuestion()">अर्को प्रश्न</button>
+        <div class="question-numbers" id="questionNumbers"></div>
+      </div>
+
+      <div id="resultContainer" class="result hidden"></div>
+    </div>
+    <div class="cards">
+      <a href="{{ url_for('who5') }}" class="card">Retake</a>
+      <a href="{{ url_for('introwho') }}" class="card">Details</a>
+    </div>
+    <script>
+      const questions = [
+        "1. मैले राम्रो मनस्थितिमा प्रफुल्ल महसुस गरेको छु।",
+        "2. मैले शान्त र आराम महसुस गरेको छु।",
+        "3. मैले सक्रिय र जोशिलो महसुस गरेको छु।",
+        "4. म ताजा र हलुका महसुस गर्दै उठे।",
+        "5. मेरो दैनिक जीवन मलाई रुचि लाग्ने कुराहरूले भरिएको छ।",
+      ];
+
+      const options = [
+        { value: 5, label: "सबै समय" },
+        { value: 4, label: "धेरैजसो समय" },
+        { value: 3, label: "आधा भन्दा बढी समय" },
+        { value: 2, label: "आधा भन्दा कम समय" },
+        { value: 1, label: "केही समय" },
+        { value: 0, label: "कहिल्यै होइन" },
+      ];
+
+      let currentQuestion = 0;
+      const answers = [];
+
+      function startQuiz() {
+        const address = document.getElementById("address").value.trim();
+        const gender = document.getElementById("gender").value.trim();
+
+        const age = document.getElementById("age").value.trim();
+        const date = document.getElementById("date").value.trim();
+
+        if (!gender || !address || !age || !date) {
+          alert("कृपया सबै विवरणहरू (लिङ्ग , ठेगाना, उमेर,मिति) भर्नुहोस्।");
+          return;
+        }
+
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("quizContainer").classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        document.getElementById("questionText").innerText =
+          questions[currentQuestion];
+        const container = document.getElementById("optionsContainer");
+        container.innerHTML = "";
+
+        options.forEach((opt, idx) => {
+          const id = `opt${idx}`;
+          const radio = `<input type="radio" name="answer" id="${id}" value="${opt.value}">`;
+          const label = `<label for="${id}">${radio}${opt.label}</label>`;
+          container.innerHTML += label;
+        });
+
+        const numberContainer = document.getElementById("questionNumbers");
+        numberContainer.innerHTML = "";
+        for (let i = 0; i < questions.length; i++) {
+          const circle = document.createElement("div");
+          circle.classList.add("number");
+          if (i === currentQuestion) circle.classList.add("active");
+          circle.innerText = i + 1;
+          numberContainer.appendChild(circle);
+        }
+        // Change button text here
+        const btn = document.querySelector("#quizContainer button.btn");
+        if (currentQuestion === questions.length - 1) {
+          btn.textContent = "सबमिट गर्नुहोस्"; // Submit in Nepali
+          btn.onclick = submitQuiz; // change click handler to submitQuiz function (defined next)
+        } else {
+          btn.textContent = "अर्को प्रश्न"; // Next Question
+          btn.onclick = nextQuestion;
+        }
+      }
+
+      function nextQuestion() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+        if (!selected) {
+          alert("कृपया उत्तर चयन गर्नुहोस्।");
+          return;
+        }
+
+        answers.push(parseInt(selected.value));
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }
+      function downloadPDF() {
+        const gender = document.getElementById("gender").value.trim();
+        const element = document.getElementById("pdfReport");
+        html2canvas(element, { scale: 2 }).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new window.jspdf.jsPDF("p", "mm", "a4");
+          // Calculate width/height to fit A4
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const imgWidth = canvas.width;
+          const imgHeight = canvas.height;
+          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+          const imgPDFWidth = imgWidth * ratio;
+          const imgPDFHeight = imgHeight * ratio;
+          pdf.addImage(imgData, "PNG", 0, 0, imgPDFWidth, imgPDFHeight);
+          pdf.save(`WHO5_wellbeing_Report_${name.replace(/\s+/g, "_")}.pdf`);
+        });
+      }
+
+      function showResult() {
+        const gender = document.getElementById("gender").value;
+        const address = document.getElementById("address").value;
+        const age = document.getElementById("age").value;
+        const date = document.getElementById("date").value;
+
+        const totalScore = answers.reduce((sum, val) => sum + val, 0);
+        const percentScore = totalScore * 4;
+
+        let interpretation = "";
+
+        if (percentScore < 52) {
+          interpretation = `
+            <p>तपाईंको भलाइको स्तर राम्रो छ भन्न सकिंदैन। तपाईलाई डिप्रेसन जस्तो समस्या हुन पनि सक्छ। यस्तो अवस्थामा सम्बन्धित विशेषज्ञबाट सुझाव र सहायता लिनु अनिवार्य हुन्छ।</p>
+            <p><a href="{{ url_for('support') }}" target="_blank">तपाईंको भलाइको स्तर सुधार्नका लागि राहत दिने केही उपाय र <u> समाधानहरू</u>।</a></p>
+            <ul>
+              <li>शहरी स्वास्थ्य प्रवर्द्धन केन्द्रहरू</li>
+              <li>विशेषज्ञ मानसिक स्वास्थ्य सेवा - बबरमहल</li>
+              <li>शिक्षण अस्पताल, कान्ति बाल अस्पताल</li>
+              <li>मानसिक अस्पताल - लगनखेल, ललितपुर</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन: <strong>११६६</strong></li>
+            </ul>
+          `;
+        } else if (percentScore >= 52 && percentScore < 80) {
+          interpretation = `
+            <p>तपाईंको भलाइको स्तर मध्यम छ। भलाइको स्तर थप सुधार गर्नका लागि स्वास्थ्यकर्मीबाट परामर्श लिनु राम्रो हुन्छ। थप आवश्यकता लागेमा सम्बन्धित विशेषज्ञबाट उपयुक्त सेवा लिनु अनिवार्य हुन्छ।</p>
+            <p><a href="{{ url_for('support') }}" target="_blank">तपाईंको भलाइको स्तर सुधार्नका लागि उपाय र <u> समाधानहरू</u>।</a></p>
+            <ul>
+              <li>नियमित स्वास्थ्य जाँच</li>
+              <li>मानसिक भलाइ परामर्श</li>
+              <li>स्वस्थ जीवनशैली</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन: <strong>११६६</strong></li>
+            </ul>
+          `;
+        } else {
+          interpretation = `
+            <p>तपाईको भलाइको स्तर उत्तम छ। कृपया यसलाई निरन्तरता दिनुहोस्।</p>
+            <p><a href="{{ url_for('article2') }}" target="_blank">तपाईंको स्वास्थ्य निरन्तरता लागि केही <u> समाधानहरू</u> ।</a></p>
+            <ul>
+              <li>स्वस्थ जीवनशैली</li>
+              <li>सामाजिक सम्बन्धहरू</li>
+            </ul>
+          `;
+        }
+
+        const resultHTML = `
+          <div id="pdfReport" style="padding:15px;color:black;">
+          <h3>मानसिक भलाइ परिणाम</h3>
+          <h3>डब्लु एच ओ - ५ कल्याण सूचकाङ्क</h3>
+          <hr>
+          <p><strong>लिङ्ग:</strong> ${gender}</p>
+          <p><strong>हालको ठेगाना:</strong> ${address}</p>
+          <p><strong>उमेर:</strong> ${age}</p>
+          <p><strong>मिति:</strong> ${date}</p>
+          <hr>
+          <div style="background-color: white;border-radius: 10px; padding: 15px;">
+           <p><strong>प्रतिशत स्कोर:</strong> ${percentScore} / 100</p>
+          <p><strong>व्याख्या:</strong> ${interpretation}</p>
+          </div>
+          <hr>
+    
+          <p><strong>This translation was not created by the World Health Organization (WHO).</strong></p>
+          <p>WHO is not responsible for the content or accuracy of this translation. The original English edition shall be the binding and authentic edition.</p>
+          <p>One can adapt the work for non-commercial purposes by appropriately citing the source.</p>
+          <p><strong>Source:</strong><br>
+          World Health Organization. The World Health Organization-Five Well-Being Index (WHO-5). Geneva: World Health Organization; 2024.<br>
+          License: CC-BY-NC-SA 3.0 IGO</p>
+          </div>
+           <div style="text-align: center; margin-top: 20px;">
+    <button class="btn" onclick="downloadPDF()">📥 PDF डाउनलोड</button>
+  </div>
+        `;
+
+        document.getElementById("quizContainer").classList.add("hidden");
+        document.getElementById("resultContainer").innerHTML = resultHTML;
+        document.getElementById("resultContainer").classList.remove("hidden");
+      }
+
+      function submitQuiz() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+
+        answers.push(parseInt(selected.value));
+
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const date = document.getElementById("date").value.trim();
+
+        const totalScore = answers.reduce((sum, val) => sum + val, 0);
+        const percentScore = totalScore * 4;
+
+        // Send data to Flask backend
+        fetch("/submit/who5", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gender,
+            address,
+            age,
+            date,
+            totalScore,
+            percentScore,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message); // Show success/failure message from backend
+            showResult(); // Show result screen after submission
+          })
+          .catch((error) => {
+            alert("डेटा पठाउन समस्या: " + error);
+            showResult(); // Show result anyway
+          });
+      }
+    </script>
+  </body>
+</html>

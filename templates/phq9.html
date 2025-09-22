@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ne">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PHQ-9 डिप्रेसन परीक्षण</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-size: larger;
+        background: #f5f7fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        text-align: center;
+      }
+
+      h1 {
+        color: #01a056;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        font-size: 1rem;
+      }
+
+      .question {
+        margin-top: 30px;
+      }
+
+      .options label,
+      select {
+        display: block;
+        background: #eaf7f9;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .options input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .btn {
+        background: #01a056;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: #01713d;
+      }
+
+      .result {
+        background: #e1fdf0;
+        border-left: 6px solid #01a056;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      input[type="text"],
+      input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+      }
+
+      .cards {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .card {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #01a056;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .card:hover {
+        background: #01713d;
+      }
+
+      .question-numbers {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .question-numbers .number {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        margin: 0 5px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        color: #333;
+        font-weight: bold;
+        user-select: none;
+      }
+
+      .question-numbers .active {
+        background-color: #01a056;
+        color: white;
+      }
+      a {
+        text-decoration: none;
+        color: black;
+      }
+
+      a:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "navbar.html" %}
+    <div class="container">
+      <h1>मानसिक स्वास्थ्य अवस्था सम्बन्धी प्रारम्भिक परीक्षण</h1>
+      <h2>PHQ-9 डिप्रेसन परीक्षण</h2>
+
+      <p>
+        तलका प्रश्नहरू पढेर गएको २ हप्ताको अनुभव सम्झेर मिल्ने उत्तर चयन
+        गर्नुहोस्।
+      </p>
+      <p style="text-align: justify; color: rgb(155, 2, 2)">
+        <strong
+          >हामी तपाईंको व्यक्तिगत जानकारीको गोपनीयता र सुरक्षामा पूर्ण प्रतिवद्ध
+          छौं।</strong
+        >
+      </p>
+
+      <div id="startScreen">
+        <label>हालको ठेगाना:</label>
+        <input type="text" id="address" placeholder="हालको ठेगाना लेख्नुहोस्" />
+        <label>लिङ्ग (Gender):</label>
+        <select id="gender" required>
+          <option value="">-- लिङ्ग छान्नुहोस् --</option>
+          <option value="पुरुष">पुरुष (Male)</option>
+          <option value="महिला">महिला (Female)</option>
+          <option value="अन्य">अन्य (Self-describe)</option>
+          <option value="प्रकट गर्न चाहन्न">
+            प्रकट गर्न चाहन्न (Prefer not to say)
+          </option>
+        </select>
+        <label>उमेर:</label>
+        <input type="text" id="age" placeholder="उमेर लेख्नुहोस्" />
+        <label>मिति:</label>
+        <input type="date" id="date" />
+        <script>
+          document.getElementById("date").value = new Date()
+            .toISOString()
+            .split("T")[0];
+        </script>
+        <button class="btn" onclick="startQuiz()">सुरु गर्नुहोस्</button>
+      </div>
+
+      <div id="quizContainer" class="hidden">
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <button class="btn" onclick="nextQuestion()">अर्को प्रश्न</button>
+        <div class="question-numbers" id="questionNumbers"></div>
+      </div>
+
+      <div id="resultContainer" class="result hidden"></div>
+    </div>
+
+    <div class="cards">
+      <a href="{{ url_for('phq9') }}" class="card">Retake</a>
+      <a href="{{ url_for('introphq') }}" class="card">Details</a>
+    </div>
+
+    <script>
+      const questions = [
+        "१. तपाईंलाई काममा रमाउन नसक्ने वा मन नलाग्ने कत्तिको भएको थियो?",
+        "२. दिक्क लाग्ने वा केही गर्न सक्दिन जस्तो लाग्ने कत्तिको भएको थियो?",
+        "३. राम्ररी सुत्न नसक्ने वा धेरै सुत्ने कत्तिको भएको थियो?",
+        "४. थकान महशुस हुने, शक्ति कम हुने कत्तिको महशुस भएको थियो?",
+        "५. खानामा रुचि नहुने वा अत्यधिक खान मन लाग्ने कत्तिको भएको थियो?",
+        "६. आफूलाई दोषी ठान्ने वा असफल भएको महसुस कत्तिको भएको थियो?",
+        "७. ध्यान केन्द्रित गर्न गाह्रो हुने कत्तिको भएको थियो?",
+        "८. बोल्न वा हिड्न बिस्तारै हुने वा अत्यधिक सक्रियता देखिने कत्तिको भएको थियो?",
+        "९. आत्महत्या गर्ने विचारहरू कत्तिको आएको थियो?",
+      ];
+
+      const options = [
+        { value: 0, label: "कहिल्यै पनि भएन" },
+        { value: 1, label: "कहिलेकाहीं भयो" },
+        { value: 2, label: "धेरै जसो भयो" },
+        { value: 3, label: "सँधै जसो भयो" },
+      ];
+
+      let currentQuestion = 0;
+      const answers = [];
+
+      function startQuiz() {
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const date = document.getElementById("date").value.trim();
+
+        if (!gender || !address || !age || !date) {
+          alert("कृपया सबै विवरणहरू (लिङ्ग, ठेगाना, उमेर,मिति) भर्नुहोस्।");
+          return;
+        }
+
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("quizContainer").classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        document.getElementById("questionText").innerText =
+          questions[currentQuestion];
+        const container = document.getElementById("optionsContainer");
+        container.innerHTML = "";
+
+        options.forEach((opt, idx) => {
+          const id = `opt${idx}`;
+          container.innerHTML += `
+          <label for="${id}">
+            <input type="radio" name="answer" id="${id}" value="${opt.value}">
+            ${opt.label}
+          </label>`;
+        });
+
+        const numberContainer = document.getElementById("questionNumbers");
+        numberContainer.innerHTML = "";
+
+        for (let i = 0; i < questions.length; i++) {
+          const span = document.createElement("span");
+          span.classList.add("number");
+          if (i === currentQuestion) span.classList.add("active");
+          span.innerText = i + 1;
+          numberContainer.appendChild(span);
+        }
+        // Change button text here
+        const btn = document.querySelector("#quizContainer button.btn");
+        if (currentQuestion === questions.length - 1) {
+          btn.textContent = "सबमिट गर्नुहोस्"; // Submit in Nepali
+          btn.onclick = submitQuiz; // change click handler to submitQuiz function (defined next)
+        } else {
+          btn.textContent = "अर्को प्रश्न"; // Next Question
+          btn.onclick = nextQuestion;
+        }
+      }
+
+      function nextQuestion() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+        if (!selected) {
+          alert("कृपया उत्तर चयन गर्नुहोस्।");
+          return;
+        }
+
+        answers.push(parseInt(selected.value));
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }
+      function downloadPDF() {
+        const gender = document.getElementById("gender").value.trim();
+        const element = document.getElementById("pdfReport");
+        html2canvas(element, { scale: 2 }).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new window.jspdf.jsPDF("p", "mm", "a4");
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const imgWidth = canvas.width;
+          const imgHeight = canvas.height;
+          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+          const imgPDFWidth = imgWidth * ratio;
+          const imgPDFHeight = imgHeight * ratio;
+          pdf.addImage(imgData, "PNG", 0, 0, imgPDFWidth, imgPDFHeight);
+          pdf.save(`PHQ9_depression_Report_${name.replace(/\s+/g, "_")}.pdf`);
+        });
+      }
+
+      function showResult() {
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value;
+        const age = document.getElementById("age").value;
+        const date = document.getElementById("date").value;
+
+        const rawScore = answers.reduce((sum, val) => sum + val, 0);
+        const percentScore = rawScore * 4;
+
+        let interpretation = "";
+        const totalScore = answers.reduce((sum, val) => sum + val, 0);
+        let level = "";
+        let message = "";
+
+        if (totalScore <= 4) {
+          level = "डिप्रेसन छैन वा हल्का डिप्रेसन";
+          message = `
+    तपाईले दिएको जवाफको आधारमा तपाईमा उदासीनता (वा डिप्रेसन) समस्या कम छ वा छदै छैन। 
+    कहिलेकहीँ अलि अलि उदासीनता, वा निराशा, वा बेखुसी हुनु सामान्य नै हो। 
+    <br> 
+    <a href="{{ url_for('article2') }}" target="_blank">तपाईंको स्वास्थ्य निरन्तरता लागि केही <u> उपायहरू</u></a>।
+  `;
+        } else if (totalScore <= 9) {
+          level = "हल्का डिप्रेसन";
+          message = `
+    तपाईले दिएको जवाफको आधारमा तपाईमा उदासीनता (वा डिप्रेसन) समस्या हल्का छ। 
+    कहिलेकहीँ अलि अलि उदासीनता, वा निराशा, वा बेखुसी हुनु सामान्य नै मान्न सकिन्छ। 
+    तपाईले स्वास्थ्यकर्मी वा विज्ञलाई भेटेर समस्या कम गर्ने बारेमा छलफल वा परामर्श लिन सक्नुहुन्छ। 
+    चाँडो उपचार लिनाले यसलाई छिटो नै निको बनाउन सकिन्छ। 
+   <br>
+    <a href="{{ url_for('article2') }}" target="_blank">तपाईंको स्वास्थ्य निरन्तरता लागि केही <u> उपायहरू</u></a>।
+  `;
+        } else if (totalScore <= 14) {
+          level = "मध्यम डिप्रेसन";
+          message = `
+    तपाईले दिएको जवाफको आधारमा तपाईमा उदासीनता (वा डिप्रेसन) समस्या मध्यम खालको छ। 
+    कहिलेकहीँ अलि अलि निराशा हुनु सामान्य हो। 
+    यो समस्यालाई बेलैमा उचित ढंगले व्यवस्थापन गर्नु राम्रो हुन्छ।  
+    तपाईले स्वास्थ्यकर्मी वा मानसिक स्वास्थ्य विशेषज्ञसँग परामर्श लिनु उपयुक्त हुन्छ। 
+    <br>
+    <a href="{{ url_for('support') }}" target="_blank">तपाईंको स्वास्थ्य सुधार्नका लागि केही राहत दिने <u> उपायहरू</u></a>।<br>
+  <ul>
+              <li>शहरी स्वास्थ्य प्रवर्द्धन केन्द्रहरू</li>
+              <li>विशेषज्ञ मानसिक स्वास्थ्य सेवा - बबरमहल</li>
+              <li>शिक्षण अस्पताल, कान्ति बाल अस्पताल</li>
+              <li>मानसिक अस्पताल - लगनखेल, ललितपुर</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन:<strong>११६६</strong></li>
+            </ul>
+  `;
+        } else if (totalScore <= 19) {
+          level = "मध्यम गम्भीर डिप्रेसन";
+          message = `
+    तपाईमा उदासीनता (वा डिप्रेसन) समस्या मध्यम गम्भीर देखिएको छ। 
+    यो समस्यालाई बेलैमा उचित ढंगले व्यवस्थापन गर्न बेलैमा स्वास्थ्य सेवा (उपचार) लिनु अत्यन्त जरुरी छ। 
+    तपाईले स्वास्थ्यकर्मी वा मानसिक स्वास्थ्य विशेषज्ञसँग तुरुन्त स्वास्थ्य परामर्श लिनुहोस्। 
+     <br>
+    <a href="{{ url_for('support') }}" target="_blank">तपाईंको स्वास्थ्य सुधार्नका लागि केही राहत दिने <u> उपायहरू</u></a>।<br>
+    <ul>
+              <li>शहरी स्वास्थ्य प्रवर्द्धन केन्द्रहरू</li>
+              <li>विशेषज्ञ मानसिक स्वास्थ्य सेवा - बबरमहल</li>
+              <li>शिक्षण अस्पताल, कान्ति बाल अस्पताल</li>
+              <li>मानसिक अस्पताल - लगनखेल, ललितपुर</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन:<strong>११६६</strong></li>
+            </ul>
+
+  `;
+        } else {
+          level = "गम्भीर डिप्रेसन";
+          message = `
+    तपाईमा गम्भीर डिप्रेसनको लक्षण देखिएको छ। 
+    तपाईंको समस्यालाई उचित ढंगले समाधान गर्नका लागि तपाईले तत्काल स्वास्थ्य सेवाको लिन आवश्यकता छ। 
+    तपाईले स्वास्थ्यकर्मी वा मानसिक स्वास्थ्य विशेषज्ञसँग तुरुन्त स्वास्थ्य परामर्श लिन अनिवार्य छ। 
+    <br>
+    <a href="{{ url_for('support') }}" target="_blank">तपाईंको स्वास्थ्य सुधार्नका लागि केही राहत दिने <u> उपायहरू</u></a>।<br>
+   <ul>
+              <li>शहरी स्वास्थ्य प्रवर्द्धन केन्द्रहरू</li>
+              <li>विशेषज्ञ मानसिक स्वास्थ्य सेवा - बबरमहल</li>
+              <li>शिक्षण अस्पताल, कान्ति बाल अस्पताल</li>
+              <li>मानसिक अस्पताल - लगनखेल, ललितपुर</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन:<strong>११६६</strong></li>
+            </ul>
+  `;
+        }
+
+        const resultHTML = `
+          <div id="pdfReport" style="padding:15px;color:black;">
+          <h3>डिप्रेसन परीक्षण नतिजा</h3>
+          <h3>PHQ-9 डिप्रेसन परीक्षण</h3>
+          <hr>
+          <p><strong>लिङ्ग:</strong> ${gender}</p>
+          <p><strong>हालको ठेगाना:</strong> ${address}</p>
+          <p><strong>उमेर:</strong> ${age}</p>
+          <p><strong>मिति:</strong> ${date}</p>
+          <hr>
+          <div style="background-color: white;border-radius: 10px; padding: 15px;">
+         
+          <p><strong>कुल स्कोर:</strong> ${totalScore} / 27</p>
+          <p><strong>स्तर:</strong> ${level}</p>
+          <p>${message}</p>
+              
+          </div>  <hr> 
+          <p><strong>नोटः</strong><br>
+           
+            यो प्रश्नावलीको माध्यामले गर्ने एक प्रारम्भिक परीक्षण मात्र हो। थप परीक्षण गर्न र आवश्यक परामर्श वा औषधि उपचार सेवा लिन स्वास्थ्यकर्मी वा मानसिक स्वास्थ्य विशेषज्ञहरू लाई भेट्नुहोस वा सम्पर्क गर्नुहोस।
+
+                    </p>
+
+                      <p><strong>Source:</strong> PHQ-9 by Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from 
+Pfizer Inc. </p></div>
+                    <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="downloadPDF()">📥 PDF डाउनलोड</button>
+              </div>
+          `;
+
+        document.getElementById("quizContainer").classList.add("hidden");
+        document.getElementById("resultContainer").innerHTML = resultHTML;
+        document.getElementById("resultContainer").classList.remove("hidden");
+      }
+      function submitQuiz() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+
+        answers.push(parseInt(selected.value));
+
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const date = document.getElementById("date").value.trim();
+
+        const totalScore = answers.reduce((sum, val) => sum + val, 0);
+        const percentScore = totalScore * 4;
+
+        // Send data to Flask backend
+        fetch("/submit/phq9", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gender,
+            address,
+            age,
+            date,
+            totalScore,
+            percentScore,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message); // Show success/failure message from backend
+            showResult(); // Show result screen after submission
+          })
+          .catch((error) => {
+            alert("डेटा पठाउन समस्या: " + error);
+            showResult(); // Show result anyway
+          });
+      }
+    </script>
+  </body>
+</html>

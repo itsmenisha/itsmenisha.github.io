@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ne">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GAD-7 चिन्ता परीक्षण</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+ <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-size: 3vh;
+       
+        font-size: larger;
+         background: #fff8f2; /* updated */
+    margin: 0;
+    padding: 20px;
+  }
+       
+   
+
+  .container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h1,
+  h2 {
+    color: #f7941d; /* updated */
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-size: 1rem;
+  }
+
+  .question {
+    margin-top: 30px;
+  }
+
+  .options label,select {
+    display: block;
+    background: #fff0e3; /* updated */
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .options input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  .btn {
+    background: #f7941d; /* updated */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background: #d97a00; /* updated */
+  }
+
+  .result {
+    background: #fff6eb; /* updated */
+    border-left: 6px solid #f7941d; /* updated */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+  }
+
+  .question-numbers {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .question-numbers .number {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #ffe2c4; /* updated */
+    color: #333;
+    font-weight: bold;
+  }
+
+  .question-numbers .active {
+    background-color: #f7941d; /* updated */
+    color: #fff;
+  }
+
+  .cards {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .card {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #f7941d; /* updated */
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+  
+  }
+
+  .card:hover {
+    background: #d97a00; /* updated */
+  }
+   a {
+        text-decoration: none;
+        color: black;
+      }
+
+      a:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+</style>
+
+  </head>
+  <body>
+     {% include "navbar.html" %}
+    <div class="container" method="POST">
+      <h1>मानसिक स्वास्थ्य अवस्था सम्बन्धी प्रारम्भिक परीक्षण</h1>
+      <br />
+      <h2>
+        चिन्ता चिन्ताजन्य समस्या (एङ्जाइटी)को प्रारम्भिक परीक्षण: जि ए डि ७
+        (GAD-7)
+      </h2>
+
+      <p>
+        तलका प्रश्नहरू पढेर गएको २ हप्ताको अनुभवहरुलाई सम्झेर कहिल्यै पनि भएन,
+        कहिलेकाहीं भयो, धेरै जसो भयो, वा सँधै जसो भयो मध्ये आफूलाई मिल्ने एउटा
+        उत्तर रोज्नुहोस्।
+      </p>
+     
+      <p style="text-align: justify; color: rgb(155, 2, 2)">
+        <strong
+          >हामी तपाईंको व्यक्तिगत जानकारीको गोपनीयता र सुरक्षामा पूर्ण प्रतिवद्ध
+          छौं।</strong
+        >
+      </p>
+
+
+      <div id="startScreen">
+     
+        <label>हालको ठेगाना:</label>
+        <input type="text" id="address" placeholder="हालको ठेगाना लेख्नुहोस्" />
+        <label>लिङ्ग (Gender):</label>
+        <select id="gender" required>
+          <option value="">-- लिङ्ग छान्नुहोस् --</option>
+          <option value="पुरुष">पुरुष (Male)</option>
+          <option value="महिला">महिला (Female)</option>
+          <option value="अन्य">अन्य (Self-describe)</option>
+          <option value="प्रकट गर्न चाहन्न">
+            प्रकट गर्न चाहन्न (Prefer not to say)
+          </option>
+        </select>
+
+        <label>उमेर:</label>
+        <input type="text" id="age" placeholder="उमेर लेख्नुहोस्" />
+
+        <label>मिति:</label>
+        <input type="date" id="date" />
+        <script>
+          document.getElementById("date").value = new Date()
+            .toISOString()
+            .split("T")[0];
+        </script>
+
+        <button class="btn" onclick="startQuiz()">सुरु गर्नुहोस्</button>
+
+      </div>
+
+      <div id="quizContainer" class="hidden">
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <button class="btn" onclick="nextQuestion()">अर्को प्रश्न</button>
+             <div class="question-numbers" id="questionNumbers"></div>
+   
+      </div>
+
+      <div id="resultContainer" class="result hidden"></div>
+    </div>
+
+    <div class="cards">
+      <a href="{{ url_for('gad7') }}" class="card">Retake</a>
+      <a href="{{ url_for('introgad') }}" class="card">Details</a>
+    </div>
+
+    <script>
+    
+
+      const questions = [
+        "१. तपाईलाई मनमा चिन्ता लागि रहने कत्तिको भयो ?",
+        "२. चिन्ता रोक्न नसक्ने कत्तिको भयो ?",
+        "३. विभिन्न कुराहरूको बारेमा धेरै नै चिन्ता लागि रहने कत्तिको भयो ? (जस्तै: कामको, परिवारको, आर्थिक स्थितिको बारेमा)",
+        "४. आराम गर्न गाह्रो हुने कत्तिको भयो ?",
+        "५. धेरै छटपटी भएर एक ठाउँमा बस्न गाह्रो हुने कत्तिको भयो ?",
+        "६. छिट्टै रिस उठ्ने वा झर्को लाग्ने कत्तिको भयो ?",
+        "७. केही नराम्रो भईहाल्छ कि भनेर मनमा डर लागि रहने कत्तिको भयो ?",
+      ];
+
+      const options = [
+        { value: 0, label: "कहिल्यै पनि भएन" },
+        { value: 1, label: "कहिलेकाहीं भयो" },
+        { value: 2, label: "धेरै जसो भयो" },
+        { value: 3, label: "सँधै जसो भयो" },
+      ];
+
+      let currentQuestion = 0;
+      const answers = [];
+
+      function startQuiz() {
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const date = document.getElementById("date").value.trim();
+
+        if (!gender || !address || !age ||!date) {
+          alert("कृपया सबै विवरणहरू (लिङ्ग, ठेगाना, उमेर,मिति) भर्नुहोस्।");
+          return;
+        }
+
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("quizContainer").classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        document.getElementById("questionText").innerText =
+          questions[currentQuestion];
+        const container = document.getElementById("optionsContainer");
+        container.innerHTML = "";
+
+        options.forEach((opt, idx) => {
+          const id = `opt${idx}`;
+          const radio = `<input type="radio" name="answer" id="${id}" value="${opt.value}">`;
+          const label = `<label for="${id}">${radio}${opt.label}</label>`;
+          container.innerHTML += label;
+        });
+
+        const numberContainer = document.getElementById("questionNumbers");
+        numberContainer.innerHTML = "";
+        for (let i = 0; i < questions.length; i++) {
+          const circle = document.createElement("div");
+          circle.classList.add("number");
+          if (i === currentQuestion) circle.classList.add("active");
+          circle.innerText = i + 1;
+          numberContainer.appendChild(circle);
+        }
+         // Change button text here
+          const btn = document.querySelector('#quizContainer button.btn');
+          if (currentQuestion === questions.length - 1) {
+            btn.textContent = "सबमिट गर्नुहोस्";  // Submit in Nepali
+            btn.onclick = submitQuiz;  // change click handler to submitQuiz function (defined next)
+          } else {
+            btn.textContent = "अर्को प्रश्न";  // Next Question
+            btn.onclick = nextQuestion;
+          }
+        }
+      
+
+      function nextQuestion() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+        if (!selected) {
+          alert("कृपया उत्तर चयन गर्नुहोस्।");
+          return;
+        }
+
+        answers.push(parseInt(selected.value));
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }
+        function downloadPDF() {
+            const gender = document.getElementById("gender").value.trim();
+      const element = document.getElementById("pdfReport");
+  html2canvas(element, { scale: 2 }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+    // Calculate width/height to fit A4
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    const imgPDFWidth = imgWidth * ratio;
+    const imgPDFHeight = imgHeight * ratio;
+    pdf.addImage(imgData, 'PNG', 0, 0, imgPDFWidth, imgPDFHeight);
+    pdf.save(`GAD7_Report_${name.replace(/\s+/g, "_")}.pdf`);
+  });
+}
+
+      function showResult() {
+        const gender = document.getElementById("gender").value.trim();
+        const address = document.getElementById("address").value;
+        const age = document.getElementById("age").value;
+        const date = document.getElementById("date").value;
+
+        const totalScore = answers.reduce((sum, val) => sum + val, 0);
+        const percentScore = totalScore * 4;
+
+        let interpretation = "";
+if (totalScore <= 4) {
+  interpretation = `
+    <p>तपाईले दिएको जवाफको आधारमा तपाईमा चिन्ताजन्य समस्या कम छ वा छदै छैन।</p>
+    <p>कहिलेकाहीं अलि अलि चिन्ता हुनु सामान्य नै हो।</p>
+    <p><a href="{{ url_for('article2') }}" target="_blank">तपाईंको स्वास्थ्य निरन्तरता लागि केही <u> समाधानहरू</u>।</a></p>
+  `;
+} else if (totalScore <= 9) {
+  interpretation = `
+    <p>तपाईले दिएको जवाफको आधारमा तपाईमा चिन्ताजन्य समस्या हल्का छ।</p>
+    <p>कहिलेकाहीं अलि अलि चिन्ता हुनु सामान्य नै हो। चिन्ता व्यवस्थापन गर्ने सकारात्मक उपायहरू जान्नु उपयुक्त हुन्छ।</p>
+    <p><a href="{{ url_for('article2') }}" target="_blank">चिन्ता व्यवस्थापन र मानसिक स्वास्थ्य प्रवर्द्धन सम्बन्धी <u>जानकारी</u> ।</a></p>
+  `;
+} else if (totalScore <= 14) {
+  interpretation = `
+    <p>तपाईले दिएको जवाफको आधारमा तपाईमा चिन्ताजन्य समस्या मध्यम खालको छ।</p>
+    <p>समस्यालाई उचित ढंगले व्यवस्थापन गर्न तपाईले स्वास्थ्यकर्मी तथा विज्ञको सहयोग लिनु उपयुक्त हुन्छ। </p>
+    <p><a href="{{ url_for('support') }}" target="_blank">स्वास्थ्य सेवा लिएर मानसिक स्वास्थ्य लाभ गर्ने बारे <u>जानकारी</u> ।</a></p>
+    <ul>
+      <li>मानसिक स्वास्थ्य सेवा केन्द्रहरू</li>
+      <li>विशेषज्ञ परामर्शदाता</li>
+     </ul>
+  `;
+} else {
+  interpretation = `
+    <p>तपाईले दिएको जवाफको आधारमा तपाईमा चिन्ताजन्य समस्या गम्भीर खालको छ।</p>
+    <p>समस्यालाई उचित ढंगले व्यवस्थापन गर्न तपाईले स्वास्थ्यकर्मी तथा मानसिक स्वास्थ्य विशेषज्ञको सहयोग लिनु अति आवश्यक छ।</p>
+    <p><a href="{{ url_for('support') }}" target="_blank">स्वास्थ्य सेवा लिएर आफ्नो मानसिक स्वास्थ्य लाभ गर्ने बारे <u>जानकारी</u> ।</a></p>
+    <ul>
+      <li>मानसिक स्वास्थ्य उपचार केन्द्रहरू</li>
+      <li>विशेषज्ञ स्वास्थ्यकर्मीहरूसँग सम्पर्क</li>
+      <li>हटलाइन: <strong>११६६</strong></li>
+    
+              <li>शहरी स्वास्थ्य प्रवर्द्धन केन्द्रहरू</li>
+              <li>विशेषज्ञ मानसिक स्वास्थ्य सेवा - बबरमहल</li>
+              <li>शिक्षण अस्पताल, कान्ति बाल अस्पताल</li>
+              <li>मानसिक अस्पताल - लगनखेल, ललितपुर</li>
+              <li>राष्ट्रिय आत्महत्या रोकथाम हेल्पलाइन:<strong>११६६</strong></li>
+     
+    </ul>
+  `;
+}
+
+// ...inside showResult()...
+const resultHTML = `
+  <div id="pdfReport" style="padding:15px;color:black;">
+    <div style="margin-bottom:16px;">
+      <h3 style="margin-top:24px;">चिन्ता परीक्षण नतिजा</h3>
+      <h3>मानसिक भलाइ परिणाम</h3>
+    </div>
+    <div style="margin-bottom:12px;">
+      <p><strong>लिङ्ग:</strong> ${gender}</p>
+      <p><strong>हालको ठेगाना:</strong> ${address}</p>
+      <p><strong>उमेर:</strong> ${age}</p>
+      <p><strong>मिति:</strong> ${date}</p>
+    </div>
+    <hr>
+     <div style="background-color: white;border-radius: 10px; padding: 15px;">
+         
+    <div style="margin-bottom:12px;">
+      <p><strong>कुल स्कोर:</strong> ${totalScore} / 21</p>
+    </div>
+    <div style="margin-bottom:12px;">
+      <strong>व्याख्या:</strong>
+      ${interpretation}
+    </div>
+     </div>
+    <hr>
+
+    <div style="margin-bottom:12px;">
+      <strong>सूचना:</strong><br>
+      यो प्रश्नावलीको माध्यामले गर्ने एक प्रारम्भिक परीक्षण मात्र हो। थप परीक्षण गर्न र आवश्यक परामर्श वा औषधि उपचार सेवा लिन स्वास्थ्यकर्मी वा मानसिक स्वास्थ्य विशेषज्ञहरू लाई भेट्नुहोस वा सम्पर्क गर्नुहोस।
+    </div>
+    <div style="margin-bottom:12px;">
+      <strong>Source:</strong> GAD-7 was developed by .Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from Pfizer Inc.
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+    <button class="btn" onclick="downloadPDF()">📥 PDF डाउनलोड</button>
+  </div>
+`;
+// ...existing code...
+
+        document.getElementById("quizContainer").classList.add("hidden");
+        document.getElementById("resultContainer").innerHTML = resultHTML;
+        document.getElementById("resultContainer").classList.remove("hidden");
+      }
+  function submitQuiz() {
+  const selected = document.querySelector('input[name="answer"]:checked');
+
+  answers.push(parseInt(selected.value));
+
+   const gender = document.getElementById("gender").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const date = document.getElementById("date").value.trim();
+
+  const totalScore = answers.reduce((sum, val) => sum + val, 0);
+  const percentScore = totalScore * 4;
+
+  // Send data to Flask backend
+  fetch('/submit/gad7', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      gender,
+      address,
+      age,
+      date,
+      totalScore,
+      percentScore
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message);  // Show success/failure message from backend
+      showResult();         // Show result screen after submission
+    })
+    .catch(error => {
+      alert("डेटा पठाउन समस्या: " + error);
+      showResult();         // Show result anyway
+    });
+}
+
+    </script>
+    </div>
+  </body>
+</html>
