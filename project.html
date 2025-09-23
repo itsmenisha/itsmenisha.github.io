@@ -1,136 +1,240 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="keywords"
+      content="web development, AI, machine learning, python coder, QA, software development"
+    />
+    <meta
+      name="description"
+      content="Portfolio of Nisha Kiran Gnawaly, expertise in web development, AI, machine learning, software development and more."
+    />
+    <meta name="author" content="Nisha Kiran Gnawaly" />
+    <link rel="icon" type="image/png" href="images/nisha_logo.png" />
+    <title>Nisha Kiran Gnawaly</title>
 
-<head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="keywords" content="web development, AI, machine learning, python coder, QA, software development" />
-<meta name="description" content="Portfolio of Nisha Kiran Gnawaly, expertise in web development, AI, machine learning,software development and more." />
-<meta name="author" content="Nisha Kiran Gnawaly" />
-<link rel="icon" type="image/png" href="images/nisha_logo.png">
-  <!-- Site Metas -->
-  <title>Nisha Kiran Gnawaly</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <!-- In-page CSS -->
+    <style>
+      /* General styles */
+      body {
+        font-family: Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      a {
+        text-decoration: none;
+        color: black;
+      }
 
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="css/responsive.css" rel="stylesheet" />
-</head>
+      /* Card layout */
+      .card {
+        border-radius: 2vh;
+        transition: transform 0.3s ease-in-out;
+      }
+      .card-header1111 {
+        background-color: rgb(21, 32, 13);
+        color: white;
+        padding: 2vh;
+        border-radius: 1.5vh 1.5vh 0 0;
+      }
+      .card-header1111 h5 {
+        font-size: 4vh;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+      }
+      .card-body {
+        background-color: #f6f8f9;
 
-<body class="sub_page">
-  <script src="js\loadhtml.js"></script>
-  <div id="navbar-placeholder" style="margin: 0.3vw"></div>
-  <script>
-    loadHTML("navbar-placeholder", "navbar.html");
-    loadHTML("footer-holder", "footer.html");
+        text-align: center;
+        padding: 1vh;
+      }
+      .project-col {
+        width: 2vh;
+        padding: 1vh;
+        margin-bottom: 2vh;
+      }
+      .project-col img {
+        width: 80%;
+        height: auto;
+        border-radius: 2vh;
+        box-shadow: 0 4vh 12vh rgba(21, 32, 13, 0.3);
+        transition: transform 0.3s ease-in-out;
+      }
+      .project-col img:hover {
+        transform: scale(1.05);
+      }
+      .project-col p {
+        margin-top: 1vh;
+        color: black;
+        font-size: 1.2rem;
+      }
+
+      /* About section */
+      .about_section {
+        padding: 3vh;
+      }
+      .about_section .img-box {
+        width: 80vh;
+      }
+      .about_section .img-box img {
+        border-radius: 1.5vh;
+        width: 2vh;
+      }
+      .detail-box h2 {
+        font-size: 5vh;
+        margin-bottom: 1vh;
+      }
+      .detail-box p {
+        font-size: 3vh;
+        line-height: 2.5vh;
+      }
+      .btn-1 {
+        display: inline-block;
+        margin-top: 1vh;
+        padding: 1vh 2vh;
+        background-color: #15200d;
+        color: white;
+        border-radius: 1vh;
+        text-decoration: none;
+        transition: 0.3s ease-in-out;
+      }
+      .btn-1:hover {
+        background-color: rgb(248, 197, 206);
+        color: black;
+      }
+
+      /* Responsive grid for projects */
+      @media (min-width: 768px) {
+        .project-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .project-col {
+          flex: 0 0 30%;
+          margin: 1vh;
+        }
+      }
+      @media (max-width: 767px) {
+        .project-col {
+          flex: 0 0 45%;
+          margin: 1vh;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="sub_page">
+    <script src="js/loadhtml.js"></script>
+    <div id="navbar-placeholder" style="margin: 0.3vh"></div>
+
+    <script>
+      loadHTML("navbar-placeholder", "navbar.html");
+      loadHTML("footer-holder", "footer.html");
     </script>
-    
-<div class="container my-5">
-  <div class="card shadow-lg p-4" style="border-radius: 20px; background-color: #f8f9f5;">
-    <div class="row align-items-center">
-      <!-- Text Column -->
-      <div class="col-md-6">
-        <div class="card-header d-flex align-items-center" style="background-color: #15200D; color: white; border-radius: 15px 15px 0 0;">
-          <h5 class="mb-0" style="font-family: 'Lucida Handwriting', cursive;">
-            📽️ Cinemarga – My First Real Project
-          </h5>
-        </div>
-      </div>
-        <div class="col-md-9">
-        <p style="color: #333;">
-          <br>
-          Cinemarga wasn’t just a project — it was the beginning of my real journey into full-scale application development.
-          <br><br>
-          At first, <b>designing</b> was a whole new world. From colors and spacing to layout and typography — every decision felt like a challenge. I wasn’t just writing code; I was creating experiences. And honestly? It was overwhelming.
-          <br><br>
-          I built everything from scratch. No templates, no shortcuts. Just me figuring things out day by day. And even now, I find myself making tiny adjustments. Because with every tweak, the site gets better — and I grow with it.
-          <br><br>
-          The biggest takeaway? <b>Optimization is essential</b>. A good website doesn’t just work — it loads fast, feels smooth, and makes sense. And that’s the kind of quality I now strive for in every project.
-        </p>
-      </div>
-   
-      <!-- Logo Column -->
-      <div class="col-md-3 text-center">
-        <a href="https://cinemarga.com" target="_blank">
-          <img src="images/cinemarga.png" alt="Cinemarga Logo"
-            style="width: 20vw; height: 20vw; border-radius: 20px; box-shadow: 0 4px 12px rgba(21, 32, 13, 0.3); transition: 0.3s ease-in-out;"
-            onmouseover="this.style.transform='scale(1.05)'" 
-            onmouseout="this.style.transform='scale(1)'">
-        </a>
-       </div>
-    </div>
-  </div>
-</div>
 
-  <div class="card shadow-lg p-4" style="border-radius: 20px; background-color: #f0f4f7;">
-    <div class="row align-items-center">
-      <div class="col-12">
-        <div class="card-header" style="background-color: #15200D; color: white; border-radius: 15px 15px 0 0;">
-          <h5 class="mb-0" style="font-family: 'Poppins', sans-serif;">
-          Beginner Projects
-          </h5>
-        </div>
-        <div class="card-body text-center">
-          <a href="qr.html">
-          <!-- QR Content Goes Here --> <div class="col-md-3 text-center">
-            <img
-              src="images/qr.jpg"
-              alt="Cinemarga Logo"
-              style="
-                margin-top: 1vw;
-                width: 25vw;
-                height: 20vw;
-                border-radius: 20px;
-                box-shadow: 0 4px 12px rgba(21, 32, 13, 0.3);
-                transition: 0.3s ease-in-out;
-              "
-              onmouseover="this.style.transform='scale(1.05)'"
-              onmouseout="this.style.transform='scale(1)'"
-            />
-             <p class="mt-3" style="color: black; font-size: 2vw;"> 📱QR </p>
+    <br /><br />
+
+    <!-- Beginner Projects -->
+    <div class="card shadow-lg col-12">
+      <div class="card-header1111">
+        <h5>Beginner Projects</h5>
+      </div>
+
+      <div class="card-body">
+        <div class="project-row">
+          <div class="project-col">
+            <a href="qr.html">
+              <img src="images/qr.jpg" alt="QR Project" />
+            </a>
+            <p>📱 QR</p>
           </div>
-         
-          </a>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
+    <br />
 
-<br>
+    <!-- Intermediate Projects -->
+    <div class="card shadow-lg col-12">
+      <div class="card-header1111">
+        <h5>Intermediate Projects</h5>
+      </div>
+      <div class="card-body">
+        <div class="project-row">
+          <div class="project-col">
+            <a href="templates/services.html">
+              <img src="images/kathmandu.png" alt="QR Project 2" />
+            </a>
+            <p>🏥Health Acessment-flask</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <br />
 
+    <!-- Advanced Projects -->
+    <div class="card shadow-lg col-12">
+      <div class="card-header1111">
+        <h5>Advanced Projects</h5>
+      </div>
+      <div class="card-body">
+        <div class="project-row">
+          <div class="project-col">
+            <a href="https://cinemarga.com/">
+              <img src="images/cinemarga.png" alt="CineMarga Project" />
+            </a>
+            <p>🎬 CineMarga</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <!-- category section -->
+    <br />
 
+    <!-- About Section -->
+    <section class="about_section layout_padding">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-5 mx-auto">
+            <div class="img-box">
+              <img src="images/nisha7.png" alt="" class="responsive-img" />
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="detail-box">
+          <h2>Sneak Peek -> Nisha Kiran</h2>
+          <p>
+            Aiming to make a name in the next big automation breakthrough,
+            reducing manual workload for people and optimizing overall work
+            performance. <br />
+            <a href="Nisha-Kiran-Gnawaly.pdf" download class="btn-1">
+              Download CV
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
 
+    <div id="footer-holder"></div>
 
-<!-- end category section -->
-
-  
-
-  <!-- end about section -->
-
-  <!-- info section -->
-
-  <div id="footer-holder"></div>
-
-
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
-
-
-</body>
-</body>
-
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+  </body>
 </html>
-
