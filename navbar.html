@@ -10,11 +10,25 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
+  <style>
+    @media (max-width: 768px) {
+      .navbar-nav {
+          font-size: 4vh;
+          flex-direction: row; /* stack items vertically */
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+        }
+        .nav-item {
+          margin:0;          /* spacing between links */
+        }
+}
+  </style>
 </head>
 <body>
   <div
     class="hero_area"
-    style="border-radius: 2vh; width: 100%; height: 6%; margin-bottom: 1vh; font-size: 4vh;
+    style="border-radius: 2vh; width: 100%; height: 6%; margin-bottom: 1vh; 
                "
   >
     <!-- header section strats -->
@@ -27,7 +41,7 @@
               class="asaa"
               style="
                 font-family: 'Lucida Handwriting', cursive;
-                font-size: 5vh;
+                font-size: 4.5vh;
                 color: black;
                 font-weight: 100;
               "
