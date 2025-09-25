@@ -52,7 +52,6 @@ body {
   grid-template-columns: repeat(3, 1fr); /* 3 boxes in the main content */
   grid-gap: 1vh;
   margin-left: 1.5vh;
-
 }
 
 .box1234 {
@@ -188,7 +187,32 @@ aside .side1234:hover {
 .scale-up1234 {
   transform: scale(1.02); /* Grow by 0.2vw */
 }
+@media (max-width: 768px) {
+  .main-content1234 {
+    grid-template-columns: 1fr; /* Make it 1 column */
+    grid-gap: 2vh; /* optional, more spacing vertically */
+    margin-left: 0; /* adjust for mobile */
+  }
 
+  .box1234,
+  .sidebar11234,
+  .sidebar21234,
+  .sidebar31234,.sidebar41234 {
+    width: 60vh; /* make them take full width of screen */
+    height: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 5vh;
+  }
+ .navbar-nav {
+    font-size: 4vh;
+    flex-direction: column; /* stack items vertically */
+    text-align: center;
+  }
+  .nav-item {
+    margin: 8px 0;          /* spacing between links */
+  }
+}
 
   </style>
 </head>
@@ -214,7 +238,7 @@ aside .side1234:hover {
       
         <b>
        Visionary Coder💛 <br />with
-<span style="font-family: 'Lucida Handwriting', cursive; font-size: 2vw; font-weight: 200;">
+<span style="font-family: 'Lucida Handwriting', cursive; font-size: 3vh; font-weight: 200;">
 an eye that spots everything with YOLO
 </span>
 ~turning pixels into possibilities, one frame at a time.
