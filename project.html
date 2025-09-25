@@ -80,6 +80,7 @@
         margin-top: 1vh;
         color: black;
         font-size: 1.2rem;
+        
       }
 
       /* About section */
@@ -131,8 +132,16 @@
       @media (max-width: 767px) {
         .project-col {
           flex: 0 0 45%;
-          margin: 1vh;
-        }
+         }
+       .project-col p {
+        margin-left: 20vh;
+              display: flex;
+              justify-content: center; /* horizontal center */
+              align-items: center;     /* vertical center */
+              text-align: center;      /* keeps multiline centered */
+            }
+
+
       }
     </style>
   </head>
