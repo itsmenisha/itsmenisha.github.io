@@ -206,12 +206,28 @@ aside .side1234:hover {
   }
   .sidebar41234,.sidebar1234 {
     display: none !important;
-  }
+    margin: 0vh;
+    padding: 0vh;
+    font-size: 0vh;
+  height: 0;   
+  width: 0;
+  overflow: hidden;   /* Prevent content spill */
+ 
 
+  }
+  .sidebar31234{
+    background-color: rgb(21, 32, 13);
+    color: rgb(249, 214, 221);
+  }
+  .sidebar31234 span .ss1234{
+    color: rgb(245, 129, 150);
+  }
  .navbar-nav {
     font-size: 4vh;
-    flex-direction: column; /* stack items vertically */
+    flex-direction: row; /* stack items vertically */
     text-align: center;
+    align-items: center;
+    justify-content: center;
   }
   .nav-item {
     margin: 8px 0;          /* spacing between links */
@@ -263,7 +279,7 @@ Nisha is an AI explorer on a mission to make machines smarter and life simpler. 
       </aside>
   
       <aside class="sidebar31234">
-        <span>
+        <span class="s1234">
           <br />
           <b>Contact</b><span style="font-family: 'Lucida Handwriting', cursive">me</span>
         </span>
