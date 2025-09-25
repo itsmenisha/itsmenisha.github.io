@@ -5,29 +5,29 @@ body {
 }
 
 .layout_padding {
-  padding-top: 90px;
-  padding-bottom: 90px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 }
 
 .layout_padding2 {
-  padding: 45px 0;
+  padding: 35px 0;
 }
 
 .layout_padding2-top {
-  padding-top: 45px;
-  padding-bottom: 45px;
+  padding-top: 35px;
+  padding-bottom: 35px;
 }
 
 .layout_padding2-bottom {
-  padding-bottom: 45px;
+  padding-bottom: 30px;
 }
 
 .layout_padding-top {
-  padding-top: 90px;
+  padding-top: 80px;
 }
 
 .layout_padding-bottom {
-  padding-bottom: 90px;
+  padding-bottom: 80px;
 }
 .header1234 {
   border-radius: 25px;
@@ -57,30 +57,11 @@ body {
   text-transform: uppercase;
 }
 
-/*header section*/
-.hero_area {
-  height: calc(100vh - 30px);
-  background: -webkit-gradient(linear, left top, right top, color-stop(55%, #1a2e35), color-stop(55%, #1cbbb4));
-  background: linear-gradient(to right, rgb(21, 32, 13) 55%, #1cbbb4 55%);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  position: relative;
-}
-
 .sub_page .hero_area {
   height: auto;
   background: none;
-  background-color: rgb(21, 32, 13);
 }
 
-.hero_area.sub_pages {
-  height: auto;
-}
 
 .header_section {
   overflow-x: hidden;
@@ -218,6 +199,22 @@ a:focus {
   color: #1cbbb4;
   text-transform: uppercase;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*end header section*/
 /* slider section */
