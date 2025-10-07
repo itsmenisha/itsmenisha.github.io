@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Traffic Sign Recognition</title>
+    <style>
+      h1,
+      h2 {
+        color: #222;
+      }
+      .aaa {
+        text-align: center;
+        margin-top: 3rem;
+        align-items: center;
+      }
+
+      section {
+        background: #fff;
+        margin: 1.5rem auto;
+        padding: 2rem;
+        max-width: 900px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      pre,
+      code {
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        padding: 0.5rem;
+        display: block;
+        overflow-x: auto;
+      }
+      ul {
+        margin-left: 1.5rem;
+      }
+      a {
+        color: #007acc;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .cta {
+        text-align: center;
+        margin-top: 2rem;
+      }
+      .cta a {
+        background-color: #007acc;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .cta a:hover {
+        background-color: #005fa3;
+      }
+      .footer {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <script src="js\loadhtml.js"></script>
+      <div id="navbar-placeholder" style="margin: 0.3vw"></div>
+      <script>
+        loadHTML("navbar-placeholder", "navbar.html");
+        loadHTML("footer-holder", "footer.html");
+      </script>
+
+      <h2 class="aaa">Real-Time Traffic Sign Recognition</h2>
+    </header>
+
+    <section>
+      <h2>Introduction</h2>
+      <p>
+        When I started my Real-Time Traffic Sign Recognition project, I didn’t
+        expect it to teach me so much about data preparation, patience, and how
+        long simple training can take on a CPU. I had already done the project
+        on a GPU and thought, “Why not try it on a CPU?” That’s when I realized
+        the real challenge but I still took it as an opportunity to see it
+        through.
+      </p>
+      <p>
+        I used the
+        <a
+          href="https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign"
+          target="_blank"
+        >
+          German Traffic Sign Recognition Benchmark (GTSRB)
+        </a>
+        for this project, a dataset with about 39,209 training images divided
+        into 43 traffic sign classes was used. Each image includes bounding box
+        details stored in CSV files with coordinates, width, height, and class
+        ID.
+      </p>
+    </section>
+
+    <section>
+      <h2>Preparing the Dataset</h2>
+      <p>
+        The first step was converting the CSV annotations into YOLO-friendly
+        format.
+      </p>
+      <p>
+        The dataset includes three folders: train, test and meta each containing
+        a CSV file with bounding box coordinates and class labels for every
+        image.
+      </p>
+      <p>YOLO requires labels in this format:</p>
+      <pre><code>class_id x_center_norm y_center_norm width_norm height_norm</code></pre>
+      <p>
+        I wrote a Python script fortex.py to handle this conversion. It reads
+        each CSV file (like train.csv), calculates normalized values, and
+        generates a .txt file for each image — saved in its respective class
+        folder. This part was tedious but crucial, since YOLO won’t train
+        without proper labels.
+      </p>
+    </section>
+
+    <section>
+      <h2>Creating a Mini Dataset</h2>
+      <p>
+        Training on 39,000+ images with a CPU was painfully slow, so I created a
+        mini dataset of 7,842 images. The main goals were:
+      </p>
+      <ul>
+        <li>
+          Feature preservation – ensure key traffic signs are represented.
+        </li>
+        <li>Data augmentation – flip images to create variation.</li>
+        <li>Stratified sampling – maintain balance across all 43 classes.</li>
+      </ul>
+      <p>Here’s what I did:</p>
+      <ul>
+        <li>Randomly selected 2 images out of every 10 per class.</li>
+        <li>Created flipped versions of each image.</li>
+      </ul>
+      <pre><code>dataset/
+  images/
+    train/        12,546 images – original + flipped
+    val/          1,569 images
+  labels/
+    train/        TXT files matching images
+    val/          TXT files matching images</code></pre>
+      <p>
+        The labels folder contained YOLO-formatted .txt files for both original
+        and flipped images.
+      </p>
+    </section>
+
+    <section>
+      <h2>Setting Up YOLOv8 Nano</h2>
+      <p>
+        I used YOLOv8 Nano because it’s lightweight, fast, and still provides
+        decent accuracy — ideal for CPU-based training.
+      </p>
+      <p>I created a YAML configuration file mini_dataset.yaml specifying:</p>
+      <ul>
+        <li>Paths to training and validation sets</li>
+        <li>Number of classes nc: 43</li>
+        <li>Class names</li>
+      </ul>
+      <p>
+        Lesson learned: overly long class names overlap during visualization —
+        keep them short and simple next time.
+      </p>
+    </section>
+
+    <section>
+      <h2>Training the Model</h2>
+      <p>Training script: train_yolo.py</p>
+      <ul>
+        <li>Epochs: 50</li>
+        <li>Batch size: 6</li>
+        <li>Device: CPU</li>
+        <li>Workers: 4</li>
+        <li>Patience: 10 (early stopping)</li>
+      </ul>
+      <p>
+        I also enabled augment=True to help the model generalize better —
+        meaning, if it learns one kind of stop sign, it can recognize similar
+        ones even in different conditions.
+      </p>
+      <p>
+        Training took around 32 hours on CPU — painfully long! Moral: always use
+        a GPU when possible.
+      </p>
+    </section>
+
+    <section>
+      <h2>Testing the Model</h2>
+      <p>After training, I used showresults.py to test the model:</p>
+      <ul>
+        <li>Loaded the best.pt weights.</li>
+        <li>Ran inference on sample images and videos.</li>
+      </ul>
+      <p>
+        The model performed well — detecting signs like Stop, Yield, and Speed
+        Limit accurately. It struggled with tilted or cluttered backgrounds, but
+        seeing real-time detection was rewarding.
+      </p>
+    </section>
+
+    <section>
+      <h2>Reflections and Future Improvements</h2>
+      <p>
+        This project taught me a lot about preprocessing, dataset management,
+        and patience. Here’s what I’d improve next time:
+      </p>
+      <ul>
+        <li>Use GPU for faster training.</li>
+        <li>Start from pretrained YOLO weights.</li>
+        <li>
+          Apply more augmentations (rotation, brightness, scaling, mosaic).
+        </li>
+        <li>Balance underrepresented classes.</li>
+        <li>Try YOLOv8 Small or Medium for better accuracy.</li>
+        <li>Keep class names concise.</li>
+      </ul>
+      <p>
+        Though this was my first real-time detection project, it gave me a
+        strong foundation to build on.
+      </p>
+    </section>
+
+    <section>
+      <h2>Final Thoughts</h2>
+      <p>
+        Real-Time Traffic Sign Recognition sounds simple, but it covers
+        everything — labeling, augmentation, training strategy, and inference
+        optimization.
+      </p>
+      <p>Waiting 32 hours for CPU training also builds patience 😅.</p>
+      <p>
+        This project marks the start of my journey into computer vision and
+        real-time AI. Next steps: optimize inference, test with live camera
+        feeds, and continue improving.
+      </p>
+    </section>
+
+    <section class="cta">
+      <h2>Explore the Dataset</h2>
+      <p>Interested in exploring the dataset? Check it out on Kaggle:</p>
+      <a
+        href="https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign"
+        target="_blank"
+      >
+        GTSRB Dataset on Kaggle
+      </a>
+    </section>
+    <footer>
+      <div id="footer-holder"></div>
+    </footer>
+  </body>
+</html>
