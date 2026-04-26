@@ -1,571 +1,397 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!-- Basic -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="keywords" content="web development, AI, machine learning, python coder, QA, software development" />
-<meta name="description" content="Portfolio of Nisha Kiran Gnawaly, expertise in web development, AI, machine learning,software development and more." />
-<meta name="author" content="Nisha Kiran Gnawaly" />
-<link rel="icon" type="image/png" href="images/nisha_logo.png">
-  <!-- Site Metas -->
-  <title>Nisha Kiran Gnawaly</title>
+  <meta name="keywords" content="IT professor, computer vision, AI, machine learning, Python, software engineering, Nepal" />
+  <meta name="description" content="Nisha Kiran Gnawaly — IT Professor, AI & Computer Vision Researcher, Machine Learning Engineer based in Kathmandu, Nepal." />
+  <meta name="author" content="Nisha Kiran Gnawaly" />
+  <link rel="icon" type="image/png" href="images/nisha_logo.png" />
+  <title>Nisha Kiran Gnawaly — IT Professor &amp; AI Researcher</title>
 
-  <!-- bootstrap core css -->
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-  <link href="assets/vendor/loadscreen/css/spinkit.css" rel="stylesheet" />
- 
-
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-  <!-- Custom styles for this template -->
+  <!-- Google Fonts: Poppins + Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Custom styles -->
   <link href="css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
-<style>
-   .sid1234,
-.side1234 {
-  text-decoration: none;
-  color: black;
-}
-
-body {
-  color: black;
-  background-color: white;
-  font-family: Arial, sans-serif;
-}
-
-.container1234 {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* 3 columns: left, center, right */
-  grid-template-rows: 0.12px 1fr auto; /* Rows: header, main content, sidebar + sidebar4 */
-  width: 90vh;
-  margin: 1px;
-  grid-gap: 1vh;
-  transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
-}
-
-
-.main-content1234 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 boxes in the main content */
-  grid-gap: 1vh;
-  margin-left: 1.5vh;
-}
-
-.box1234 {
- margin:1vh;
-  margin-left: 4vh;
-  width: 45vh;
-  height: 55vh; /* Adjust height relative to width */
-  background-color: rgb(248, 197, 206);
-  border-radius: 10px;
-}
-
-.box1234 img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 2vh;
-}
-
-/* Sidebar styles */
-.sidebar1234 {
-  background-color: rgb(248, 197, 206);
-  border-radius: 20px;
-  font-size: 3.5vh;
-  height:65vh;
-  width: 60vh;
-  /* Sidebar takes full height of the container */
-}
-
-.side1234 {
-  justify-content: center;
-  align-items: center;
-  border-bottom: 0.8px solid rgb(199, 160, 62);
-  border-radius: 15vh;
-  height: 20%;
-  width:98%;
-  /* Sidebar takes full height of the container */
-}
-
-aside .side1234 {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-aside .side1234:hover {
- color: black;
-  font-weight: bold;
-}
-
-.sidebar11234,
-.sidebar21234,
-.sidebar31234,
-.sidebar41234 {
-  background-color: rgb(248, 197, 206);
-  border-radius: 1.5vh;
-  padding: 3vh;
-}
-
-.sidebar31234:hover,
-.header1234:hover,
-.sidebar11234:hover,
-.sidebar21234:hover,
-.sidebar1234 .side1234:hover,
-.sidebar1234 .side1234 span:hover,
-.sidebar41234 .sid1234:hover,
-.sidebar31234 .ss1234:hover,
-.sidebar41234:hover {
-  color: rgb(248, 197, 206);
-  background-color: rgb(21, 32, 13);
-}
-
-/* Specific sizes for each sidebar */
-.sidebar11234 {
-  font-family: "Californian FB", serif;
-  font-size: 6.5vh;
-  align-items: center;
-  justify-content: center;
-  width: 102vh;
-  height: 55vh;
-}
-
-.sidebar21234 {
-  color: rgb(30, 29, 29);
-  width: 101vh;
-  height: 25vh;
-  font-size: 2.5vh;
-}
-
-.sidebar21234 span:hover {
-  color: rgb(249, 214, 221);
-}
-
-.sidebar41234:hover {
-  color: rgb(249, 214, 221);
-}
-
-.sidebar31234 {
-  font-family: "Copperplate", serif;
-  font-size: 7vh;
-  color: black;
-  width: 55vh;
-  height: 25vh;
-  background-color: rgb(245, 129, 150);
-}
-
-.sidebar41234 {
-  text-transform: uppercase;
-  gap: 1.7vw;
-  font-size: 3vh;
-  border-radius: 10px;
-  width: 60vh;
-  height: 16vh;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: row; /* Sidebar takes full height */
-}
-
-
-.sidebar31234 span,
-.b1234 {
-  flex-direction: row; /* Sidebar takes full height */
-  align-items: center;
-  display: flex;
-}
-
-.sidebar31234 .ss1234 {
-  color: rgb(245, 129, 150);
-  font-size: 3vh;
-}
-
-/* New class to scale the container */
-.scale-up1234 {
-  transform: scale(1.02); /* Grow by 0.2vw */
-}
-@media (max-width: 768px) {
-  .main-content1234 {
-    grid-template-columns: 1fr; /* Make it 1 column */
-    grid-gap: 2vh; /* optional, more spacing vertically */
-    margin-left: 0; /* adjust for mobile */
-  }
-
-  .box1234,
-  .sidebar11234,
-  .sidebar21234,
-  .sidebar31234,.sidebar41234 {
-    width: 52vh; /* make them take full width of screen */
-    height: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 5vh;
-  }
-  .sidebar41234,.sidebar1234 {
-    display: none !important;
-    margin: 0vh;
-    padding: 0vh;
-    font-size: 0vh;
-  height: 0;   
-  width: 0;
-  overflow: hidden;   /* Prevent content spill */
-  }
-  .sidebar31234{
-    background-color: rgb(21, 32, 13);
-    color: rgb(249, 214, 221);
-  }
-  .sidebar31234 span .ss1234{
-    color: rgb(245, 129, 150);
-  }
-}
-
-  </style>
 </head>
 
-<body class="sub_page">
-  <script src="js\loadhtml.js"></script>
-  <div id="navbar-placeholder" style="margin: 0.3vw"></div>
+<body class="pro-page">
+  <script src="js/loadhtml.js"></script>
+  <div id="navbar-placeholder"></div>
   <script>
     loadHTML("navbar-placeholder", "navbar.html");
     loadHTML("footer-holder", "footer.html");
-    </script>
-  
+  </script>
+
+  <!-- ===================================================
+       HERO SECTION
+  =================================================== -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <!-- Left: Text content -->
+        <div class="col-lg-6 order-2 order-lg-1 hero-content">
+          <span class="badge-pro">IT Professor &amp; AI Researcher</span>
+          <h1 class="hero-title">Nisha Kiran <span class="text-accent">Gnawaly</span></h1>
+          <p class="hero-tagline">Computer Vision &bull; Machine Learning &bull; Software Engineering</p>
+          <p class="hero-bio">
+            Bridging academia and technology — teaching the next generation of engineers while building
+            intelligent systems that solve real-world problems.
+          </p>
+          <div class="hero-actions">
+            <a href="Nisha-Kiran-Gnawaly.pdf" class="btn-pro btn-pro-primary" download>
+              <i class="fas fa-download"></i> Download CV
+            </a>
+            <a href="work.html" class="btn-pro btn-pro-outline-light">
+              <i class="fas fa-briefcase"></i> My Experience
+            </a>
+          </div>
+          <div class="hero-socials">
+            <a href="https://www.linkedin.com/in/nisha-kiran-gnawaly-544b34283/" target="_blank" class="social-icon-link" title="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/itsmenisha" target="_blank" class="social-icon-link" title="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.facebook.com/nisha.gnawaly.3" target="_blank" class="social-icon-link" title="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.youtube.com/@Tuturu124" target="_blank" class="social-icon-link" title="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Photo -->
+        <div class="col-lg-6 order-1 order-lg-2 hero-photo-col">
+          <div class="hero-photo-wrap">
+            <div class="hero-photo-ring"></div>
+            <img id="nishaImage" src="images/nisha.png" alt="Nisha Kiran Gnawaly — IT Professor" class="hero-photo" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       ABOUT / KNOW NISHA SECTION
+  =================================================== -->
+  <section class="about-section section-pad" id="about">
+    <div class="container">
+      <div class="row align-items-center g-5">
+
+        <div class="col-lg-5">
+          <div class="about-img-wrap">
+            <img src="images/cv3.png" alt="Nisha Kiran Gnawaly" class="about-img" />
+            <div class="about-img-badge">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>IT Professor</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <span class="section-label">About Me</span>
+          <h2 class="section-title">Know Nisha</h2>
+          <p class="about-bio">
+            I specialize in <strong>Computer Vision</strong>, <strong>Artificial Intelligence</strong>,
+            and <strong>Machine Learning</strong>. As an IT Professor, I bridge theoretical foundations
+            with hands-on applications — from real-time object detection with <strong>YOLO</strong> and
+            image recognition with <strong>Vision Transformers</strong>, to building full-stack web
+            applications. My Python expertise spans OpenCV, PyTorch, TensorFlow, Pandas, and NumPy,
+            and I craft clean, responsive interfaces with HTML5, CSS3, JavaScript, and Bootstrap.
+          </p>
+
+          <div class="skills-strip">
+            <a href="https://www.python.org" target="_blank" class="skill-icon-link" title="Python">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" />
+            </a>
+            <a href="https://www.djangoproject.com/" target="_blank" class="skill-icon-link" title="Django">
+              <img src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="Django" />
+            </a>
+            <a href="https://flask.palletsprojects.com/" target="_blank" class="skill-icon-link" title="Flask">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg" alt="Flask" />
+            </a>
+            <a href="https://www.tensorflow.org/" target="_blank" class="skill-icon-link" title="TensorFlow">
+              <img src="https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg" alt="TensorFlow" />
+            </a>
+            <a href="https://pytorch.org/" target="_blank" class="skill-icon-link" title="PyTorch">
+              <img src="https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg" alt="PyTorch" />
+            </a>
+            <a href="https://opencv.org/" target="_blank" class="skill-icon-link" title="OpenCV">
+              <img src="https://www.vectorlogo.zone/logos/opencv/opencv-icon.svg" alt="OpenCV" />
+            </a>
+            <a href="https://scikit-learn.org/" target="_blank" class="skill-icon-link" title="Scikit-learn">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-learn" />
+            </a>
+            <a href="https://numpy.org/" target="_blank" class="skill-icon-link" title="NumPy">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" alt="NumPy" />
+            </a>
+            <a href="https://pandas.pydata.org/" target="_blank" class="skill-icon-link" title="Pandas">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" alt="Pandas" />
+            </a>
+            <a href="https://www.mysql.com/" target="_blank" class="skill-icon-link" title="MySQL">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="MySQL" />
+            </a>
+            <a href="https://www.w3.org/html/" target="_blank" class="skill-icon-link" title="HTML5">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5" />
+            </a>
+            <a href="https://www.w3schools.com/css/" target="_blank" class="skill-icon-link" title="CSS3">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3" />
+            </a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="skill-icon-link" title="JavaScript">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" />
+            </a>
+            <a href="https://getbootstrap.com/" target="_blank" class="skill-icon-link" title="Bootstrap">
+              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="Bootstrap" />
+            </a>
+            <a href="https://git-scm.com/" target="_blank" class="skill-icon-link" title="Git">
+              <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="Git" />
+            </a>
+            <a href="https://github.com/ultralytics/yolov5" target="_blank" class="skill-icon-link" title="YOLO">
+              <img src="images/yolo.png" alt="YOLO" />
+            </a>
+          </div>
+
+          <a href="Nisha-Kiran-Gnawaly.pdf" class="btn-pro btn-pro-primary" download style="display:inline-flex;margin-top:2rem;">
+            <i class="fas fa-file-alt"></i> View Full CV
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       EXPERTISE SECTION
+  =================================================== -->
+  <section class="expertise-section section-pad" id="expertise">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-label">What I Teach &amp; Do</span>
+        <h2 class="section-title">My Expertise</h2>
+        <p class="section-sub">Areas I research, teach, and build professional solutions in.</p>
+      </div>
+      <div class="expertise-grid">
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c1.png" alt="AI" />
+          </div>
+          <h4>Artificial Intelligence</h4>
+          <p>Neural networks, deep learning architectures, and intelligent agent design.</p>
+        </div>
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c2.png" alt="Computer Vision" />
+          </div>
+          <h4>Computer Vision</h4>
+          <p>Object detection with YOLO, image segmentation, and Vision Transformers.</p>
+        </div>
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c3.png" alt="Machine Learning" />
+          </div>
+          <h4>Machine Learning</h4>
+          <p>Predictive modeling, data analysis, and end-to-end ML pipeline development.</p>
+        </div>
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c5.png" alt="Python" />
+          </div>
+          <h4>Python</h4>
+          <p>Advanced Python with Django, Flask, NumPy, Pandas, and scientific computing.</p>
+        </div>
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c6.png" alt="QA" />
+          </div>
+          <h4>Quality Assurance</h4>
+          <p>Test-driven development, software testing strategies, and QA engineering.</p>
+        </div>
+
+        <div class="expertise-card">
+          <div class="expertise-icon">
+            <img src="images/c4.png" alt="Software Development" />
+          </div>
+          <h4>Software Development</h4>
+          <p>Full-stack development, responsive web design, and system architecture.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       EXPERIENCE SECTION
+  =================================================== -->
+  <section class="experience-pro-section section-pad" id="experience">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-label">Career &amp; Projects</span>
+        <h2 class="section-title">Work I Have Done</h2>
+        <p class="section-sub">Professional experience across AI, computer vision, and software engineering.</p>
+      </div>
+
+      <div class="row align-items-start g-5">
+
+        <!-- Accordion Tabs -->
+        <div class="col-lg-6" id="expAccordion">
+
+          <div class="exp-tab" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
+            <div class="exp-icon-wrap">
+              <img src="images/f1.png" alt="Python ML" />
+            </div>
+            <div class="exp-info">
+              <span class="exp-duration">2 Years</span>
+              <h5>Python &amp; Machine Learning</h5>
+            </div>
+            <i class="fas fa-chevron-down exp-chevron"></i>
+          </div>
+          <div class="collapse show exp-collapse-body" id="collapseOne" data-parent="#expAccordion">
+            <p>Developed ML pipelines for classification, regression, and clustering using Python's scientific
+            stack. Built end-to-end prediction systems and applied models to real-world datasets.</p>
+          </div>
+
+          <div class="exp-tab collapsed" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="false" aria-controls="collapseTwo">
+            <div class="exp-icon-wrap">
+              <img src="images/f2.png" alt="Computer Vision" />
+            </div>
+            <div class="exp-info">
+              <span class="exp-duration">1 Year</span>
+              <h5>Computer Vision</h5>
+            </div>
+            <i class="fas fa-chevron-down exp-chevron"></i>
+          </div>
+          <div class="collapse exp-collapse-body" id="collapseTwo" data-parent="#expAccordion">
+            <p>Implemented real-time object detection using YOLO and image recognition with Vision Transformers.
+            Worked extensively with OpenCV for preprocessing and feature extraction pipelines.</p>
+          </div>
+
+          <div class="exp-tab collapsed" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="false" aria-controls="collapseThree">
+            <div class="exp-icon-wrap">
+              <img src="images/f3.png" alt="DevOps" />
+            </div>
+            <div class="exp-info">
+              <span class="exp-duration">4 Months</span>
+              <h5>DevOps at Nest Nepal</h5>
+            </div>
+            <i class="fas fa-chevron-down exp-chevron"></i>
+          </div>
+          <div class="collapse exp-collapse-body" id="collapseThree" data-parent="#expAccordion">
+            <p>Gained hands-on experience with CI/CD pipelines, containerization, and deployment workflows
+            at Nest Nepal's engineering team.</p>
+          </div>
+
+          <div class="exp-tab collapsed" data-toggle="collapse" data-target="#collapseFour"
+               aria-expanded="false" aria-controls="collapseFour">
+            <div class="exp-icon-wrap">
+              <img src="images/f4.png" alt="Internship" />
+            </div>
+            <div class="exp-info">
+              <span class="exp-duration">6 Months</span>
+              <h5>CodSoft ML &amp; Data Analytics Internship</h5>
+            </div>
+            <i class="fas fa-chevron-down exp-chevron"></i>
+          </div>
+          <div class="collapse exp-collapse-body" id="collapseFour" data-parent="#expAccordion">
+            <p>Completed an ML and data analytics internship at CodSoft, working on real-world datasets,
+            building dashboards, and deploying predictive models for business insights.</p>
+          </div>
+
+        </div>
+
+        <!-- Showcase Image -->
+        <div class="col-lg-6">
+          <div class="exp-showcase-wrap">
+            <img src="images/slider-img3.png" alt="Work Experience Showcase" class="exp-showcase-img" />
+            <div class="exp-quick-links">
+              <a href="https://github.com/itsmenisha" class="exp-quick-link" target="_blank">
+                <i class="fab fa-github"></i> ML &amp; Python Projects
+              </a>
+              <a href="https://www.cinemarga.com" class="exp-quick-link" target="_blank">
+                <i class="fas fa-film"></i> Cinemarga
+              </a>
+              <a href="https://github.com/itsmenisha/toRist-website" class="exp-quick-link" target="_blank">
+                <i class="fas fa-code"></i> Front-End Development
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       CONTACT STRIP
+  =================================================== -->
+  <section class="contact-strip section-pad-sm">
+    <div class="container">
+      <div class="contact-strip-inner">
+        <div class="contact-strip-text">
+          <h3>Interested in collaborating or connecting?</h3>
+          <p>Open to academic partnerships, research collaborations, and speaking opportunities.</p>
+        </div>
+        <div class="contact-strip-actions">
+          <a href="mailto:gnawalynishakiran@gmail.com" class="btn-pro btn-pro-white">
+            <i class="fas fa-envelope"></i> Send Email
+          </a>
+          <a href="https://www.linkedin.com/in/nisha-kiran-gnawaly-544b34283/" target="_blank" class="btn-pro btn-pro-outline-white">
+            <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-holder"></div>
+
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>  
-
-  <div class="container1234">
-    <header class="header1234"style="height:0vw;width: 98vw;">
-    </header>
-    <!-- experience section -->
-    <div class="main-content1234">
-      <aside class="sidebar11234">
-      
-        <b>
-       Visionary Coder💛 <br />with
-<span style="font-family: 'Lucida Handwriting', cursive; font-size: 3vh; font-weight: 200;">
-an eye that spots everything with YOLO
-</span>
-~turning pixels into possibilities, one frame at a time.
-  </b>
-      </aside>
-  
-      <div class="box1234">
-        <img id="nishaImage" src="images/nisha.png" alt="Illustration" class="image1234" />
-      </div>
-      <br />
-  
-      <aside class="sidebar21234">
-        <br />
-    <span>
-Nisha is an AI explorer on a mission to make machines smarter and life simpler.  She’s building smart solutions,from predictive systems to creative AI tools -> learning endlessly, and turning bold ideas into reality. Every project is a new adventure, every line of code a step toward the future.
-</span>
-
-      </aside>
-  
-      <aside class="sidebar31234">
-        <span class="s1234">
-          <br />
-          <b>Contact</b><span style="font-family: 'Lucida Handwriting', cursive">me</span>
-        </span>
-        <span class="ss1234">
-          gnawalynishakiran@gmail.com <br />
-          nishakirangnawaly@gmail.com
-        </span>
-      </aside>
-    </div>
-  
-    <aside class="sidebar1234">
-      <a href="https://github.com/itsmenisha" class="side1234" target="_blank">ML and python</a>
-      <a href="https://www.cinemarga.com" target="_blank" class="side1234">Cinemarga</a>
-      <a href="https://github.com/itsmenisha/toRist-website" class="side1234" target="_blank">Front-End development</a>
-      <a href=" https://internshipinnepal.com/information/guide-to-land-good-internship/" class="side1234" target="_blank">SEO</a>
-      <a href="Nisha-Kiran-Gnawaly.pdf" class="side1234" target="_blank" style="margin-bottom: 1vw;" download>
-        <span style="background-color: rgb(250, 236, 198); padding:3vh;border-radius: 2vh;" class="span1234"/>Download CV</span>
-      </a>
-      <div class="sidebar41234">
-        <a href="https://www.linkedin.com/in/nisha-kiran-gnawaly-544b34283/" class="sid1234" target="_blank">LinkedIn</a>
-        <a href="https://github.com/itsmenisha" class="sid1234" target="_blank">Github</a>
-        <a href="https://www.facebook.com/nisha.gnawaly.3" class="sid1234" target="_blank">Facebook</a>
-      </div>
-    </aside>
-  </div>
-  
+  <script src="js/custom.js"></script>
   <script>
-    // Array of image sources
-    const images = [
-      "images/nisha.png",
-      "images/nisha1.png",
-      "images/nisha2.png",
-      "images/nisha3.png",
-      "images/nisha4.png",
-      "images/nisha5.png",
-      "images/nisha6.png",
-      "images/nisha7.png",
-      "images/nisha8.png",
-      "images/nisha9.png",
+    // Photo slideshow — 3 s interval
+    const photos = [
+      "images/nisha.png",  "images/nisha1.png", "images/nisha2.png",
+      "images/nisha3.png", "images/nisha4.png", "images/nisha5.png",
+      "images/nisha6.png", "images/nisha7.png", "images/nisha8.png",
+      "images/nisha9.png"
     ];
-  
-    let currentIndex = 0;
-  
-    // Function to change the image every 1.5 seconds
-    function changeImage() {
-      currentIndex = (currentIndex + 1) % images.length; // Loop back to the first image after the last one
-      document.getElementById("nishaImage").src = images[currentIndex];
-    }
-  
-    // Call the changeImage function every 1.5 seconds
-    setInterval(changeImage, 1000);
-  
-    let container = document.querySelector(".box1234");
-      setInterval(() => {
-        container.classList.toggle("scale-up1234");
-      }, 602);
-       </script>
-  
-  <section class="experience_section layout_padding" style="font-family: 'Californian FB', serif;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-5">
-          <div class="img-box">
-            <img src="images/cv3.png" alt="" style="border-radius: 10px;">
-          </div>
-        </div>
-        <div class="col-md-7">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2 style="font-family: 'Lucida Handwriting'">
-                Know Nisha
-              </h2>
-            </div>
-            <style>
-  body { font-family: Arial, sans-serif; text-align:center; background:#f8f9fa; }
-  h3 { margin:20px 0; }
-  .skills {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:14px;
-    padding:10px;
-  }
-  .skills a img {
-    width:40px;
-    height:40px;
-    transition:transform .2s;
-  }
-  .skills a img:hover { transform:scale(1.1); }
-</style>
+    let photoIdx = 0;
+    const photoEl = document.getElementById("nishaImage");
+    setInterval(() => {
+      photoEl.style.opacity = "0";
+      setTimeout(() => {
+        photoIdx = (photoIdx + 1) % photos.length;
+        photoEl.src = photos[photoIdx];
+        photoEl.style.opacity = "1";
+      }, 300);
+    }, 3000);
 
-<div class="skills">
-  <!-- Core Languages & Frameworks -->
-  <a href="https://www.python.org"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python"></a>
-  <a href="https://www.djangoproject.com/"><img src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="Django"></a>
-  <a href="https://flask.palletsprojects.com/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg" alt="Flask"></a>
-  <a href="https://www.mysql.com/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="MySQL"></a>
-  <a href="https://numpy.org/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" alt="NumPy"></a>
-  <a href="https://pandas.pydata.org/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" alt="Pandas"></a>
-  <a href="https://scikit-learn.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-learn"></a>
-  <a href="https://seaborn.pydata.org/"><img src="https://seaborn.pydata.org/_images/logo-mark-lightbg.svg" alt="Seaborn"></a>
-  <a href="https://www.tensorflow.org/"><img src="https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg" alt="TensorFlow"></a>
-  <a href="https://pytorch.org/"><img src="https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg" alt="PyTorch"></a>
-  <a href="https://opencv.org/"><img src="https://www.vectorlogo.zone/logos/opencv/opencv-icon.svg" alt="OpenCV"></a>
-  <a href="https://github.com/ultralytics/yolov5"><img src="images/yolo.png" alt="YOLO"></a>
-  <a href="https://www.w3.org/html/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5"></a>
-  <a href="https://www.w3schools.com/css/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3"></a>
-  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript"></a>
-  <a href="https://getbootstrap.com/"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="Bootstrap"></a>
-  <a href="https://git-scm.com/"><img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="Git"></a>
-</div>
-
-           <p style="max-width:850px;margin:30px auto;font-size:16px;line-height:1.6;">
-I specialize in <strong>Computer Vision</strong>, <strong>Artificial Intelligence</strong>, and 
-<strong>Machine Learning</strong>, building systems that can see, learn, and make decisions.  
-My work draws on the Python ecosystem using <strong>OpenCV</strong> for image processing, 
-<strong>PyTorch</strong> and <strong>TensorFlow</strong> for deep learning, and 
-<strong>Pandas</strong> and <strong>NumPy</strong> for data analysis.  
-I’ve applied these tools in projects such as real-time object detection with <strong>YOLO</strong> 
-and image recognition with <strong>Vision Transformers</strong>.  
-On the front end, I craft clean, responsive interfaces with <strong>HTML5</strong>, 
-<strong>CSS3</strong>, <strong>JavaScript</strong>, and <strong>Bootstrap</strong>, 
-blending back-end intelligence with user-focused design.  
-I love exploring new technologies and turning complex data into intuitive, high-quality solutions.
-</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end experience section -->
-
-  <!-- category section -->
-
-  <section class="category_section"id="category_container" style="font-family: 'Californian FB', serif;">
-    <br><br>
-    <div class="container">
-      <div class="heading_container">
-        <h2 style="font-family: 'Lucida Handwriting'">
-          My Expertise
-        </h2>
-      </div>
-      <div class="category_container">
-        <div class="box">
-          <div class="img-box">
-            <img src="images/c1.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              AI
-            </h5>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="images/c2.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Computer Vision
-            </h5>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="images/c3.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Machine learning
-            </h5>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="images/c5.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              python 
-            </h5>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="images/c6.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              QA
-            </h5>
-          </div>
-        </div>
-        <div class="box" id="workinnngggggg">
-          <div class="img-box">
-            <img src="images/c4.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Software development
-            </h5>
-          </div>
-        </div>
-      </div>
-    </div>
-     <br><br>
-  </section>
-
-
-  <!-- end category section -->
-
-  <section class="freelance_section layout_padding" id="work_container"  style="font-family: 'Californian FB', serif;">
-    <div id="accordion">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-5 offset-md-1">
-            <div class="detail-box">
-              <div class="heading_container">
-                <h2 style="font-family: 'Lucida Handwriting'">
-                  Work I Have Done
-                </h2>
-              </div>
-              <div class="tab_container">
-                <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  <div class="img-box">
-                    <img src="images/f1.png" alt="">
-                  </div>
-                  <div class="detail-box">
-                    <h5>
-                      2 years
-                    </h5>
-                    <h3>
-                     Python & Machine Learning
-                    </h3>
-                  </div>
-                </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  <div class="img-box">
-                    <img src="images/f2.png" alt="">
-                  </div>
-                  <div class="detail-box">
-                    <h5>
-                      1 Years
-                    </h5>
-                    <h3>
-                      Computer Vision
-                    </h3>
-                  </div>
-                </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  <div class="img-box">
-                    <img src="images/f3.png" alt="">
-                  </div>
-                  <div class="detail-box">
-                    <h5>
-                      4 months
-                    </h5>
-                    <h3>
-                      DevOps in Nest Nepal
-                    </h3>
-                  </div>
-                </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                  <div class="img-box">
-                    <img src="images/f4.png" alt="">
-                  </div>
-                  <div class="detail-box">
-                    <h5>
-                      6 months
-                    </h5>
-                    <h3>
-                      CodSoft ML and Data Analytics Internship
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="collapse show" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion">
-              <div class="img-box">
-                <div class="box12345">&nbsp;&nbsp;&nbsp;
-                  <img id="nishaIma" src="images/slider-img3.png" alt="Illustration1"  class="image12345" />
-                </div>
-               </div>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>  
-  </section> 
-
-  
-
-
-<div id="footer-holder"></div>
+    // Rotate chevrons in accordion
+    document.querySelectorAll('.exp-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        document.querySelectorAll('.exp-tab').forEach(t => t.classList.remove('is-active'));
+        if (!isExpanded) this.classList.add('is-active');
+      });
+    });
+  </script>
 </body>
-
 </html>
