@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Snake Pro Neon</title>
+    <title>Nisha Projects Hub</title>
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -15,429 +15,419 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Orbitron", sans-serif;
       }
 
       body {
+        font-family: Inter, sans-serif;
+        color: #fff;
+        background:
+          radial-gradient(
+            circle at left,
+            rgba(34, 197, 94, 0.16),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at right,
+            rgba(56, 189, 248, 0.16),
+            transparent 35%
+          ),
+          linear-gradient(135deg, #020617, #07111f, #01030a);
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: radial-gradient(
-          circle at top,
-          #1e3a8a,
-          #0f172a 55%,
-          #020617
-        );
-        overflow: hidden;
-        color: white;
       }
 
-      /* stars */
-      body::before {
-        content: "";
-        position: absolute;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.08) 1px,
-          transparent 1px
-        );
-        background-size: 40px 40px;
-        animation: bgmove 18s linear infinite;
-        opacity: 0.25;
+      .wrap7777 {
+        max-width: 100vw;
+        margin: auto;
+        padding: 40px 18px;
       }
 
-      @keyframes bgmove {
-        0% {
-          transform: translate(0, 0);
-        }
-        100% {
-          transform: translate(-80px, -80px);
-        }
+      .top7777 {
+        color: #38bdf8;
+        font-size: 14px;
+        margin-bottom: 8px;
       }
 
-      .card {
-        position: relative;
-        z-index: 2;
-        width: 720px;
-        max-width: 95%;
-        padding: 22px;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(16px);
-        box-shadow:
-          0 0 25px rgba(56, 189, 248, 0.15),
-          0 20px 45px rgba(0, 0, 0, 0.5);
-        text-align: center;
+      .title7777 {
+        font-size: 52px;
+        font-weight: 800;
+        margin-bottom: 26px;
+        color: #fff;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
       }
 
-      h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px #38bdf8;
-      }
-
-      .info {
+      .filters7777 {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
-        margin-bottom: 10px;
+        margin-bottom: 28px;
       }
 
-      .pill {
-        flex: 1;
-        min-width: 120px;
-        padding: 10px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.08);
-        font-size: 14px;
-      }
-
-      canvas {
-        display: block;
-        margin: auto;
-        background: rgba(255, 255, 255, 0.04);
-        border: 2px solid rgba(56, 189, 248, 0.5);
-        border-radius: 16px;
-      }
-
-      .buttons {
-        margin-top: 10px;
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      button {
-        padding: 10px 14px;
+      .btn7777 {
         border: none;
-        border-radius: 12px;
         cursor: pointer;
-        font-weight: 800;
-        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: #fff;
+        background: #111827;
+        transition: 0.25s;
+      }
+
+      .btn7777:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+      }
+
+      .active7777 {
+        background: linear-gradient(135deg, #38bdf8, #22c55e);
         color: #00111a;
       }
 
-      .mobile {
-        margin-top: 8px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
+      .grid7777 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
       }
 
-      .mobbtn {
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: #0ea5e9;
-        color: black;
-        font-weight: 900;
-        cursor: pointer;
+      .card7777 {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 18px;
+        transition: 0.28s;
       }
 
-      #msg {
-        margin-top: 8px;
+      .card7777:hover {
+        transform: translateY(-8px);
+        border-color: rgba(56, 189, 248, 0.45);
+        box-shadow:
+          0 0 20px rgba(56, 189, 248, 0.15),
+          0 15px 35px rgba(0, 0, 0, 0.45);
+      }
+
+      .thumb7777 {
+        width: 100%;
+        height: 185px;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 14px;
+      }
+
+      .thumb7777 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.35s;
+      }
+
+      .card7777:hover img {
+        transform: scale(1.05);
+      }
+
+      .card7777 h3 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+
+      .card7777 p {
+        font-size: 14px;
+        color: #94a3b8;
+        min-height: 42px;
+      }
+
+      .tag7777 {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #111827;
         color: #7dd3fc;
-        min-height: 20px;
       }
 
-      /* popup */
-      #popup {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 50px;
-        font-weight: 900;
-        background: rgba(0, 0, 0, 0.75);
-        opacity: 0;
-        pointer-events: none;
+      .footer7777 {
+        text-align: center;
+        margin-top: 45px;
+        color: #94a3b8;
+        font-size: 14px;
+        padding-bottom: 30px;
       }
 
-      .show {
-        animation: pop 1.2s ease;
+      @media (max-width: 980px) {
+        .grid7777 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .title7777 {
+          font-size: 42px;
+        }
       }
 
-      @keyframes pop {
-        0% {
-          opacity: 0;
-          transform: scale(0.6);
+      @media (max-width: 680px) {
+        .grid7777 {
+          grid-template-columns: 1fr;
         }
-        20% {
-          opacity: 1;
-          transform: scale(1.1);
+        .title7777 {
+          font-size: 32px;
         }
-        80% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0.9);
+        .btn7777 {
+          padding: 10px 14px;
+          font-size: 13px;
         }
       }
     </style>
   </head>
 
   <body>
-    <div class="card">
-      <h1>🐍 SNAKE PRO</h1>
+    <script src="js/loadhtml.js"></script>
+    <div id="navbar-placeholder"></div>
+    <script>
+      loadHTML("navbar-placeholder", "navbar.html");
+    </script>
 
-      <div class="info">
-        <div class="pill">LEVEL <span id="level">1</span>/10</div>
-        <div class="pill">SCORE <span id="score">0</span></div>
-        <div class="pill">BEST <span id="best">0</span></div>
+    <div class="wrap7777">
+      <div class="top7777">projects.run()</div>
+      <h1 class="title7777">My Projects Hub</h1>
+
+      <div class="filters7777">
+        <button class="btn7777 active7777" onclick="filter7777('all', this)">
+          ALL
+        </button>
+        <button class="btn7777" onclick="filter7777('game', this)">
+          GAMES
+        </button>
+        <button class="btn7777" onclick="filter7777('health', this)">
+          HEALTH
+        </button>
+        <button class="btn7777" onclick="filter7777('tool', this)">
+          TOOLS
+        </button>
+        <button class="btn7777" onclick="filter7777('pdf', this)">PDF</button>
       </div>
 
-      <canvas id="game" width="420" height="420"></canvas>
+      <div class="grid7777" id="grid7777">
+        <!-- GAMES -->
+        <div class="card7777" data-cat="game" data-date="35">
+          <a href="aalucross.html">
+            <div class="thumb7777"><img src="images/tiktaktoe.png" /></div>
+            <h3>Tic Tac Toe</h3>
+            <p>Classic neon board battle.</p>
+            <span class="tag7777">Game</span></a
+          >
+        </div>
 
-      <div class="buttons">
-        <button onclick="startGame()">START</button>
-        <button onclick="restartGame()">RESTART</button>
+        <div class="card7777" data-cat="game" data-date="34">
+          <a href="rock_paper_scissors.html">
+            <div class="thumb7777"><img src="images/rockpaper.png" /></div>
+            <h3>Rock Paper Scissors</h3>
+            <p>Beat the CPU instantly.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="32">
+          <a href="snake.html">
+            <div class="thumb7777"><img src="images/snake.png" /></div>
+            <h3>Snake Game</h3>
+            <p>Arcade snake with speed levels.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="31">
+          <div class="thumb7777"><img src="images/2048.jpg" /></div>
+          <h3>2048 Puzzle</h3>
+          <p>Merge blocks to 2048.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="30">
+          <div class="thumb7777"><img src="images/hangman.jpg" /></div>
+          <h3>Hangman</h3>
+          <p>Guess the hidden word.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="29">
+          <div class="thumb7777"><img src="images/memory.jpg" /></div>
+          <h3>Memory Flip</h3>
+          <p>Train memory with cards.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="28">
+          <div class="thumb7777"><img src="images/runner.jpg" /></div>
+          <h3>Runner Dash</h3>
+          <p>Jump and survive endless mode.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <!-- HEALTH -->
+        <div class="card7777" data-cat="health" data-date="27">
+          <div class="thumb7777"><img src="images/bmi.jpg" /></div>
+          <h3>BMI Calculator</h3>
+          <p>Check body mass instantly.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="26">
+          <div class="thumb7777"><img src="images/health.jpg" /></div>
+          <h3>Health Predictor</h3>
+          <p>AI based health estimate.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="25">
+          <div class="thumb7777"><img src="images/water.jpg" /></div>
+          <h3>Water Tracker</h3>
+          <p>Daily hydration reminder.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="24">
+          <div class="thumb7777"><img src="images/calorie.jpg" /></div>
+          <h3>Calorie Calculator</h3>
+          <p>Daily calorie estimate tool.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="23">
+          <div class="thumb7777"><img src="images/step.jpg" /></div>
+          <h3>Step Goal Planner</h3>
+          <p>Track your walking goals.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="22">
+          <div class="thumb7777"><img src="images/sleep.jpg" /></div>
+          <h3>Sleep Timer</h3>
+          <p>Better bedtime schedule planner.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <!-- TOOLS -->
+        <div class="card7777" data-cat="tool" data-date="21">
+          <div class="thumb7777"><img src="images/qr.jpg" /></div>
+          <h3>QR Generator</h3>
+          <p>Create payment QR instantly.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="20">
+          <div class="thumb7777"><img src="images/date.jpg" /></div>
+          <h3>Nepali Date Converter</h3>
+          <p>BS to AD / AD to BS.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="19">
+          <div class="thumb7777"><img src="images/unit.jpg" /></div>
+          <h3>Unit Converter</h3>
+          <p>Length, weight and speed.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="18">
+          <div class="thumb7777"><img src="images/password.jpg" /></div>
+          <h3>Password Generator</h3>
+          <p>Create secure passwords.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="17">
+          <div class="thumb7777"><img src="images/interest.jpg" /></div>
+          <h3>Interest Calculator</h3>
+          <p>Simple & compound interest.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="16">
+          <div class="thumb7777"><img src="images/todo.jpg" /></div>
+          <h3>Todo Planner</h3>
+          <p>Organize daily tasks fast.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <!-- PDF -->
+        <div class="card7777" data-cat="pdf" data-date="15">
+          <div class="thumb7777"><img src="images/pdf1.jpg" /></div>
+          <h3>Docs to PDF</h3>
+          <p>Convert docs into PDF file.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="14">
+          <div class="thumb7777"><img src="images/pdf2.jpg" /></div>
+          <h3>Merge PDF</h3>
+          <p>Combine many PDFs.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="13">
+          <div class="thumb7777"><img src="images/pdf3.jpg" /></div>
+          <h3>Split PDF</h3>
+          <p>Extract selected pages.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="12">
+          <div class="thumb7777"><img src="images/pdf4.jpg" /></div>
+          <h3>Compress PDF</h3>
+          <p>Reduce PDF size quickly.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="11">
+          <div class="thumb7777"><img src="images/pdf5.jpg" /></div>
+          <h3>Image to PDF</h3>
+          <p>Convert photos to PDF.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="10">
+          <div class="thumb7777"><img src="images/pdf6.jpg" /></div>
+          <h3>PDF Lock</h3>
+          <p>Add password security.</p>
+          <span class="tag7777">PDF</span>
+        </div>
       </div>
 
-      <div class="mobile">
-        <div class="mobbtn" onclick="moveDir('up')">⬆</div>
-        <div class="mobbtn" onclick="moveDir('left')">⬅</div>
-        <div class="mobbtn" onclick="moveDir('down')">⬇</div>
-        <div class="mobbtn" onclick="moveDir('right')">➡</div>
-      </div>
-
-      <div id="msg">Eat food, grow, survive 🚀</div>
-      <div id="popup"></div>
+      <div class="footer7777">© 2026 Nisha Kiran Gnawaly</div>
     </div>
 
     <script>
-      const canvas = document.getElementById("game");
-      const ctx = canvas.getContext("2d");
+      function filter7777(cat, btn) {
+        document.querySelectorAll(".btn7777").forEach((b) => {
+          b.classList.remove("active7777");
+        });
 
-      let level = 1,
-        score = 0,
-        target = 5;
-      let tile = 20,
-        count = 20;
-      let snake = [],
-        food = {},
-        dir = { x: 1, y: 0 };
-      let speed = 150,
-        loop;
-      let particles = [];
+        btn.classList.add("active7777");
 
-      /* HIGH SCORE */
-      let best = localStorage.getItem("snakeBest") || 0;
-      document.getElementById("best").innerText = best;
+        const cards = [...document.querySelectorAll(".card7777")];
 
-      /* SOUND */
-      function beep(freq) {
-        const audio = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audio.createOscillator();
-        const gain = audio.createGain();
-        osc.connect(gain);
-        gain.connect(audio.destination);
-        osc.frequency.value = freq;
-        osc.start();
-        osc.stop(audio.currentTime + 0.08);
-      }
-
-      /* POPUP */
-      function popup(text) {
-        let p = document.getElementById("popup");
-        p.innerText = text;
-        p.classList.remove("show");
-        void p.offsetWidth;
-        p.classList.add("show");
-      }
-
-      /* LEVEL SETUP */
-      function setup() {
-        count = 20 + (level - 1) * 2;
-        tile = Math.floor(420 / count);
-        speed = Math.max(50, 150 - level * 12);
-
-        snake = [];
-        for (let i = 4 + level; i > 0; i--) {
-          snake.push({ x: i, y: 10 });
-        }
-
-        dir = { x: 1, y: 0 };
-        score = 0;
-        target = 4 + level;
-        spawnFood();
-
-        document.getElementById("level").innerText = level;
-        document.getElementById("score").innerText = score;
-
-        popup("LEVEL " + level);
-      }
-
-      /* FOOD */
-      function spawnFood() {
-        food = {
-          x: Math.floor(Math.random() * count),
-          y: Math.floor(Math.random() * count),
-        };
-      }
-
-      /* PARTICLES */
-      function addParticles(x, y) {
-        for (let i = 0; i < 10; i++) {
-          particles.push({
-            x: x,
-            y: y,
-            vx: (Math.random() - 0.5) * 3,
-            vy: (Math.random() - 0.5) * 3,
-            life: 20,
-          });
-        }
-        beep(600);
-      }
-
-      /* DRAW */
-      function draw() {
-        ctx.clearRect(0, 0, 420, 420);
-
-        /* food glow */
-        ctx.fillStyle = "#f43f5e";
-        ctx.beginPath();
-        ctx.arc(
-          food.x * tile + tile / 2,
-          food.y * tile + tile / 2,
-          tile / 2.5,
-          0,
-          6.28,
-        );
-        ctx.fill();
-
-        /* snake */
-        snake.forEach((s, i) => {
-          ctx.fillStyle = i === 0 ? "#38bdf8" : "#0ea5e9";
-          ctx.beginPath();
-          ctx.roundRect(s.x * tile, s.y * tile, tile - 1, tile - 1, 6);
-          ctx.fill();
-
-          /* eyes */
-          if (i === 0) {
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(s.x * tile + 6, s.y * tile + 6, 2, 0, 6.28);
-            ctx.arc(s.x * tile + 14, s.y * tile + 6, 2, 0, 6.28);
-            ctx.fill();
+        cards.forEach((card) => {
+          if (cat === "all" || card.dataset.cat === cat) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
           }
         });
 
-        /* particles */
-        particles.forEach((p, i) => {
-          ctx.fillStyle = "rgba(56,189,248,.9)";
-          ctx.fillRect(p.x, p.y, 2, 2);
-          p.x += p.vx;
-          p.y += p.vy;
-          p.life--;
-          if (p.life <= 0) particles.splice(i, 1);
+        sort7777();
+      }
+
+      function sort7777() {
+        const grid = document.getElementById("grid7777");
+        const cards = [...document.querySelectorAll(".card7777")];
+
+        cards.sort((a, b) => {
+          return Number(b.dataset.date) - Number(a.dataset.date);
         });
+
+        cards.forEach((card) => grid.appendChild(card));
       }
 
-      /* UPDATE */
-      function update() {
-        let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-        if (head.x < 0 || head.y < 0 || head.x >= count || head.y >= count) {
-          gameOver();
-          return;
-        }
-
-        for (let s of snake) {
-          if (s.x === head.x && s.y === head.y) {
-            gameOver();
-            return;
-          }
-        }
-
-        snake.unshift(head);
-
-        /* eat */
-        if (head.x === food.x && head.y === food.y) {
-          score++;
-          document.getElementById("score").innerText = score;
-
-          addParticles(head.x * tile, head.y * tile);
-
-          if (score > best) {
-            best = score;
-            localStorage.setItem("snakeBest", best);
-            document.getElementById("best").innerText = best;
-          }
-
-          beep(800);
-          spawnFood();
-
-          if (score >= target) {
-            nextLevel();
-            return;
-          }
-        } else {
-          snake.pop();
-        }
-
-        draw();
-      }
-
-      /* LOOP */
-      function startGame() {
-        clearInterval(loop);
-        level = 1;
-        setup();
-        draw();
-        loop = setInterval(update, speed);
-      }
-
-      function restartGame() {
-        startGame();
-      }
-
-      function nextLevel() {
-        clearInterval(loop);
-
-        if (level === 10) {
-          popup("YOU WIN 🏆");
-          beep(1000);
-          return;
-        }
-
-        level++;
-        popup("LEVEL UP!");
-        beep(900);
-
-        setTimeout(() => {
-          setup();
-          loop = setInterval(update, speed);
-        }, 1000);
-      }
-
-      function gameOver() {
-        clearInterval(loop);
-        popup("GAME OVER");
-        beep(200);
-      }
-
-      /* CONTROLS */
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowUp" && dir.y !== 1) dir = { x: 0, y: -1 };
-        if (e.key === "ArrowDown" && dir.y !== -1) dir = { x: 0, y: 1 };
-        if (e.key === "ArrowLeft" && dir.x !== 1) dir = { x: -1, y: 0 };
-        if (e.key === "ArrowRight" && dir.x !== -1) dir = { x: 1, y: 0 };
-      });
-
-      /* MOBILE */
-      function moveDir(d) {
-        if (d === "up" && dir.y !== 1) dir = { x: 0, y: -1 };
-        if (d === "down" && dir.y !== -1) dir = { x: 0, y: 1 };
-        if (d === "left" && dir.x !== 1) dir = { x: -1, y: 0 };
-        if (d === "right" && dir.x !== -1) dir = { x: 1, y: 0 };
-      }
-
-      draw();
+      sort7777();
     </script>
   </body>
 </html>
