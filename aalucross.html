@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Tic Tac Toe Neon Deluxe</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      /* MAIN WRAPPER */
+      .body1111 {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 15px;
+
+        /* BLACK CENTER + GREEN LEFT + BLUE RIGHT */
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22) 0%,
+            rgba(34, 197, 94, 0.1) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2) 0%,
+            rgba(56, 189, 248, 0.09) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at center,
+            #050505 0%,
+            #020617 58%,
+            #01030a 100%
+          );
+
+        overflow: hidden;
+        position: relative;
+      }
+
+      .body1111::before {
+        content: "";
+        position: absolute;
+        width: 220%;
+        height: 220%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px
+        );
+        background-size: 40px 40px;
+        animation: bgmove1111 18s linear infinite;
+        opacity: 0.25;
+      }
+
+      @keyframes bgmove1111 {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(-80px, -80px);
+        }
+      }
+
+      /* CARD */
+      .card1111 {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 560px;
+        padding: 22px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(18px);
+        box-shadow:
+          0 0 20px rgba(56, 189, 248, 0.3),
+          0 0 60px rgba(56, 189, 248, 0.18),
+          0 25px 60px rgba(0, 0, 0, 0.55);
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .title1111 {
+        font-size: 3vw;
+        color: #fff;
+        margin-bottom: 18px;
+        text-shadow:
+          0 0 10px #38bdf8,
+          0 0 22px #38bdf8;
+      }
+
+      /* TOP INFO */
+      .info1111 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .pill1111 {
+        padding: 12px 10px;
+        border-radius: 16px;
+        font-size: 13px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow:
+          inset 0 0 10px rgba(255, 255, 255, 0.04),
+          0 0 12px rgba(56, 189, 248, 0.15);
+      }
+
+      /* BOARD */
+      .board1111 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .cell1111 {
+        height: 9vw;
+        border: none;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        font-size: 62px;
+        font-weight: 900;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow:
+          inset 0 0 12px rgba(255, 255, 255, 0.03),
+          0 0 10px rgba(56, 189, 248, 0.08);
+      }
+
+      .cell1111:hover {
+        transform: translateY(-4px) scale(1.03);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
+      }
+
+      .x1111 {
+        color: #38bdf8;
+        text-shadow:
+          0 0 12px #38bdf8,
+          0 0 28px #38bdf8;
+      }
+
+      .o1111 {
+        color: #f43f5e;
+        text-shadow:
+          0 0 12px #f43f5e,
+          0 0 28px #f43f5e;
+      }
+
+      /* BUTTONS */
+      .buttons1111 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .control1111 {
+        padding: 13px 10px;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 800;
+        color: #00111a;
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+        transition: 0.2s;
+      }
+
+      .control1111:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 22px rgba(56, 189, 248, 0.75);
+      }
+
+      /* MESSAGE */
+      .msg1111 {
+        margin-top: 16px;
+        min-height: 24px;
+        color: #7dd3fc;
+        font-size: 14px;
+        text-shadow: 0 0 8px #38bdf8;
+      }
+
+      /* POPUP */
+      .announce1111 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 42px;
+        font-weight: 900;
+        border-radius: 28px;
+        background: rgba(0, 0, 0, 0.84);
+        opacity: 0;
+        pointer-events: none;
+        color: #fff;
+        text-shadow:
+          0 0 14px #38bdf8,
+          0 0 34px #38bdf8;
+      }
+
+      .show1111 {
+        animation: pop1111 1.4s ease;
+      }
+
+      @keyframes pop1111 {
+        0% {
+          opacity: 0;
+          transform: scale(0.6);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .title1111 {
+          font-size: 28px;
+        }
+        .cell1111 {
+          height: 95px;
+          font-size: 52px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .card1111 {
+          padding: 16px;
+          border-radius: 22px;
+        }
+
+        .info1111 {
+          grid-template-columns: 1fr;
+        }
+
+        .buttons1111 {
+          grid-template-columns: 1fr;
+        }
+
+        .cell1111 {
+          height: 82px;
+          font-size: 42px;
+          border-radius: 16px;
+        }
+
+        .title1111 {
+          font-size: 24px;
+        }
+
+        .announce1111 {
+          font-size: 28px;
+        }
+      }
+
+      .footer {
+        font-family: Inter, sans-serif;
+        color: #f8fafc;
+        line-height: 1.6;
+
+        /* BLACK CENTER + GREEN LEFT + BLUE RIGHT */
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22) 0%,
+            rgba(34, 197, 94, 0.1) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2) 0%,
+            rgba(56, 189, 248, 0.09) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at center,
+            #050505 0%,
+            #020617 58%,
+            #01030a 100%
+          );
+
+        background-attachment: fixed;
+
+        text-align: center;
+        padding: 60px 0;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <body class="pro-page">
+      <script src="js/loadhtml.js"></script>
+      <div id="navbar-placeholder"></div>
+      <script>
+        loadHTML("navbar-placeholder", "navbar.html");
+        loadHTML("footer-holder", "footer.html");
+      </script>
+      <div class="body1111">
+        <div class="card1111">
+          <h1 class="title1111">
+            TIC <span style="color: #ff6363">TAC</span> TOE
+          </h1>
+
+          <div class="info1111">
+            <div class="pill1111">PLAYER X</div>
+            <div class="pill1111" id="modeText1111">CPU O</div>
+            <div class="pill1111">WINS <span id="wins1111">0</span></div>
+          </div>
+
+          <div class="board1111">
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+            <button class="cell1111"></button>
+          </div>
+
+          <div class="buttons1111">
+            <button class="control1111" id="newBtn1111">NEW GAME</button>
+            <button class="control1111" id="resetBtn1111">RESET SCORE</button>
+            <button class="control1111" id="modeBtn1111">MODE: CPU</button>
+            <button class="control1111" id="diffBtn1111">EASY</button>
+          </div>
+
+          <div class="msg1111" id="msg1111">Your Turn</div>
+          <div class="announce1111" id="announce1111"></div>
+        </div>
+      </div>
+
+      <script>
+        const cells1111 = document.querySelectorAll(".cell1111");
+        const msg1111 = document.getElementById("msg1111");
+        const announce1111 = document.getElementById("announce1111");
+        const winsEl1111 = document.getElementById("wins1111");
+        const modeBtn1111 = document.getElementById("modeBtn1111");
+        const modeText1111 = document.getElementById("modeText1111");
+        const diffBtn1111 = document.getElementById("diffBtn1111");
+
+        let board1111 = Array(9).fill("");
+        let active1111 = true;
+        let vsCpu1111 = true;
+        let current1111 = "X";
+        let wins1111 = 0;
+        let difficulty1111 = 0;
+
+        const levels1111 = ["EASY", "MEDIUM", "HARD"];
+
+        cells1111.forEach((cell, i) => {
+          cell.addEventListener("click", () => move1111(i));
+        });
+
+        document.getElementById("newBtn1111").onclick = newGame1111;
+        document.getElementById("resetBtn1111").onclick = resetScore1111;
+        modeBtn1111.onclick = toggleMode1111;
+        diffBtn1111.onclick = changeDifficulty1111;
+
+        function popup1111(text) {
+          announce1111.innerText = text;
+          announce1111.classList.remove("show1111");
+          void announce1111.offsetWidth;
+          announce1111.classList.add("show1111");
+        }
+
+        function autoReset1111() {
+          setTimeout(() => newGame1111(), 1500);
+        }
+
+        function move1111(i) {
+          if (!active1111 || board1111[i] != "") return;
+
+          place1111(i, current1111);
+
+          if (checkWinner1111(current1111)) {
+            finish1111(current1111);
+            return;
+          }
+
+          if (full1111()) {
+            drawGame1111();
+            return;
+          }
+
+          if (vsCpu1111) {
+            current1111 = "O";
+            msg1111.textContent = "CPU Thinking...";
+            setTimeout(cpuMove1111, 400);
+          } else {
+            current1111 = current1111 === "X" ? "O" : "X";
+            msg1111.textContent = "Player " + current1111 + " Turn";
+          }
+        }
+
+        function cpuMove1111() {
+          if (!active1111) return;
+          let pick = randomMove1111();
+          place1111(pick, "O");
+
+          if (checkWinner1111("O")) {
+            finish1111("O");
+            return;
+          }
+
+          if (full1111()) {
+            drawGame1111();
+            return;
+          }
+
+          current1111 = "X";
+          msg1111.textContent = "Your Turn";
+        }
+
+        function place1111(i, p) {
+          board1111[i] = p;
+          cells1111[i].textContent = p;
+          cells1111[i].classList.add(p === "X" ? "x1111" : "o1111");
+        }
+
+        function finish1111(player) {
+          active1111 = false;
+
+          if (player === "X") {
+            wins1111++;
+            winsEl1111.textContent = wins1111;
+            popup1111("YOU WIN!");
+            msg1111.textContent = "Victory!";
+          } else {
+            popup1111(vsCpu1111 ? "CPU WINS" : "PLAYER O WINS");
+            msg1111.textContent = "Game Over";
+          }
+
+          autoReset1111();
+        }
+
+        function drawGame1111() {
+          active1111 = false;
+          popup1111("DRAW!");
+          msg1111.textContent = "Match Draw";
+          autoReset1111();
+        }
+
+        function checkWinner1111(p) {
+          const c = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+          ];
+          return c.some((a) => a.every((i) => board1111[i] === p));
+        }
+
+        function randomMove1111() {
+          let e = board1111
+            .map((v, i) => (v === "" ? i : null))
+            .filter((v) => v !== null);
+          return e[Math.floor(Math.random() * e.length)];
+        }
+
+        function full1111() {
+          return board1111.every((v) => v !== "");
+        }
+
+        function newGame1111() {
+          board1111 = Array(9).fill("");
+          active1111 = true;
+          current1111 = "X";
+
+          cells1111.forEach((c) => {
+            c.textContent = "";
+            c.className = "cell1111";
+          });
+
+          msg1111.textContent = "Your Turn";
+        }
+
+        function resetScore1111() {
+          wins1111 = 0;
+          winsEl1111.textContent = "0";
+          newGame1111();
+          popup1111("RESET");
+        }
+
+        function toggleMode1111() {
+          vsCpu1111 = !vsCpu1111;
+          modeBtn1111.textContent = vsCpu1111 ? "MODE: CPU" : "MODE: 2P";
+          modeText1111.textContent = vsCpu1111 ? "CPU O" : "PLAYER O";
+          newGame1111();
+        }
+
+        function changeDifficulty1111() {
+          difficulty1111 = (difficulty1111 + 1) % 3;
+          diffBtn1111.textContent = levels1111[difficulty1111];
+          popup1111(levels1111[difficulty1111]);
+          newGame1111();
+        }
+      </script>
+    </body>
+    <div class="footer">
+      © 2026 Nisha Kiran Gnawaly <br />
+
+      gnawalynishakiran@gmail.com
+
+      <a
+        href="https://mail.google.com/mail/u/0/#sent?compose=new"
+        class="link-box"
+        target="_blank"
+      >
+        <button
+          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
+          style="font-size: 1.5vw"
+        >
+          📋
+        </button>
+      </a>
+    </div>
+  </body>
+</html>

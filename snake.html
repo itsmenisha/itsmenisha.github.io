@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Snake Neon Deluxe</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(
+          circle at top,
+          #1e3a8a,
+          #0f172a 55%,
+          #020617
+        );
+        overflow: hidden;
+        color: white;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px
+        );
+        background-size: 40px 40px;
+        animation: bgmove 18s linear infinite;
+        opacity: 0.25;
+      }
+
+      @keyframes bgmove {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(-80px, -80px);
+        }
+      }
+
+      .card {
+        position: relative;
+        z-index: 2;
+        width: 760px;
+        max-width: 95%;
+        padding: 25px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(16px);
+        box-shadow:
+          0 0 25px rgba(56, 189, 248, 0.15),
+          0 20px 45px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px #38bdf8;
+        margin-bottom: 14px;
+      }
+
+      .info {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .pill {
+        flex: 1;
+        min-width: 120px;
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 14px;
+      }
+
+      canvas {
+        display: block;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.04);
+        border: 2px solid rgba(56, 189, 248, 0.5);
+        border-radius: 16px;
+        box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 13px 18px;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: 800;
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        color: #00111a;
+        transition: 0.25s;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+      }
+
+      #msg {
+        margin-top: 14px;
+        min-height: 22px;
+        color: #7dd3fc;
+        font-size: 14px;
+      }
+
+      #announce {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 46px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        background: rgba(0, 0, 0, 0.78);
+        border-radius: 28px;
+        opacity: 0;
+        pointer-events: none;
+        text-shadow:
+          0 0 12px #38bdf8,
+          0 0 30px #38bdf8;
+      }
+
+      .show {
+        animation: pop 1.3s ease;
+      }
+
+      @keyframes pop {
+        0% {
+          opacity: 0;
+          transform: scale(0.6);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>SNAKE DELUXE</h1>
+
+      <div class="info">
+        <div class="pill">LEVEL <span id="level">1</span>/10</div>
+        <div class="pill">SCORE <span id="score">0</span></div>
+        <div class="pill">BEST <span id="best">0</span></div>
+        <div class="pill">TARGET <span id="target">5</span></div>
+      </div>
+
+      <canvas id="game" width="420" height="420"></canvas>
+
+      <div class="buttons">
+        <button onclick="startGame()">START</button>
+        <button onclick="restartGame()">RESTART</button>
+        <button onclick="togglePause()">PAUSE</button>
+      </div>
+
+      <div id="msg">Arrow Keys To Move | P = Pause</div>
+      <div id="announce"></div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+
+      let level = 1,
+        score = 0,
+        target = 5;
+      let tile = 20,
+        count = 20,
+        speed = 170;
+      let snake = [],
+        food = {},
+        dir = { x: 1, y: 0 },
+        loop;
+      let paused = false;
+
+      let best = localStorage.getItem("snakeBest") || 0;
+      document.getElementById("best").innerText = best;
+
+      function popup(t) {
+        let a = document.getElementById("announce");
+        a.innerText = t;
+        a.classList.remove("show");
+        void a.offsetWidth;
+        a.classList.add("show");
+      }
+
+      function setupLevel() {
+        count = 20 + (level - 1) * 2;
+        tile = Math.floor(420 / count);
+        speed = Math.max(55, 170 - level * 12);
+        target = 4 + level;
+        score = 0;
+
+        snake = [];
+        for (let i = 4 + level; i > 0; i--) snake.push({ x: i, y: 10 });
+
+        dir = { x: 1, y: 0 };
+        spawnFood();
+
+        updateText();
+        popup("LEVEL " + level);
+      }
+
+      function updateText() {
+        levelEl.innerText = level;
+        scoreEl.innerText = score;
+        targetEl.innerText = target;
+      }
+
+      function spawnFood() {
+        food = {
+          x: Math.floor(Math.random() * count),
+          y: Math.floor(Math.random() * count),
+        };
+      }
+
+      function rr(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawEyes(head) {
+        ctx.fillStyle = "white";
+
+        let ex1 = head.x * tile + tile * 0.28;
+        let ex2 = head.x * tile + tile * 0.62;
+        let ey = head.y * tile + tile * 0.32;
+
+        if (dir.x === -1) {
+          ex1 = head.x * tile + tile * 0.22;
+          ex2 = head.x * tile + tile * 0.22;
+        }
+        if (dir.x === 1) {
+          ex1 = head.x * tile + tile * 0.7;
+          ex2 = head.x * tile + tile * 0.7;
+        }
+        if (dir.y === 1) {
+          ey = head.y * tile + tile * 0.7;
+        }
+        if (dir.y === -1) {
+          ey = head.y * tile + tile * 0.18;
+        }
+
+        ctx.beginPath();
+        ctx.arc(ex1, ey, 2.2, 0, 6.28);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ex2, ey, 2.2, 0, 6.28);
+        ctx.fill();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, 420, 420);
+
+        for (let i = 0; i < count; i++) {
+          for (let j = 0; j < count; j++) {
+            ctx.strokeStyle = "rgba(255,255,255,.03)";
+            ctx.strokeRect(i * tile, j * tile, tile, tile);
+          }
+        }
+
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = "#f43f5e";
+        ctx.fillStyle = "#f43f5e";
+        rr(food.x * tile, food.y * tile, tile - 1, tile - 1, 8);
+
+        ctx.shadowBlur = 0;
+
+        snake.forEach((p, i) => {
+          ctx.fillStyle = i === 0 ? "#38bdf8" : "#0ea5e9";
+          ctx.shadowBlur = i === 0 ? 16 : 0;
+          ctx.shadowColor = "#38bdf8";
+
+          if (i === 0) {
+            rr(p.x * tile, p.y * tile, tile - 1, tile - 1, tile / 2);
+            drawEyes(p);
+          } else {
+            rr(p.x * tile, p.y * tile, tile - 1, tile - 1, 4);
+          }
+        });
+
+        ctx.shadowBlur = 0;
+      }
+
+      function update() {
+        if (paused) return;
+
+        let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+        if (head.x < 0 || head.y < 0 || head.x >= count || head.y >= count) {
+          gameOver();
+          return;
+        }
+
+        for (let p of snake) {
+          if (head.x === p.x && head.y === p.y) {
+            gameOver();
+            return;
+          }
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+          score++;
+          if (score > best) {
+            best = score;
+            localStorage.setItem("snakeBest", best);
+            bestEl.innerText = best;
+          }
+          scoreEl.innerText = score;
+          spawnFood();
+
+          if (score >= target) {
+            nextLevel();
+            return;
+          }
+        } else {
+          snake.pop();
+        }
+
+        draw();
+      }
+
+      function startGame() {
+        clearInterval(loop);
+        paused = false;
+        setupLevel();
+        draw();
+        loop = setInterval(update, speed);
+      }
+
+      function restartGame() {
+        level = 1;
+        startGame();
+      }
+
+      function nextLevel() {
+        clearInterval(loop);
+
+        if (level === 10) {
+          popup("YOU WIN!");
+          msg.innerText = "Champion!";
+          return;
+        }
+
+        level++;
+        popup("LEVEL UP!");
+        msg.innerText = "Next Level...";
+        setTimeout(startGame, 1300);
+      }
+
+      function gameOver() {
+        clearInterval(loop);
+        popup("GAME OVER");
+        msg.innerText = "Press Restart";
+      }
+
+      function togglePause() {
+        paused = !paused;
+        msg.innerText = paused ? "PAUSED" : "Resumed";
+        if (paused) popup("PAUSED");
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowUp" && dir.y !== 1) dir = { x: 0, y: -1 };
+        if (e.key === "ArrowDown" && dir.y !== -1) dir = { x: 0, y: 1 };
+        if (e.key === "ArrowLeft" && dir.x !== 1) dir = { x: -1, y: 0 };
+        if (e.key === "ArrowRight" && dir.x !== -1) dir = { x: 1, y: 0 };
+        if (e.key === "p" || e.key === "P") togglePause();
+      });
+
+      draw();
+    </script>
+  </body>
+</html>
+y

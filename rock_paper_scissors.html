@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Rock Paper Scissors Ultimate</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(
+          circle at top,
+          #1e3a8a,
+          #0f172a 55%,
+          #020617
+        );
+        color: white;
+        overflow: hidden;
+      }
+
+      /* floating particles */
+      body::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px
+        );
+        background-size: 40px 40px;
+        animation: moveBg 18s linear infinite;
+        opacity: 0.25;
+      }
+
+      @keyframes moveBg {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(-80px, -80px);
+        }
+      }
+
+      .card {
+        position: relative;
+        z-index: 2;
+        width: 540px;
+        max-width: 95%;
+        padding: 30px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(16px);
+        box-shadow:
+          0 0 25px rgba(56, 189, 248, 0.15),
+          0 20px 45px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #38bdf8;
+      }
+
+      .sub {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 20px;
+      }
+
+      .score {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .pill {
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 18px;
+        box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.04);
+      }
+
+      .arena {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 22px;
+      }
+
+      .choice {
+        height: 120px;
+        border-radius: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 64px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: 0.3s ease;
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.03);
+      }
+
+      .vs {
+        font-size: 22px;
+        font-weight: 900;
+        color: #38bdf8;
+        text-shadow: 0 0 10px #38bdf8;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .btn {
+        padding: 15px;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        color: #00111a;
+        transition: 0.25s ease;
+        box-shadow: 0 8px 18px rgba(14, 165, 233, 0.35);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 14px 28px rgba(14, 165, 233, 0.45);
+      }
+
+      .btn:active {
+        transform: scale(0.96);
+      }
+
+      .restart {
+        grid-column: 1/4;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 8px 18px rgba(239, 68, 68, 0.35);
+      }
+
+      #result {
+        margin-top: 18px;
+        min-height: 28px;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      /* shake */
+      .shake {
+        animation: shake 0.45s ease;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        50% {
+          transform: translateX(10px);
+        }
+        75% {
+          transform: translateX(-6px);
+        }
+      }
+
+      /* winner pulse */
+      .win {
+        animation: winPulse 0.7s ease;
+      }
+
+      @keyframes winPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.18);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* loser spin */
+      .lose {
+        animation: loseSpin 0.7s ease;
+      }
+
+      @keyframes loseSpin {
+        0% {
+          transform: scale(1) rotate(0);
+        }
+        100% {
+          transform: scale(0.15) rotate(540deg);
+          opacity: 0;
+        }
+      }
+
+      /* overlay */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.94);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 30px;
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        color: #38bdf8;
+        text-shadow:
+          0 0 10px #38bdf8,
+          0 0 25px #38bdf8,
+          0 0 50px #38bdf8;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .show {
+        animation: flash 1.2s ease;
+      }
+
+      @keyframes flash {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1.12);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>ROCK PAPER SCISSORS</h1>
+      <div class="sub">First to 5 Wins</div>
+
+      <div class="score">
+        <div class="pill">YOU: <span id="userScore">0</span></div>
+        <div class="pill">CPU: <span id="cpuScore">0</span></div>
+      </div>
+
+      <div class="arena">
+        <div class="choice" id="userChoice">❔</div>
+        <div class="vs">VS</div>
+        <div class="choice" id="cpuChoice">❔</div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn" onclick="play('rock')">🪨 ROCK</button>
+        <button class="btn" onclick="play('paper')">📄 PAPER</button>
+        <button class="btn" onclick="play('scissors')">✂️ SCISSORS</button>
+      </div>
+
+      <div class="buttons">
+        <button class="btn restart" onclick="restartGame()">RESTART</button>
+      </div>
+
+      <div id="result">MAKE YOUR MOVE</div>
+
+      <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script>
+      const icons = {
+        rock: "🪨",
+        paper: "📄",
+        scissors: "✂️",
+      };
+
+      let user = 0;
+      let cpu = 0;
+
+      const u = document.getElementById("userChoice");
+      const c = document.getElementById("cpuChoice");
+      const r = document.getElementById("result");
+      const overlay = document.getElementById("overlay");
+
+      function play(choice) {
+        if (user >= 5 || cpu >= 5) return;
+
+        clearAnim();
+
+        const opts = ["rock", "paper", "scissors"];
+        const comp = opts[Math.floor(Math.random() * 3)];
+
+        u.classList.add("shake");
+        c.classList.add("shake");
+
+        r.innerText = "READY...";
+
+        setTimeout(() => {
+          u.classList.remove("shake");
+          c.classList.remove("shake");
+
+          u.innerText = icons[choice];
+          c.innerText = icons[comp];
+
+          if (choice === comp) {
+            r.innerText = "DRAW!";
+            flash("DRAW");
+            return;
+          }
+
+          const userWins =
+            (choice === "rock" && comp === "scissors") ||
+            (choice === "paper" && comp === "rock") ||
+            (choice === "scissors" && comp === "paper");
+
+          if (userWins) {
+            user++;
+            userScore.innerText = user;
+            animateWin(u, c);
+            r.innerText = "YOU WON ROUND!";
+            flash("YOU WON!");
+          } else {
+            cpu++;
+            cpuScore.innerText = cpu;
+            animateWin(c, u);
+            r.innerText = "CPU WON ROUND!";
+            flash("CPU WON!");
+          }
+
+          checkGameOver();
+        }, 550);
+      }
+
+      function animateWin(winner, loser) {
+        winner.classList.add("win");
+        loser.classList.add("lose");
+
+        setTimeout(() => {
+          loser.style.opacity = 1;
+          clearAnim();
+        }, 700);
+      }
+
+      function clearAnim() {
+        u.classList.remove("win", "lose", "shake");
+        c.classList.remove("win", "lose", "shake");
+        u.style.opacity = 1;
+        c.style.opacity = 1;
+      }
+
+      function flash(text) {
+        overlay.innerText = text;
+        overlay.classList.remove("show");
+        void overlay.offsetWidth;
+        overlay.classList.add("show");
+      }
+
+      function checkGameOver() {
+        if (user === 5) {
+          setTimeout(() => {
+            flash("GAME OVER - YOU WIN");
+            r.innerText = "VICTORY!";
+          }, 300);
+
+          // AUTO RESTART
+          setTimeout(() => {
+            restartGame();
+            flash("NEW MATCH");
+          }, 2500);
+        }
+
+        if (cpu === 5) {
+          setTimeout(() => {
+            flash("GAME OVER - CPU WINS");
+            r.innerText = "DEFEAT!";
+          }, 300);
+          // AUTO RESTART
+          setTimeout(() => {
+            restartGame();
+            flash("NEW MATCH");
+          }, 2500);
+        }
+      }
+
+      function restartGame() {
+        user = 0;
+        cpu = 0;
+        userScore.innerText = 0;
+        cpuScore.innerText = 0;
+        u.innerText = "❔";
+        c.innerText = "❔";
+        r.innerText = "MAKE YOUR MOVE";
+        clearAnim();
+      }
+    </script>
+  </body>
+</html>
