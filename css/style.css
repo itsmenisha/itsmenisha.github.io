@@ -1020,11 +1020,33 @@ body.pro-page {
    HERO SECTION
 ==================================================== */
 .hero-section {
-  background: linear-gradient(140deg, #0f2351 0%, #163976 55%, #0b1f48 100%);
   padding: 90px 0 70px;
-  overflow: hidden;
-  position: relative;
+  background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22) 0%,
+            rgba(28, 181, 84, 0.1) 18%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2) 0%,
+            rgba(28, 173, 234, 0.09) 18%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at center,
+            #050505 0%,
+            #020617 58%,
+            #01030a 100%
+          );
+
+        background-attachment: fixed;
+
 }
+
+
+
 .hero-section::before {
   content: '';
   position: absolute;
