@@ -1,416 +1,322 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nisha Courses & Certificates</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Inter, sans-serif;
+        color: #f8fafc;
+        line-height: 1.6;
 
-<head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <meta name="keywords" content="AI, Artificial Intelligence, Machine Learning, Data Science, IT Professional" />
-  <meta name="description" content="Portfolio of Nisha Kiran, expertise and projects in Artificial Intelligence and Machine Learning." />
-  <meta name="author" content="Nisha Kiran" />
-<link rel="icon" type="image/png" href="images/nisha_logo.png">
-  <!-- Site Metas -->
-  <title>Nisha Kiran Gnawaly</title>
+        /* BLACK CENTER + GREEN LEFT + BLUE RIGHT */
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22) 0%,
+            rgba(34, 197, 94, 0.1) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2) 0%,
+            rgba(56, 189, 248, 0.09) 18%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at center,
+            #050505 0%,
+            #020617 58%,
+            #01030a 100%
+          );
 
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="css/responsive.css" rel="stylesheet" />
-  <style>
-.about_section .responsive-img {
-  width: 25%;
-}
-
-/* Media query for small devices */
-@media (max-width: 575.98px) {
-  .about_section .responsive-img {
-    width: 95%; /* Adjust the width for smaller screens */
-  }
-}
-  </style>
-</head>
-
-<body class="sub_page">
-  <script src="js\loadhtml.js"></script>
-  <div id="navbar-placeholder"></div>
-  <script>
-    loadHTML("navbar-placeholder", "navbar.html");
-    loadHTML("footer-placeholder", "footer.html");
-    </script>  
-
-<style>
-
-      .stack-container {
+        background-attachment: fixed;
+      }
+      a {
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: auto;
+        padding: 0 24px;
+      }
+      .nav {
+        position: sticky;
+        top: 0;
+        background: rgba(2, 6, 23, 0.82);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+      }
+      .nav-inner {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 0;
+      }
+      .logo {
+        font-family: "JetBrains Mono", monospace;
+        color: #38bdf8;
+        font-weight: 700;
+      }
+      .nav a {
+        color: #cbd5e1;
+        margin-left: 22px;
+      }
+      .hero {
+        padding: 90px 0 50px;
+      }
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+        color: #38bdf8;
+      }
+      .hero h1 {
+        font-size: 58px;
+        line-height: 1.05;
+        margin: 10px 0;
+      }
+      .sub {
+        max-width: 760px;
+        color: #94a3b8;
+        font-size: 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 40px 0 90px;
+      }
+      .card123 {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 24px;
+        padding: 24px;
+        transition: 0.25s;
+      }
+      .card123:hover {
+        transform: translateY(-6px);
+        border-color: rgba(56, 189, 248, 0.35);
+      }
+      .card123 h3 {
+        font-size: 22px;
+        margin-bottom: 12px;
+      }
+      .card123 p {
+        color: #94a3b8;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .tag {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #111827;
+        color: #7dd3fc;
+      }
+      .btn123 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 18px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: #38bdf8;
+        color: #02111f;
+        font-weight: 700;
+        cursor: pointer;
+        width: max-content;
+      }
+      .btn123 img {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+      .footer {
+        text-align: center;
+        padding: 60px 0;
+        color: #94a3b8;
+      }
+
+      /* MODAL */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        align-items: center;
         justify-content: center;
-        padding: 20px;
-        height: 30vh;
+        z-index: 9999;
+      }
+      .modal.show {
+        display: flex;
+      }
+      .modal img {
+        max-width: 90%;
+        max-height: 88vh;
+        border-radius: 12px;
+      }
+      .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 44px;
+        color: white;
+        cursor: pointer;
+      }
+
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
         }
-      .stack-container:hover {
-       height: 50vh;
-      }
-      .img{
-        width:100%;
-        height:auto;
-      }
-
-  .stack {
-    display: flex;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .card1111 {
-    width: 45vh;
-    height: 30vh;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: -25vh; /* all stacked initially */
-    transition: transform 0.5s;
-    position: relative;
-    overflow: hidden; /* keep image inside card */
-  }
-
-  .card1111 img {
-    width: 100%;
-    height:auto;
-    object-fit: cover; /* maintain aspect ratio and fill card */
-  }
-
-  
-      /* Hover: move cards to their positions */
-      .stack:hover .card1111:nth-child(1) {
-        transform: translateX(-1vh);
-      }
-      .stack:hover .card1111:nth-child(2) {
-        transform: translateX(33vh);
-      }
-      .stack:hover .card1111:nth-child(3) {
-        transform: translateX(65vh);
-      }
-      .stack:hover .card1111:nth-child(4) {
-        transform: translateX(100vh);
-      }
-
-      .stack:hover .card1111:nth-child(5) {
-        transform: translate(-81vh, 32vh);
-      }
-      .stack:hover .card1111:nth-child(6) {
-        transform: translate(-48vh, 32vh);
-      }
-      .stack:hover .card1111:nth-child(7) {
-        transform: translate(-14vh, 32vh);
-      }
-      .stack:hover .card1111:nth-child(8) {
-        transform: translate(20vh, 32vh);
-      }
-      
-  /* Hover positions */
- 
-      /* Hover: move cards to their positions */
-      /* .stack:hover .card1111:nth-child(1) {
-        transform: translate(25vh, 0);
-      }
-      .stack:hover .card1111:nth-child(2) {
-        transform: translate(58vh, 0);
-      }
-      .stack:hover .card1111:nth-child(3) {
-        transform: translate(90vh, 0);
-      }
-      .stack:hover .card1111:nth-child(4) {
-        transform: translate(125vh, 0);
-      }
-
-      .stack:hover .card1111:nth-child(5) {
-        transform: translate(20vh, 40vh);
-      }
-      .stack:hover .card1111:nth-child(6) {
-        transform: translate(55vh, 40vh);
-      }
-      .stack:hover .card1111:nth-child(7) {
-        transform: translate(85vh, 40vh);
-      }
-      .stack:hover .card1111:nth-child(8) {
-        transform: translate(120vh, 40vh);
-      } */
-
-         @media (max-width: 768px) {
-      .stack-container .card1111,.card1111 img{
-         width: 30vh;
-         height: auto;
+        .hero h1 {
+          font-size: 42px;
         }
-        .stack:hover .card1111{
-         width: 30vh;
-         height: auto;
-        }
-        .stack-container:hover {
-       height: 30vh;
-       margin-bottom:15vh;
-       margin-right: -1vh;
       }
-}
-</style>
-<br>
-<div class="stack-container">
-  <div class="stack">
-    <div class="card1111"><a href="#python"><img src="images/geeksforgeekspython.jpg" alt="Card 1"></a></div>
-    <div class="card1111"><a href="#"><img src="images/Coursera.jpg" alt="Card 2"></a></div>
-    <div class="card1111"><a href="#"><img src="images/datascience.jpg" alt="Card 3"></a></div>
-    <div class="card1111"><a href="#"><img src="images/gis.png" alt="Card 4"></a></div>
-    <div class="card1111"><a href="#"><img src="images/SQL.jpg" alt="Card 5"></a></div>
-    <div class="card1111"><a href="#"><img src="images/kaggle Intro to Machine Learning.png" alt="Card 6"></a></div>
-    <div class="card1111"><a href="#"><img src="images/ds.png" alt="Card 7"></a></div>
-    <div class="card1111"><a href="#"><img src="images/github.png" alt="Card 8"></a></div>
-    <!-- <div class="card1111"><a href="#"><img src="images/card9.jpg" alt="Card 9"></a></div>
-    <div class="card1111"><a href="#"><img src="images/card10.jpg" alt="Card 10"></a></div>
-    <div class="card1111"><a href="#"><img src="images/card11.jpg" alt="Card 11"></a></div>
-    <div class="card1111"><a href="#"><img src="images/card12.jpg" alt="Card 12"></a></div> -->
-  </div>
-</div>
+      @media (max-width: 700px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 34px;
+        }
+        .nav-inner {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
 
-    <br />
+  <body>
+    <script src="js/loadhtml.js"></script>
+    <div id="navbar-placeholder"></div>
+    <script>
+      loadHTML("navbar-placeholder", "navbar.html");
+      loadHTML("footer-holder", "footer.html");
+    </script>
 
+    <div class="wrap">
+      <section class="hero">
+        <div class="mono">learning.path()</div>
+        <h1>Courses & Certifications</h1>
+        <p class="sub">
+          Continuous learning in ML, software engineering, databases, GIS and
+          real-world systems.
+        </p>
+      </section>
 
-  <!-- end about section -->
-  <!-- experience section -->
-  <section class="experience_section layout_padding-top layout_padding2-bottom">
-    <div class="container"id="python">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="img-box">
-            <img src="images/geeksforgeekspython.jpg" alt="Python Course" height="300vh">
+      <section id="courses" class="grid">
+        <div class="card123">
+          <h3>Python Programming</h3>
+          <p>OOP, APIs, GUI apps, file handling and databases.</p>
+          <div class="tags"><span class="tag">GeeksforGeeks</span></div>
+          <div
+            class="btn123"
+            onclick="openModal('images/geeksforgeekspython.jpg')"
+          >
+            View <img src="images/geeksforgeekspython.jpg" />
           </div>
         </div>
-        <div class="col-md-7">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2 style="font-family: 'Lucida Handwriting', cursive;">
-                Python Programming – GeeksforGeeks
-              </h2>
-            </div>
-            <p>
-                To strengthen my core Python skills, I completed a 4-week Pure Python Programming course from GeeksforGeeks.
-            </p>
-            <ul>
-                <li>Learned control flow, functions, recursion, comprehensions, data structures, OOP, file handling, exceptions, APIs, and JSON/CSV/Excel processing.</li>
-                <li>Worked with databases using MySQL and MongoDB, and explored built-in Python modules like <code>math</code>, <code>datetime</code>, <code>os</code>, and <code>functools</code>.</li>
-                <li>Developed desktop GUI applications using Tkinter and completed hands-on projects and coding challenges to improve problem-solving and coding efficiency.</li>
-            </ul>
-            <div class="btn-box">
-              <a href="images/geeksforgeekspython.jpg" class="btn-1" download>
-                Download Certificate 📥
-              </a>
-            </div>
+
+        <div class="card123">
+          <h3>Machine Learning</h3>
+          <p>Regression, classification and ML foundations by Andrew Ng.</p>
+          <div class="tags"><span class="tag">Coursera</span></div>
+          <div class="btn123" onclick="openModal('images/Coursera.jpg')">
+            View <img src="images/Coursera.jpg" />
           </div>
         </div>
-      </div>
+
+        <div class="card123">
+          <h3>Data Science Bootcamp</h3>
+          <p>EDA, statistics, visualization and predictive modeling.</p>
+          <div class="tags"><span class="tag">GFG</span></div>
+          <div class="btn123" onclick="openModal('images/datascience.jpg')">
+            View <img src="images/datascience.jpg" />
+          </div>
+        </div>
+
+        <div class="card123">
+          <h3>SQL Database</h3>
+          <p>CRUD operations, joins and MySQL with Python.</p>
+          <div class="tags"><span class="tag">SQL</span></div>
+          <div class="btn123" onclick="openModal('images/SQL.jpg')">
+            View <img src="images/SQL.jpg" />
+          </div>
+        </div>
+
+        <div class="card123">
+          <h3>GIS & Remote Sensing</h3>
+          <p>Spatial analysis, mapping and geospatial systems.</p>
+          <div class="tags"><span class="tag">GIS</span></div>
+          <div class="btn123" onclick="openModal('images/gis.png')">
+            View <img src="images/gis.png" />
+          </div>
+        </div>
+
+        <div class="card123">
+          <h3>Leadership & Scouting</h3>
+          <p>Volunteering, teamwork and field leadership experience.</p>
+          <div class="tags"><span class="tag">Experience</span></div>
+          <div class="btn123" onclick="openModal('images/cv3.png')">
+            View <img src="images/cv3.png" />
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
 
+    <div class="footer">
+      © 2026 Nisha Kiran Gnawaly <br />
 
-<section class="experience_section layout_padding-top layout_padding2-bottom" id="COURSEERA">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="img-box">
-          <img src="images/Coursera.jpg" alt="Supervised Machine Learning Certificate" height="400vh">
-        </div>
-      </div>
-      <div class="col-md-7">
-        <div class="detail-box">
-          <div class="heading_container">
-            <h2 style="font-family: 'Lucida Handwriting'">
-                          Supervised Machine Learning: Regression and Classification – Stanford University (Coursera)
+      gnawalynishakiran@gmail.com
 
-            </h2>
-          </div>
-        
-            <p>
-                Completed the course taught by Dr. Andrew Ng, providing a comprehensive introduction to supervised learning techniques.
-            </p>
-            <ul>
-                <li>Gained hands-on experience in building and training machine learning models using Python, NumPy, and scikit-learn.</li>
-                <li>Learned key algorithms including linear regression, logistic regression, and other supervised learning methods.</li>
-                <li>Acquired skills to apply machine learning techniques to real-world problems and datasets.</li>
-            </ul>  </p>
-          <div class="btn-box">
-            <a href="images/Coursera suprivised learining.pdf" class="btn-1" >
-               Download Certificate 📥
-            </a>
-          </div>
-        </div>
-      </div>
+      <a
+        href="https://mail.google.com/mail/u/0/#sent?compose=new"
+        class="link-box"
+        target="_blank"
+      >
+        <button
+          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
+          style="font-size: 1.5vw"
+        >
+          📋
+        </button>
+      </a>
     </div>
-  </div>
-</section>
-<section class="experience_section layout_padding-top layout_padding2-bottom" id="GEEKSFORGEEKS_DS">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="img-box">
-          <img src="images/datascience.jpg" alt="Data Science Certificate" height="400vh">
-        </div>
-      </div>
-      <div class="col-md-7">
-        <div class="detail-box">
-          <div class="heading_container">
-           <h2 style="font-family: 'Lucida Handwriting', cursive;">
-              Data Science Course – GeeksforGeeks (6 Weeks)
-           </h2>
-          </div>
-          <p>
-            Completed a 6-week intensive Data Science program offered by GeeksforGeeks.
-          </p>
-          <ul>
-            <li>Learned the foundations of data analysis, statistics, and probability for data-driven decision making.</li>
-            <li>Explored Python libraries such as NumPy, Pandas, and Matplotlib for data manipulation and visualization.</li>
-            <li>Worked with real-world datasets to clean, process, and analyze data effectively.</li>
-            <li>Gained hands-on experience in creating predictive models using machine learning algorithms including linear regression, decision trees, and clustering techniques.</li>
-            <li>Implemented projects that involved data preprocessing, exploratory data analysis, visualization, and model evaluation.</li>
-          </ul>
-          <div class="btn-box">
-              <a href="images/datascience.jpg" class="btn-1" download>
-                  Download Certificate 📥
-              </a>
-          </div>
-        </div>
-      </div>
+
+    <!-- MODAL (THIS WAS MISSING) -->
+    <div class="modal" id="modal" onclick="closeModal()">
+      <span class="close" onclick="closeModal(event)">&times;</span>
+      <img id="modalImg" src="" />
     </div>
-  </div>
-</section>
 
+    <!-- FIXED SCRIPT -->
+    <script>
+      function openModal(src) {
+        document.getElementById("modalImg").src = src;
+        document.getElementById("modal").classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
 
-<section class="experience_section layout_padding-top layout_padding2-bottom" id="COURSEERA">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="img-box">
-          <img src="images/SQL.jpg" alt="Supervised Machine Learning Certificate" height="400vh">
-        </div>
-      </div>
-      <div class="col-md-7">
-        <div class="detail-box">
-          <div class="heading_container">
-           <h2 style="font-family: 'Lucida Handwriting', cursive;">
-    Introduction to SQL – SimplyLearn
-</h2>
-</div>
-<p>
-    Skillop and Krishna Kumar SimplyLearn
-</p>
-<ul>
-    <li>Learned fundamentals of SQL including <code>CREATE</code>, <code>INSERT</code>, <code>SELECT</code>, <code>UPDATE</code>, and <code>DELETE</code> statements.</li>
-    <li>Worked with MySQL databases using Python and executed queries in Google Colab.</li>
-    <li>Gained hands-on experience creating databases, tables, inserting and querying data, and displaying results with Pandas.</li>
-</ul>
-<div class="btn-box">
-    <a href="https://github.com/itsmenisha/Python-Projects/blob/main/Intermediate/mysql/Mysql_simplilearn.ipynb" class="btn-1" download>
-        View Codes Involved
-    </a>
-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  
-
-
-  <section class="experience_section layout_padding-top layout_padding2-bottom" id="gis">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="img-box">
-            <img src="images/gis.png" alt="" height="400vh">
-          </div>
-        </div>
-        <div class="col-md-7">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2 style="font-family: 'Lucida Handwriting'">
-                ArcGIS Training
-              </h2>
-            </div>
-            <p>
-              I had the opportunity to participate in the "Integrating Geospatial Technologies in Climate-Smart Agriculture Planning and Management in South Asia" training program. 
-              This comprehensive program equipped me with proficiency in utilizing the ArcGIS application for agricultural research and data analysis.
-               <br>I gained expertise in integrating various data files and GPS files, creating detailed maps nd apply advanced spatial analysis techniques.  Additionally, I learned how to apply these geospatial technologies to monitor crop health, optimize resource allocation, and improve decision-making processes in agricultural practices.</p>
-            <div class="btn-box">
-              <a href="https://www.linkedin.com/in/nisha-kiran-gnawaly-544b34283/" class="btn-1">
-                View linkedin
-              </a>
-            </div>
-              
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  
-  
-
-  
-
-  <section class="experience_section layout_padding-top layout_padding2-bottom"id="scout">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="img-box">
-            <img src="images/cv3.png" alt="">
-          </div>
-        </div>
-        <div class="col-md-7">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2 style="font-family: 'Lucida Handwriting'">
-                Scouting Experience
-              </h2>
-            </div>
-            <p>
-              The experiences I had been able to gain from scouting through volunteering in various social events, including Shivaratri, Rover Moot, and Visit Nepal 2020, has strengthened my ability to confidently engage with diverse crowds and efficiently utilize resources to address challenges.
-            </p>
-            <div class="btn-box">
-              <a href="Nisha-Kiran-Gnawaly.pdf" download class="btn-1" >
-                Download CV
-              </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- end experience section -->
-
-
- 
-
-  <!-- end about section -->
-
-  <!-- info section -->
-  <div id="footer-placeholder"></div>
- 
-
-
-
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
-
-
-</body>
-
-
+      function closeModal(e) {
+        if (e) e.stopPropagation();
+        document.getElementById("modal").classList.remove("show");
+        document.body.style.overflow = "auto";
+      }
+    </script>
+  </body>
 </html>
