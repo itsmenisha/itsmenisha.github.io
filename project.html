@@ -1,279 +1,220 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta
-      name="keywords"
-      content="web development, AI, machine learning, python coder, QA, software development"
-    />
-    <meta
-      name="description"
-      content="Portfolio of Nisha Kiran Gnawaly, expertise in web development, AI, machine learning, software development and more."
-    />
-    <meta name="author" content="Nisha Kiran Gnawaly" />
-    <link rel="icon" type="image/png" href="images/nisha_logo.png" />
-    <title>Nisha Kiran Gnawaly</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nisha Projects</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- In-page CSS -->
     <style>
-      /* General styles */
-      body {
-        font-family: Arial, sans-serif;
-        color: black;
-        background-color: white;
-      }
-      a {
-        text-decoration: none;
-        color: black;
-      }
-
-      /* Card layout */
-      .card {
-        border-radius: 2vh;
-        transition: transform 0.3s ease-in-out;
-      }
-      .card-header1111 {
-        background-color: rgb(21, 32, 13);
-        color: white;
-        padding: 2vh;
-        border-radius: 1.5vh 1.5vh 0 0;
-      }
-      .card-header1111 h5 {
-        font-size: 4vh;
-        font-family: "Poppins", sans-serif;
+      * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-      .card-body {
-        background-color: #f6f8f9;
 
-        text-align: center;
-        padding: 1vh;
+      body {
+        font-family: Inter, sans-serif;
+        color: #f8fafc;
+        line-height: 1.6;
+
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2),
+            transparent 45%
+          ),
+          radial-gradient(circle at center, #050505, #020617 60%, #01030a);
+
+        background-attachment: fixed;
       }
-      .project-col {
-        width: 2vh;
-        padding: 1vh;
-        margin-bottom: 2vh;
+
+      .wrap {
+        max-width: 1180px;
+        margin: auto;
+        padding: 40px 24px;
       }
-      .project-col img {
-        width: 45vh;
-        height: auto;
-        border-radius: 2vh;
-        box-shadow: 0 4vh 12vh rgba(21, 32, 13, 0.3);
-        transition: transform 0.3s ease-in-out;
+
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+        color: #38bdf8;
       }
-      .project-col img:hover {
+
+      h1 {
+        font-size: 48px;
+        margin: 10px 0 30px;
+      }
+
+      /* GRID */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      /* 🧊 UPDATED CARD */
+      .card1234 {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 24px;
+        padding: 22px;
+        transition: 0.25s;
+      }
+
+      .card1234:hover {
+        transform: translateY(-6px);
+        border-color: rgba(56, 189, 248, 0.35);
+      }
+
+      .card1234 h3 {
+        color: white;
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+
+      .card1234 p {
+        color: #94a3b8;
+        font-size: 14px;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #111827;
+        color: #7dd3fc;
+      }
+
+      /* 🖼 IMAGE FIXED SIZE */
+      .img-box {
+        margin-top: 14px;
+        width: 100%;
+        height: 180px; /* FIXED HEIGHT */
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      .img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* IMPORTANT FIX */
+        transition: 0.3s;
+      }
+
+      .img-box img:hover {
         transform: scale(1.05);
       }
-      .project-col p {
-        margin-top: 1vh;
-        color: black;
-        font-size: 1.2rem;
-        
-      }
 
-      /* About section */
-      .about_section {
-        padding: 3vh;
-      }
-      .about_section .img-box {
-        width: 80vh;
-      }
-      .about_section .img-box img {
-        border-radius: 1.5vh;
-        width: 2vh;
-      }
-      .detail-box h2 {
-        font-size: 5vh;
-        margin-bottom: 1vh;
-      }
-      .detail-box p {
-        font-size: 3vh;
-        line-height: 2.5vh;
-      }
-      .btn-1 {
-        display: inline-block;
-        margin-top: 1vh;
-        padding: 1vh 2vh;
-        background-color: #15200d;
-        color: white;
-        border-radius: 1vh;
-        text-decoration: none;
-        transition: 0.3s ease-in-out;
-      }
-      .btn-1:hover {
-        background-color: rgb(248, 197, 206);
-        color: black;
-      }
-
-      /* Responsive grid for projects */
-      @media (min-width: 768px) {
-        .project-row {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-        .project-col {
-          flex: 0 0 30%;
-          margin: 1vh;
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
         }
       }
-      @media (max-width: 767px) {
-        .project-col {
-          flex: 0 0 45%;
-         }
-         .project-col img {
-          width: 40vh;
-         }
-       .project-col p {
-        margin-left: 20vh;
-              display: flex;
-              justify-content: center; /* horizontal center */
-              align-items: center;     /* vertical center */
-              text-align: center;      /* keeps multiline centered */
-            }
 
-
+      @media (max-width: 650px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
 
-  <body class="sub_page">
+  <body>
     <script src="js/loadhtml.js"></script>
-    <div id="navbar-placeholder" style="margin: 0.3vh"></div>
-
+    <div id="navbar-placeholder"></div>
     <script>
       loadHTML("navbar-placeholder", "navbar.html");
       loadHTML("footer-holder", "footer.html");
     </script>
 
-    <br /><br />
-
-    <!-- Beginner Projects -->
-    <div class="card shadow-lg col-12">
-      <div class="card-header1111">
-        <h5>Beginner Projects</h5>
-      </div>
-
-      <div class="card-body">
-        <div class="project-row">
-          <div class="project-col">
-            <a href="qr.html" target="_blank">
-              <img src="images/qr.jpg" alt="QR Project" />
-            </a>
-            <p>📱 QR</p>
+    <div class="wrap">
+      <div class="mono">projects.run()</div>
+      <h1 style="color: white">My Projects</h1>
+      <br /><br />
+      <div class="grid">
+        <div class="card1234">
+          <h3>QR Generator</h3>
+          <p>Generate QR codes instantly using Python & Flask.</p>
+          <span class="tag">Beginner</span>
+          <div class="img-box">
+            <img src="images/qr.jpg" />
           </div>
-<div class="project-col">
-  <a href="https://github.com/itsmenisha/python-weatherapp/tree/main" target="_blank">
-    <img src="https://img.youtube.com/vi/iHRFc9BVrk4/hqdefault.jpg" alt="Weather App Project" />
-  </a>
-  <p>☁️ Weather App (Weather API + OpenCV)</p>
-</div>
-      <div class="project-col">
-      <a href="https://github.com/itsmenisha/Harry-Pottter_InvisibilityCloak_OpenCv" target="_blank">
-        <img src="https://img.youtube.com/vi/RCz6ZBfFdtM/hqdefault.jpg" alt="Harry Potter Invisibility Cloak Project" />
+        </div>
+
+        <div class="card1234">
+          <h3>Weather App</h3>
+          <p>Real-time weather API with OpenCV experiments.</p>
+          <span class="tag">Beginner</span>
+          <div class="img-box">
+            <img src="https://img.youtube.com/vi/iHRFc9BVrk4/hqdefault.jpg" />
+          </div>
+        </div>
+
+        <div class="card1234">
+          <h3>Invisibility Cloak</h3>
+          <p>Harry Potter OpenCV real-time masking system.</p>
+          <span class="tag">Beginner</span>
+          <div class="img-box">
+            <img src="https://img.youtube.com/vi/RCz6ZBfFdtM/hqdefault.jpg" />
+          </div>
+        </div>
+
+        <div class="card1234">
+          <h3>Health Flask App</h3>
+          <p>AI-powered health prediction system using Flask.</p>
+          <span class="tag">Intermediate</span>
+          <div class="img-box">
+            <img src="images/kathmandu.png" />
+          </div>
+        </div>
+
+        <div class="card1234">
+          <h3>Traffic Sign Recognition</h3>
+          <p>Deep learning model for real-time detection.</p>
+          <span class="tag">Advanced</span>
+          <div class="img-box">
+            <img src="images/traffic_sign.jpg" />
+          </div>
+        </div>
+
+        <div class="card1234">
+          <h3>CineMarga</h3>
+          <p>Movie recommendation & discovery platform.</p>
+          <span class="tag">Advanced</span>
+          <div class="img-box">
+            <img src="images/cinemarga.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="footer1234"
+      style="margin: 2vw; text-align: center; color: #94a3b8"
+    >
+      © 2026 Nisha Kiran Gnawaly <br />
+
+      gnawalynishakiran@gmail.com
+
+      <a
+        href="https://mail.google.com/mail/u/0/#sent?compose=new"
+        class="link-box"
+        target="_blank"
+      >
+        <button
+          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
+          style="font-size: 1.3vw; color: white"
+        >
+          📋
+        </button>
       </a>
-      <p>🧙‍♂️ Harry Potter Invisibility Cloak</p>
     </div>
-
-</div>
-
-        </div>
-      </div>
-    </div>
-
-    <br />
-
-    <!-- Intermediate Projects -->
-    <div class="card shadow-lg col-12">
-      <div class="card-header1111">
-        <h5>Intermediate Projects</h5>
-      </div>
-      <div class="card-body">
-        <div class="project-row">
-          <div class="project-col">
-            <a href="templates/services.html" target="_blank">
-              <img src="images/kathmandu.png" alt="QR Project 2" />
-            </a>
-            <p>🏥Health Acessment-flask</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <br />
-
-    <!-- Advanced Projects -->
-    <div class="card shadow-lg col-12">
-      <div class="card-header1111">
-        <h5>Advanced Projects</h5>
-      </div>
-      
-   
-
-      <div class="card-body">
-      
-        <div class="project-row">
-          <div class="project-col">
-            <a href="https://github.com/itsmenisha/Real-Time-Traffic-Sign-Recognition">
-              <img src="images/traffic_sign.jpg" alt="CineMarga Project" />
-            </a>
-            <p>Real-Time Traffic Sign Recognition(<a href="blog2.html">blog</a>)</p>
-        
-        </div>
-          <div class="project-col">
-            <a href="https://cinemarga.com/">
-              <img src="images/cinemarga.png" alt="CineMarga Project" />
-            </a>
-            <p>🎬 CineMarga</p>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-
-    <br />
-
-    <!-- About Section -->
-    <section class="about_section layout_padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3 col-lg-5 mx-auto">
-            <div class="img-box">
-              <img src="images/nisha7.png" alt="" class="responsive-img"style="width: 70vh;" />
-            </div>
-          </div>
-        </div>
-        <br />
-        <div class="detail-box">
-          <h2>Sneak Peek -> Nisha Kiran</h2>
-          <p>
-            Aiming to make a name in the next big automation breakthrough,
-            reducing manual workload for people and optimizing overall work
-            performance. <br />
-            <a href="Nisha-Kiran-Gnawaly.pdf" download class="btn-1">
-              Download CV
-            </a>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <div id="footer-holder"></div>
-
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/custom.js"></script>
   </body>
 </html>
