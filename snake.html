@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Snake Neon Deluxe</title>
+    <title>Snake Pro Neon</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
@@ -33,6 +33,7 @@
         color: white;
       }
 
+      /* stars */
       body::before {
         content: "";
         position: absolute;
@@ -60,9 +61,9 @@
       .card {
         position: relative;
         z-index: 2;
-        width: 760px;
+        width: 720px;
         max-width: 95%;
-        padding: 25px;
+        padding: 22px;
         border-radius: 28px;
         background: rgba(255, 255, 255, 0.07);
         backdrop-filter: blur(16px);
@@ -73,25 +74,23 @@
       }
 
       h1 {
-        font-size: 34px;
-        font-weight: 900;
-        letter-spacing: 2px;
+        font-size: 32px;
+        margin-bottom: 10px;
         text-shadow: 0 0 10px #38bdf8;
-        margin-bottom: 14px;
       }
 
       .info {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
       }
 
       .pill {
         flex: 1;
         min-width: 120px;
-        padding: 12px;
-        border-radius: 16px;
+        padding: 10px;
+        border-radius: 14px;
         background: rgba(255, 255, 255, 0.08);
         font-size: 14px;
       }
@@ -102,59 +101,64 @@
         background: rgba(255, 255, 255, 0.04);
         border: 2px solid rgba(56, 189, 248, 0.5);
         border-radius: 16px;
-        box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
       }
 
       .buttons {
+        margin-top: 10px;
         display: flex;
+        gap: 8px;
         justify-content: center;
-        gap: 10px;
-        margin-top: 14px;
         flex-wrap: wrap;
       }
 
       button {
-        padding: 13px 18px;
+        padding: 10px 14px;
         border: none;
-        border-radius: 14px;
+        border-radius: 12px;
         cursor: pointer;
         font-weight: 800;
         background: linear-gradient(135deg, #38bdf8, #0ea5e9);
         color: #00111a;
-        transition: 0.25s;
       }
 
-      button:hover {
-        transform: translateY(-3px);
+      .mobile {
+        margin-top: 8px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .mobbtn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: #0ea5e9;
+        color: black;
+        font-weight: 900;
+        cursor: pointer;
       }
 
       #msg {
-        margin-top: 14px;
-        min-height: 22px;
+        margin-top: 8px;
         color: #7dd3fc;
-        font-size: 14px;
+        min-height: 20px;
       }
 
-      #announce {
+      /* popup */
+      #popup {
         position: absolute;
         inset: 0;
         display: flex;
-        justify-content: center;
         align-items: center;
-        font-size: 46px;
+        justify-content: center;
+        font-size: 50px;
         font-weight: 900;
-        letter-spacing: 3px;
-        background: rgba(0, 0, 0, 0.78);
-        border-radius: 28px;
+        background: rgba(0, 0, 0, 0.75);
         opacity: 0;
         pointer-events: none;
-        text-shadow:
-          0 0 12px #38bdf8,
-          0 0 30px #38bdf8;
       }
 
       .show {
-        animation: pop 1.3s ease;
+        animation: pop 1.2s ease;
       }
 
       @keyframes pop {
@@ -164,14 +168,14 @@
         }
         20% {
           opacity: 1;
-          transform: scale(1.08);
+          transform: scale(1.1);
         }
         80% {
           opacity: 1;
         }
         100% {
           opacity: 0;
-          transform: scale(0.95);
+          transform: scale(0.9);
         }
       }
     </style>
@@ -179,13 +183,12 @@
 
   <body>
     <div class="card">
-      <h1>SNAKE DELUXE</h1>
+      <h1>🐍 SNAKE PRO</h1>
 
       <div class="info">
         <div class="pill">LEVEL <span id="level">1</span>/10</div>
         <div class="pill">SCORE <span id="score">0</span></div>
         <div class="pill">BEST <span id="best">0</span></div>
-        <div class="pill">TARGET <span id="target">5</span></div>
       </div>
 
       <canvas id="game" width="420" height="420"></canvas>
@@ -193,11 +196,17 @@
       <div class="buttons">
         <button onclick="startGame()">START</button>
         <button onclick="restartGame()">RESTART</button>
-        <button onclick="togglePause()">PAUSE</button>
       </div>
 
-      <div id="msg">Arrow Keys To Move | P = Pause</div>
-      <div id="announce"></div>
+      <div class="mobile">
+        <div class="mobbtn" onclick="moveDir('up')">⬆</div>
+        <div class="mobbtn" onclick="moveDir('left')">⬅</div>
+        <div class="mobbtn" onclick="moveDir('down')">⬇</div>
+        <div class="mobbtn" onclick="moveDir('right')">➡</div>
+      </div>
+
+      <div id="msg">Eat food, grow, survive 🚀</div>
+      <div id="popup"></div>
     </div>
 
     <script>
@@ -208,48 +217,62 @@
         score = 0,
         target = 5;
       let tile = 20,
-        count = 20,
-        speed = 170;
+        count = 20;
       let snake = [],
         food = {},
-        dir = { x: 1, y: 0 },
+        dir = { x: 1, y: 0 };
+      let speed = 150,
         loop;
-      let paused = false;
+      let particles = [];
 
+      /* HIGH SCORE */
       let best = localStorage.getItem("snakeBest") || 0;
       document.getElementById("best").innerText = best;
 
-      function popup(t) {
-        let a = document.getElementById("announce");
-        a.innerText = t;
-        a.classList.remove("show");
-        void a.offsetWidth;
-        a.classList.add("show");
+      /* SOUND */
+      function beep(freq) {
+        const audio = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audio.createOscillator();
+        const gain = audio.createGain();
+        osc.connect(gain);
+        gain.connect(audio.destination);
+        osc.frequency.value = freq;
+        osc.start();
+        osc.stop(audio.currentTime + 0.08);
       }
 
-      function setupLevel() {
+      /* POPUP */
+      function popup(text) {
+        let p = document.getElementById("popup");
+        p.innerText = text;
+        p.classList.remove("show");
+        void p.offsetWidth;
+        p.classList.add("show");
+      }
+
+      /* LEVEL SETUP */
+      function setup() {
         count = 20 + (level - 1) * 2;
         tile = Math.floor(420 / count);
-        speed = Math.max(55, 170 - level * 12);
-        target = 4 + level;
-        score = 0;
+        speed = Math.max(50, 150 - level * 12);
 
         snake = [];
-        for (let i = 4 + level; i > 0; i--) snake.push({ x: i, y: 10 });
+        for (let i = 4 + level; i > 0; i--) {
+          snake.push({ x: i, y: 10 });
+        }
 
         dir = { x: 1, y: 0 };
+        score = 0;
+        target = 4 + level;
         spawnFood();
 
-        updateText();
+        document.getElementById("level").innerText = level;
+        document.getElementById("score").innerText = score;
+
         popup("LEVEL " + level);
       }
 
-      function updateText() {
-        levelEl.innerText = level;
-        scoreEl.innerText = score;
-        targetEl.innerText = target;
-      }
-
+      /* FOOD */
       function spawnFood() {
         food = {
           x: Math.floor(Math.random() * count),
@@ -257,87 +280,66 @@
         };
       }
 
-      function rr(x, y, w, h, r) {
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + w - r, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-        ctx.lineTo(x + w, y + h - r);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        ctx.lineTo(x + r, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
-        ctx.fill();
+      /* PARTICLES */
+      function addParticles(x, y) {
+        for (let i = 0; i < 10; i++) {
+          particles.push({
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 3,
+            vy: (Math.random() - 0.5) * 3,
+            life: 20,
+          });
+        }
+        beep(600);
       }
 
-      function drawEyes(head) {
-        ctx.fillStyle = "white";
-
-        let ex1 = head.x * tile + tile * 0.28;
-        let ex2 = head.x * tile + tile * 0.62;
-        let ey = head.y * tile + tile * 0.32;
-
-        if (dir.x === -1) {
-          ex1 = head.x * tile + tile * 0.22;
-          ex2 = head.x * tile + tile * 0.22;
-        }
-        if (dir.x === 1) {
-          ex1 = head.x * tile + tile * 0.7;
-          ex2 = head.x * tile + tile * 0.7;
-        }
-        if (dir.y === 1) {
-          ey = head.y * tile + tile * 0.7;
-        }
-        if (dir.y === -1) {
-          ey = head.y * tile + tile * 0.18;
-        }
-
-        ctx.beginPath();
-        ctx.arc(ex1, ey, 2.2, 0, 6.28);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(ex2, ey, 2.2, 0, 6.28);
-        ctx.fill();
-      }
-
+      /* DRAW */
       function draw() {
         ctx.clearRect(0, 0, 420, 420);
 
-        for (let i = 0; i < count; i++) {
-          for (let j = 0; j < count; j++) {
-            ctx.strokeStyle = "rgba(255,255,255,.03)";
-            ctx.strokeRect(i * tile, j * tile, tile, tile);
-          }
-        }
-
-        ctx.shadowBlur = 18;
-        ctx.shadowColor = "#f43f5e";
+        /* food glow */
         ctx.fillStyle = "#f43f5e";
-        rr(food.x * tile, food.y * tile, tile - 1, tile - 1, 8);
+        ctx.beginPath();
+        ctx.arc(
+          food.x * tile + tile / 2,
+          food.y * tile + tile / 2,
+          tile / 2.5,
+          0,
+          6.28,
+        );
+        ctx.fill();
 
-        ctx.shadowBlur = 0;
-
-        snake.forEach((p, i) => {
+        /* snake */
+        snake.forEach((s, i) => {
           ctx.fillStyle = i === 0 ? "#38bdf8" : "#0ea5e9";
-          ctx.shadowBlur = i === 0 ? 16 : 0;
-          ctx.shadowColor = "#38bdf8";
+          ctx.beginPath();
+          ctx.roundRect(s.x * tile, s.y * tile, tile - 1, tile - 1, 6);
+          ctx.fill();
 
+          /* eyes */
           if (i === 0) {
-            rr(p.x * tile, p.y * tile, tile - 1, tile - 1, tile / 2);
-            drawEyes(p);
-          } else {
-            rr(p.x * tile, p.y * tile, tile - 1, tile - 1, 4);
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.arc(s.x * tile + 6, s.y * tile + 6, 2, 0, 6.28);
+            ctx.arc(s.x * tile + 14, s.y * tile + 6, 2, 0, 6.28);
+            ctx.fill();
           }
         });
 
-        ctx.shadowBlur = 0;
+        /* particles */
+        particles.forEach((p, i) => {
+          ctx.fillStyle = "rgba(56,189,248,.9)";
+          ctx.fillRect(p.x, p.y, 2, 2);
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+          if (p.life <= 0) particles.splice(i, 1);
+        });
       }
 
+      /* UPDATE */
       function update() {
-        if (paused) return;
-
         let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
         if (head.x < 0 || head.y < 0 || head.x >= count || head.y >= count) {
@@ -345,8 +347,8 @@
           return;
         }
 
-        for (let p of snake) {
-          if (head.x === p.x && head.y === p.y) {
+        for (let s of snake) {
+          if (s.x === head.x && s.y === head.y) {
             gameOver();
             return;
           }
@@ -354,14 +356,20 @@
 
         snake.unshift(head);
 
+        /* eat */
         if (head.x === food.x && head.y === food.y) {
           score++;
+          document.getElementById("score").innerText = score;
+
+          addParticles(head.x * tile, head.y * tile);
+
           if (score > best) {
             best = score;
             localStorage.setItem("snakeBest", best);
-            bestEl.innerText = best;
+            document.getElementById("best").innerText = best;
           }
-          scoreEl.innerText = score;
+
+          beep(800);
           spawnFood();
 
           if (score >= target) {
@@ -375,16 +383,16 @@
         draw();
       }
 
+      /* LOOP */
       function startGame() {
         clearInterval(loop);
-        paused = false;
-        setupLevel();
+        level = 1;
+        setup();
         draw();
         loop = setInterval(update, speed);
       }
 
       function restartGame() {
-        level = 1;
         startGame();
       }
 
@@ -392,39 +400,44 @@
         clearInterval(loop);
 
         if (level === 10) {
-          popup("YOU WIN!");
-          msg.innerText = "Champion!";
+          popup("YOU WIN 🏆");
+          beep(1000);
           return;
         }
 
         level++;
         popup("LEVEL UP!");
-        msg.innerText = "Next Level...";
-        setTimeout(startGame, 1300);
+        beep(900);
+
+        setTimeout(() => {
+          setup();
+          loop = setInterval(update, speed);
+        }, 1000);
       }
 
       function gameOver() {
         clearInterval(loop);
         popup("GAME OVER");
-        msg.innerText = "Press Restart";
+        beep(200);
       }
 
-      function togglePause() {
-        paused = !paused;
-        msg.innerText = paused ? "PAUSED" : "Resumed";
-        if (paused) popup("PAUSED");
-      }
-
+      /* CONTROLS */
       document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowUp" && dir.y !== 1) dir = { x: 0, y: -1 };
         if (e.key === "ArrowDown" && dir.y !== -1) dir = { x: 0, y: 1 };
         if (e.key === "ArrowLeft" && dir.x !== 1) dir = { x: -1, y: 0 };
         if (e.key === "ArrowRight" && dir.x !== -1) dir = { x: 1, y: 0 };
-        if (e.key === "p" || e.key === "P") togglePause();
       });
+
+      /* MOBILE */
+      function moveDir(d) {
+        if (d === "up" && dir.y !== 1) dir = { x: 0, y: -1 };
+        if (d === "down" && dir.y !== -1) dir = { x: 0, y: 1 };
+        if (d === "left" && dir.x !== 1) dir = { x: -1, y: 0 };
+        if (d === "right" && dir.x !== -1) dir = { x: 1, y: 0 };
+      }
 
       draw();
     </script>
   </body>
 </html>
-y
