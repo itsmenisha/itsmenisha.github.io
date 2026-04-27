@@ -2,8 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nisha Projects</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Nisha Projects Hub</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
       * {
@@ -14,113 +19,160 @@
 
       body {
         font-family: Inter, sans-serif;
-        color: #f8fafc;
-        line-height: 1.6;
-
+        color: #fff;
         background:
           radial-gradient(
-            circle at left center,
-            rgba(34, 197, 94, 0.22),
-            transparent 45%
+            circle at left,
+            rgba(34, 197, 94, 0.16),
+            transparent 35%
           ),
           radial-gradient(
-            circle at right center,
-            rgba(56, 189, 248, 0.2),
-            transparent 45%
+            circle at right,
+            rgba(56, 189, 248, 0.16),
+            transparent 35%
           ),
-          radial-gradient(circle at center, #050505, #020617 60%, #01030a);
-
-        background-attachment: fixed;
+          linear-gradient(135deg, #020617, #07111f, #01030a);
+        min-height: 100vh;
       }
 
-      .wrap {
-        max-width: 1180px;
+      .wrap7777 {
+        max-width: 1320px;
         margin: auto;
-        padding: 40px 24px;
+        padding: 40px 18px;
       }
 
-      .mono {
-        font-family: "JetBrains Mono", monospace;
+      .top7777 {
         color: #38bdf8;
-      }
-
-      h1 {
-        font-size: 48px;
-        margin: 10px 0 30px;
-      }
-
-      /* GRID */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-
-      /* 🧊 UPDATED CARD */
-      .card1234 {
-        background: #0f172a;
-        border: 1px solid #1e293b;
-        border-radius: 24px;
-        padding: 22px;
-        transition: 0.25s;
-      }
-
-      .card1234:hover {
-        transform: translateY(-6px);
-        border-color: rgba(56, 189, 248, 0.35);
-      }
-
-      .card1234 h3 {
-        color: white;
-        font-size: 20px;
+        font-size: 14px;
         margin-bottom: 8px;
       }
 
-      .card1234 p {
-        color: #94a3b8;
-        font-size: 14px;
+      .title7777 {
+        font-size: 52px;
+        font-weight: 800;
+        margin-bottom: 26px;
+        color: #fff;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
       }
 
-      .tag {
+      .filters7777 {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+      }
+
+      .btn7777 {
+        border: none;
+        cursor: pointer;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: #fff;
+        background: #111827;
+        transition: 0.25s;
+      }
+
+      .btn7777:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+      }
+
+      .active7777 {
+        background: linear-gradient(135deg, #38bdf8, #22c55e);
+        color: #00111a;
+      }
+
+      .grid7777 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+
+      .card7777 {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 18px;
+        transition: 0.28s;
+      }
+
+      .card7777:hover {
+        transform: translateY(-8px);
+        border-color: rgba(56, 189, 248, 0.45);
+        box-shadow:
+          0 0 20px rgba(56, 189, 248, 0.15),
+          0 15px 35px rgba(0, 0, 0, 0.45);
+      }
+
+      .thumb7777 {
+        width: 100%;
+        height: 185px;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 14px;
+      }
+
+      .thumb7777 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.35s;
+      }
+
+      .card7777:hover img {
+        transform: scale(1.05);
+      }
+
+      .card7777 h3 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+
+      .card7777 p {
+        font-size: 14px;
+        color: #94a3b8;
+        min-height: 42px;
+      }
+
+      .tag7777 {
         display: inline-block;
         margin-top: 10px;
-        font-size: 12px;
-        padding: 6px 10px;
+        padding: 7px 12px;
         border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
         background: #111827;
         color: #7dd3fc;
       }
 
-      /* 🖼 IMAGE FIXED SIZE */
-      .img-box {
-        margin-top: 14px;
-        width: 100%;
-        height: 180px; /* FIXED HEIGHT */
-        border-radius: 14px;
-        overflow: hidden;
+      .footer7777 {
+        text-align: center;
+        margin-top: 45px;
+        color: #94a3b8;
+        font-size: 14px;
+        padding-bottom: 30px;
       }
 
-      .img-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* IMPORTANT FIX */
-        transition: 0.3s;
-      }
-
-      .img-box img:hover {
-        transform: scale(1.05);
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 900px) {
-        .grid {
+      @media (max-width: 980px) {
+        .grid7777 {
           grid-template-columns: 1fr 1fr;
+        }
+        .title7777 {
+          font-size: 42px;
         }
       }
 
-      @media (max-width: 650px) {
-        .grid {
+      @media (max-width: 680px) {
+        .grid7777 {
           grid-template-columns: 1fr;
+        }
+        .title7777 {
+          font-size: 32px;
+        }
+        .btn7777 {
+          padding: 10px 14px;
+          font-size: 13px;
         }
       }
     </style>
@@ -131,63 +183,251 @@
     <div id="navbar-placeholder"></div>
     <script>
       loadHTML("navbar-placeholder", "navbar.html");
-      loadHTML("footer-holder", "footer.html");
     </script>
 
-    <div class="wrap">
-      <div class="mono">projects.run()</div>
-      <h1 style="color: white">My Projects</h1>
-      <br /><br />
-      <div class="grid">
-        <div class="card1234">
+    <div class="wrap7777">
+      <div class="top7777">projects.run()</div>
+      <h1 class="title7777">My Projects Hub</h1>
+
+      <div class="filters7777">
+        <button class="btn7777 active7777" onclick="filter7777('all', this)">
+          ALL
+        </button>
+        <button class="btn7777" onclick="filter7777('game', this)">
+          GAMES
+        </button>
+        <button class="btn7777" onclick="filter7777('health', this)">
+          HEALTH
+        </button>
+        <button class="btn7777" onclick="filter7777('tool', this)">
+          TOOLS
+        </button>
+        <button class="btn7777" onclick="filter7777('pdf', this)">PDF</button>
+      </div>
+
+      <div class="grid7777" id="grid7777">
+        <!-- GAMES -->
+        <div class="card7777" data-cat="game" data-date="35">
+          <a href="aalucross.html">
+            <div class="thumb7777"><img src="images/tictac.jpg" /></div>
+            <h3>Tic Tac Toe</h3>
+            <p>Classic neon board battle.</p>
+            <span class="tag7777">Game</span></a
+          >
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="34">
+          <a href="rock_paper_scissors.html">
+            <div class="thumb7777"><img src="images/rock.jpg" /></div>
+            <h3>Rock Paper Scissors</h3>
+            <p>Beat the CPU instantly.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="32">
+          <a href="snake_game.html">
+            <div class="thumb7777"><img src="images/snake.jpg" /></div>
+            <h3>Snake Game</h3>
+            <p>Arcade snake with speed levels.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="31">
+          <div class="thumb7777"><img src="images/2048.jpg" /></div>
+          <h3>2048 Puzzle</h3>
+          <p>Merge blocks to 2048.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="30">
+          <div class="thumb7777"><img src="images/hangman.jpg" /></div>
+          <h3>Hangman</h3>
+          <p>Guess the hidden word.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="29">
+          <div class="thumb7777"><img src="images/memory.jpg" /></div>
+          <h3>Memory Flip</h3>
+          <p>Train memory with cards.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="28">
+          <div class="thumb7777"><img src="images/runner.jpg" /></div>
+          <h3>Runner Dash</h3>
+          <p>Jump and survive endless mode.</p>
+          <span class="tag7777">Game</span>
+        </div>
+
+        <!-- HEALTH -->
+        <div class="card7777" data-cat="health" data-date="27">
+          <div class="thumb7777"><img src="images/bmi.jpg" /></div>
+          <h3>BMI Calculator</h3>
+          <p>Check body mass instantly.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="26">
+          <div class="thumb7777"><img src="images/health.jpg" /></div>
+          <h3>Health Predictor</h3>
+          <p>AI based health estimate.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="25">
+          <div class="thumb7777"><img src="images/water.jpg" /></div>
+          <h3>Water Tracker</h3>
+          <p>Daily hydration reminder.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="24">
+          <div class="thumb7777"><img src="images/calorie.jpg" /></div>
+          <h3>Calorie Calculator</h3>
+          <p>Daily calorie estimate tool.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="23">
+          <div class="thumb7777"><img src="images/step.jpg" /></div>
+          <h3>Step Goal Planner</h3>
+          <p>Track your walking goals.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="22">
+          <div class="thumb7777"><img src="images/sleep.jpg" /></div>
+          <h3>Sleep Timer</h3>
+          <p>Better bedtime schedule planner.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <!-- TOOLS -->
+        <div class="card7777" data-cat="tool" data-date="21">
+          <div class="thumb7777"><img src="images/qr.jpg" /></div>
           <h3>QR Generator</h3>
-          <p>Generate QR codes instantly using Python & Flask.</p>
-          <span class="tag">Beginner</span>
-          <div class="img-box">
-            <img src="images/qr.jpg" />
-          </div>
+          <p>Create payment QR instantly.</p>
+          <span class="tag7777">Tool</span>
         </div>
 
-        <div class="card1234">
-          <h3>Weather App</h3>
-          <p>Real-time weather API with OpenCV experiments.</p>
-          <span class="tag">Beginner</span>
-          <div class="img-box">
-            <img src="https://img.youtube.com/vi/iHRFc9BVrk4/hqdefault.jpg" />
-          </div>
+        <div class="card7777" data-cat="tool" data-date="20">
+          <div class="thumb7777"><img src="images/date.jpg" /></div>
+          <h3>Nepali Date Converter</h3>
+          <p>BS to AD / AD to BS.</p>
+          <span class="tag7777">Tool</span>
         </div>
 
-        <div class="card1234">
-          <h3>Health Flask App</h3>
-          <p>AI-powered health prediction system using Flask.</p>
-          <span class="tag">Intermediate</span>
-          <div class="img-box">
-            <img src="images/kathmandu.png" />
-          </div>
+        <div class="card7777" data-cat="tool" data-date="19">
+          <div class="thumb7777"><img src="images/unit.jpg" /></div>
+          <h3>Unit Converter</h3>
+          <p>Length, weight and speed.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="18">
+          <div class="thumb7777"><img src="images/password.jpg" /></div>
+          <h3>Password Generator</h3>
+          <p>Create secure passwords.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="17">
+          <div class="thumb7777"><img src="images/interest.jpg" /></div>
+          <h3>Interest Calculator</h3>
+          <p>Simple & compound interest.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="16">
+          <div class="thumb7777"><img src="images/todo.jpg" /></div>
+          <h3>Todo Planner</h3>
+          <p>Organize daily tasks fast.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <!-- PDF -->
+        <div class="card7777" data-cat="pdf" data-date="15">
+          <div class="thumb7777"><img src="images/pdf1.jpg" /></div>
+          <h3>Docs to PDF</h3>
+          <p>Convert docs into PDF file.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="14">
+          <div class="thumb7777"><img src="images/pdf2.jpg" /></div>
+          <h3>Merge PDF</h3>
+          <p>Combine many PDFs.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="13">
+          <div class="thumb7777"><img src="images/pdf3.jpg" /></div>
+          <h3>Split PDF</h3>
+          <p>Extract selected pages.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="12">
+          <div class="thumb7777"><img src="images/pdf4.jpg" /></div>
+          <h3>Compress PDF</h3>
+          <p>Reduce PDF size quickly.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="11">
+          <div class="thumb7777"><img src="images/pdf5.jpg" /></div>
+          <h3>Image to PDF</h3>
+          <p>Convert photos to PDF.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="10">
+          <div class="thumb7777"><img src="images/pdf6.jpg" /></div>
+          <h3>PDF Lock</h3>
+          <p>Add password security.</p>
+          <span class="tag7777">PDF</span>
         </div>
       </div>
+
+      <div class="footer7777">© 2026 Nisha Kiran Gnawaly</div>
     </div>
 
-    <div
-      class="footer1234"
-      style="margin: 2vw; text-align: center; color: #94a3b8"
-    >
-      © 2026 Nisha Kiran Gnawaly <br />
+    <script>
+      function filter7777(cat, btn) {
+        document.querySelectorAll(".btn7777").forEach((b) => {
+          b.classList.remove("active7777");
+        });
 
-      gnawalynishakiran@gmail.com
+        btn.classList.add("active7777");
 
-      <a
-        href="https://mail.google.com/mail/u/0/#sent?compose=new"
-        class="link-box"
-        target="_blank"
-      >
-        <button
-          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
-          style="font-size: 1.3vw; color: white"
-        >
-          📋
-        </button>
-      </a>
-    </div>
+        const cards = [...document.querySelectorAll(".card7777")];
+
+        cards.forEach((card) => {
+          if (cat === "all" || card.dataset.cat === cat) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        sort7777();
+      }
+
+      function sort7777() {
+        const grid = document.getElementById("grid7777");
+        const cards = [...document.querySelectorAll(".card7777")];
+
+        cards.sort((a, b) => {
+          return Number(b.dataset.date) - Number(a.dataset.date);
+        });
+
+        cards.forEach((card) => grid.appendChild(card));
+      }
+
+      sort7777();
+    </script>
   </body>
 </html>
