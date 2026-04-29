@@ -250,6 +250,7 @@
 
       let level = 1,
         score = 0,
+        levelScore = 0,
         target = 5;
       let tile = 20,
         count = 20;
@@ -297,7 +298,7 @@
         }
 
         dir = { x: 1, y: 0 };
-        score = 0;
+        levelScore = 0;
         target = 4 + level;
         spawnFood();
 
@@ -393,11 +394,11 @@
 
         /* eat */
         if (head.x === food.x && head.y === food.y) {
-          score++;
+          score++; // total score
+          levelScore++; // level progress
           document.getElementById("score").innerText = score;
 
           addParticles(head.x * tile, head.y * tile);
-
           if (score > best) {
             best = score;
             localStorage.setItem("snakeBest", best);
@@ -407,7 +408,7 @@
           beep(800);
           spawnFood();
 
-          if (score >= target) {
+          if (levelScore >= target) {
             nextLevel();
             return;
           }
@@ -428,6 +429,9 @@
 
       /* LOOP */
       function startGame() {
+        score = 0;
+        levelScore = 0;
+        document.getElementById("score").innerText = score;
         focusGameScreen();
         clearInterval(loop);
         level = 1;
