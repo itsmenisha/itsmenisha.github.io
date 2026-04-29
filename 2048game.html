@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <!-- SEO TITLE -->
+    <title>
+      2048 Neon Arcade - 100 Levels | Free Online Puzzle Game (3 Min Challenge)
+    </title>
+
+    <!-- META DESCRIPTION (IMPORTANT FOR RANKING) -->
+    <meta
+      name="description"
+      content="Play 2048 Neon Arcade online for free. Enjoy a modern neon puzzle game with warm glowing tiles, 100 progressive levels, 3-minute challenge mode, smooth animations, and addictive gameplay. Merge tiles from 2 to 2048 and beyond!"
+    />
+
+    <!-- KEYWORDS (LESS IMPORTANT BUT STILL OK) -->
+    <meta
+      name="keywords"
+      content="2048 game, online 2048, free puzzle game, neon 2048, 2048 arcade, 100 level game, merge numbers game, browser 2048, HTML5 2048 game, addictive puzzle game"
+    />
+
+    <meta name="author" content="Neon Arcade Games" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1e40af" />
+
+    <!-- OPEN GRAPH (SOCIAL SHARING) -->
+    <meta
+      property="og:title"
+      content="2048 Neon Arcade - 100 Levels Puzzle Game"
+    />
+    <meta
+      property="og:description"
+      content="Play the ultimate 2048 neon puzzle game with warm glowing tiles, 100 levels, and a 3-minute challenge mode."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="2048 Neon Arcade" />
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="2048 Neon Arcade - Free Puzzle Game" />
+    <meta
+      name="twitter:description"
+      content="Merge tiles, beat 100 levels, and survive the 3-minute challenge in this addictive neon 2048 game."
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      body {
+        min-height: 120vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top, #1e3a8a, #0f172a, #020617);
+        color: white;
+      }
+
+      /* background stars */
+      body::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.07) 1px,
+          transparent 1px
+        );
+        background-size: 40px 40px;
+        animation: move 18s linear infinite;
+        opacity: 0.2;
+      }
+
+      @keyframes move {
+        from {
+          transform: translate(0, 0);
+        }
+        to {
+          transform: translate(-100px, -100px);
+        }
+      }
+
+      .card {
+        position: relative;
+        width: 40vw;
+        max-width: 95%;
+        padding: 18px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 26px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 12px #60a5fa;
+      }
+
+      .info {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .pill {
+        flex: 1;
+        padding: 1vw;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 13px;
+      }
+
+      .board {
+        width: 100%;
+        height: 30vw;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 18px;
+        display: grid;
+        grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .tile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 900;
+        border-radius: 14px;
+      }
+
+      .t2 {
+        background: #f0c38c;
+        color: #111;
+      }
+      .t4 {
+        background: #fde68a;
+        color: #111;
+      }
+      .t8 {
+        background: #fbbf24;
+        color: #111;
+      }
+      .t16 {
+        background: #f97316;
+        color: #111;
+      }
+      .t32 {
+        background: #ef4444;
+        color: white;
+      }
+      .t64 {
+        background: #dc2626;
+        color: white;
+      }
+      .t128 {
+        background: #b45309;
+        color: white;
+      }
+      .t256 {
+        background: #92400e;
+        color: white;
+      }
+      .t512 {
+        background: #7c2d12;
+        color: white;
+      }
+      .t1024 {
+        background: #6d28d9;
+        color: white;
+      }
+      .t2048 {
+        background: #4c1d95;
+        color: white;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px 14px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        background: linear-gradient(135deg, #60a5fa, #1d4ed8);
+        color: white;
+      }
+
+      /* OVERLAY */
+      #overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(14px);
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.3s;
+        border-radius: 24px;
+        z-index: 999;
+      }
+
+      #overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      #overText {
+        font-size: 42px;
+        font-weight: 900;
+        text-shadow: 0 0 20px #60a5fa;
+      }
+
+      #countdown {
+        margin-top: 10px;
+        font-size: 18px;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>2048 ARCADE ⚡</h1>
+
+      <div class="info">
+        <div class="pill">LEVEL <span id="level">1</span>/100</div>
+        <div class="pill">SCORE <span id="score">0</span></div>
+        <div class="pill">BEST <span id="best">0</span></div>
+      </div>
+
+      <div class="info">
+        <div class="pill">⏳ TIME <span id="time">3:00</span></div>
+      </div>
+
+      <div class="board" id="board"></div>
+
+      <button onclick="newGame()">START</button>
+
+      <div id="overlay">
+        <div id="overText">GAME OVER</div>
+        <div id="countdown">Restarting in 3...</div>
+      </div>
+    </div>
+
+    <script>
+      let board = [],
+        score = 0;
+      let best = localStorage.getItem("best2048") || 0;
+      document.getElementById("best").innerText = best;
+
+      let time = 180; // 🔥 3 MINUTES ONLY
+      let timer;
+
+      /* LEVEL */
+      function level() {
+        return Math.min(100, Math.floor(score / 200) + 1);
+      }
+
+      /* INIT */
+      function init() {
+        board = Array.from({ length: 4 }, () => Array(4).fill(0));
+        score = 0;
+        time = 180;
+
+        clearInterval(timer);
+        startTimer();
+
+        addTile();
+        addTile();
+        draw();
+
+        document.getElementById("overlay").classList.remove("show");
+      }
+
+      /* TIMER */
+      function startTimer() {
+        timer = setInterval(() => {
+          time--;
+          if (time <= 0) {
+            gameOver("TIME UP ⏳");
+          }
+          draw();
+        }, 1000);
+      }
+
+      /* FORMAT TIME */
+      function formatTime() {
+        let m = Math.floor(time / 60);
+        let s = time % 60;
+        return m + ":" + String(s).padStart(2, "0");
+      }
+
+      /* ADD TILE */
+      function addTile() {
+        let empty = [];
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 4; c++) {
+            if (board[r][c] === 0) empty.push({ r, c });
+          }
+        }
+        if (empty.length === 0) return;
+
+        let spot = empty[Math.floor(Math.random() * empty.length)];
+        board[spot.r][spot.c] = Math.random() > 0.9 ? 4 : 2;
+      }
+
+      /* DRAW */
+      function draw() {
+        let b = document.getElementById("board");
+        b.innerHTML = "";
+
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 4; c++) {
+            let v = board[r][c];
+            let d = document.createElement("div");
+            d.className = "tile";
+            if (v) d.classList.add("t" + v);
+            d.innerText = v || "";
+            b.appendChild(d);
+          }
+        }
+
+        document.getElementById("score").innerText = score;
+        document.getElementById("level").innerText = level();
+        document.getElementById("time").innerText = formatTime();
+      }
+
+      /* SLIDE */
+      function slide(row) {
+        row = row.filter((v) => v);
+
+        for (let i = 0; i < row.length - 1; i++) {
+          if (row[i] === row[i + 1]) {
+            row[i] *= 2;
+            score += row[i];
+            row[i + 1] = 0;
+          }
+        }
+
+        row = row.filter((v) => v);
+        while (row.length < 4) row.push(0);
+        return row;
+      }
+
+      /* MOVES */
+      function moveLeft() {
+        for (let r = 0; r < 4; r++) board[r] = slide(board[r]);
+      }
+
+      function moveRight() {
+        for (let r = 0; r < 4; r++)
+          board[r] = slide(board[r].reverse()).reverse();
+      }
+
+      function moveUp() {
+        for (let c = 0; c < 4; c++) {
+          let col = [];
+          for (let r = 0; r < 4; r++) col.push(board[r][c]);
+          col = slide(col);
+          for (let r = 0; r < 4; r++) board[r][c] = col[r];
+        }
+      }
+
+      function moveDown() {
+        for (let c = 0; c < 4; c++) {
+          let col = [];
+          for (let r = 0; r < 4; r++) col.push(board[r][c]);
+          col = slide(col.reverse()).reverse();
+          for (let r = 0; r < 4; r++) board[r][c] = col[r];
+        }
+      }
+
+      /* CAN MOVE */
+      function canMove() {
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 4; c++) {
+            if (board[r][c] === 0) return true;
+            if (c < 3 && board[r][c] === board[r][c + 1]) return true;
+            if (r < 3 && board[r][c] === board[r + 1][c]) return true;
+          }
+        }
+        return false;
+      }
+
+      /* MOVE */
+      function move(dir) {
+        let old = JSON.stringify(board);
+
+        if (dir === "left") moveLeft();
+        if (dir === "right") moveRight();
+        if (dir === "up") moveUp();
+        if (dir === "down") moveDown();
+
+        if (old !== JSON.stringify(board)) addTile();
+
+        draw();
+
+        if (score > best) {
+          best = score;
+          localStorage.setItem("best2048", best);
+        }
+
+        if (!canMove()) {
+          gameOver("NO MOVES ❌");
+        }
+      }
+
+      /* GAME OVER */
+      function gameOver(text) {
+        clearInterval(timer);
+
+        let overlay = document.getElementById("overlay");
+        let countdown = document.getElementById("countdown");
+        let title = document.getElementById("overText");
+
+        title.innerText = text;
+        overlay.classList.add("show");
+
+        let t = 3;
+        countdown.innerText = "Restarting in " + t + "...";
+
+        let cd = setInterval(() => {
+          t--;
+          countdown.innerText = "Restarting in " + t + "...";
+
+          if (t <= 0) {
+            clearInterval(cd);
+            overlay.classList.remove("show");
+            init();
+          }
+        }, 1000);
+      }
+
+      /* CONTROLS */
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") move("left");
+        if (e.key === "ArrowRight") move("right");
+        if (e.key === "ArrowUp") move("up");
+        if (e.key === "ArrowDown") move("down");
+      });
+
+      function newGame() {
+        init();
+      }
+
+      init();
+    </script>
+  </body>
+</html>
