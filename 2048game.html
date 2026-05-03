@@ -59,7 +59,7 @@
         font-family: "Orbitron", sans-serif;
       }
 
-      body {
+      .body123 {
         min-height: 120vh;
         display: flex;
         justify-content: center;
@@ -69,7 +69,7 @@
       }
 
       /* background stars */
-      body::before {
+      .body123::before {
         content: "";
         position: absolute;
         width: 100%;
@@ -93,7 +93,7 @@
         }
       }
 
-      .card {
+      .card123456 {
         position: relative;
         width: 40vw;
         max-width: 95%;
@@ -234,235 +234,291 @@
         font-size: 18px;
         opacity: 0.85;
       }
+      .footer {
+        text-align: center;
+        padding: 50px;
+        color: #94a3b8;
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22),
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2),
+            transparent 42%
+          ),
+          radial-gradient(circle at center, #050505, #020617, #01030a);
+        background-attachment: fixed;
+      }
+      .footer a {
+        text-decoration: none;
+        text-align: center;
+
+        color: #94a3b8;
+      }
     </style>
   </head>
 
   <body>
-    <div class="card">
-      <h1>2048 ARCADE ⚡</h1>
-
-      <div class="info">
-        <div class="pill">LEVEL <span id="level">1</span>/100</div>
-        <div class="pill">SCORE <span id="score">0</span></div>
-        <div class="pill">BEST <span id="best">0</span></div>
-      </div>
-
-      <div class="info">
-        <div class="pill">⏳ TIME <span id="time">3:00</span></div>
-      </div>
-
-      <div class="board" id="board"></div>
-
-      <button onclick="newGame()">START</button>
-
-      <div id="overlay">
-        <div id="overText">GAME OVER</div>
-        <div id="countdown">Restarting in 3...</div>
-      </div>
+    <div class="pro-page123">
+      <script src="js/loadhtml.js"></script>
+      <div id="navbar-placeholder"></div>
+      <script>
+        loadHTML("navbar-placeholder", "navbar.html");
+        loadHTML("footer-holder", "footer.html");
+      </script>
     </div>
+    <div class="body123">
+      <div class="card123456">
+        <h1>2048 ARCADE ⚡</h1>
 
-    <script>
-      let board = [],
-        score = 0;
-      let best = localStorage.getItem("best2048") || 0;
-      document.getElementById("best").innerText = best;
+        <div class="info">
+          <div class="pill">LEVEL <span id="level">1</span>/100</div>
+          <div class="pill">SCORE <span id="score">0</span></div>
+          <div class="pill">BEST <span id="best">0</span></div>
+        </div>
 
-      let time = 180; // 🔥 3 MINUTES ONLY
-      let timer;
+        <div class="info">
+          <div class="pill">⏳ TIME <span id="time">3:00</span></div>
+        </div>
 
-      /* LEVEL */
-      function level() {
-        return Math.min(100, Math.floor(score / 200) + 1);
-      }
+        <div class="board" id="board"></div>
 
-      /* INIT */
-      function init() {
-        board = Array.from({ length: 4 }, () => Array(4).fill(0));
-        score = 0;
-        time = 180;
+        <button onclick="newGame()">START</button>
 
-        clearInterval(timer);
-        startTimer();
+        <div id="overlay">
+          <div id="overText">GAME OVER</div>
+          <div id="countdown">Restarting in 3...</div>
+        </div>
+      </div>
 
-        addTile();
-        addTile();
-        draw();
+      <script>
+        let board = [],
+          score = 0;
+        let best = localStorage.getItem("best2048") || 0;
+        document.getElementById("best").innerText = best;
 
-        document.getElementById("overlay").classList.remove("show");
-      }
+        let time = 180; // 🔥 3 MINUTES ONLY
+        let timer;
 
-      /* TIMER */
-      function startTimer() {
-        timer = setInterval(() => {
-          time--;
-          if (time <= 0) {
-            gameOver("TIME UP ⏳");
-          }
+        /* LEVEL */
+        function level() {
+          return Math.min(100, Math.floor(score / 200) + 1);
+        }
+
+        /* INIT */
+        function init() {
+          board = Array.from({ length: 4 }, () => Array(4).fill(0));
+          score = 0;
+          time = 180;
+
+          clearInterval(timer);
+          startTimer();
+
+          addTile();
+          addTile();
           draw();
-        }, 1000);
-      }
 
-      /* FORMAT TIME */
-      function formatTime() {
-        let m = Math.floor(time / 60);
-        let s = time % 60;
-        return m + ":" + String(s).padStart(2, "0");
-      }
+          document.getElementById("overlay").classList.remove("show");
+        }
 
-      /* ADD TILE */
-      function addTile() {
-        let empty = [];
-        for (let r = 0; r < 4; r++) {
+        /* TIMER */
+        function startTimer() {
+          timer = setInterval(() => {
+            time--;
+            if (time <= 0) {
+              gameOver("TIME UP ⏳");
+            }
+            draw();
+          }, 1000);
+        }
+
+        /* FORMAT TIME */
+        function formatTime() {
+          let m = Math.floor(time / 60);
+          let s = time % 60;
+          return m + ":" + String(s).padStart(2, "0");
+        }
+
+        /* ADD TILE */
+        function addTile() {
+          let empty = [];
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              if (board[r][c] === 0) empty.push({ r, c });
+            }
+          }
+          if (empty.length === 0) return;
+
+          let spot = empty[Math.floor(Math.random() * empty.length)];
+          board[spot.r][spot.c] = Math.random() > 0.9 ? 4 : 2;
+        }
+
+        /* DRAW */
+        function draw() {
+          let b = document.getElementById("board");
+          b.innerHTML = "";
+
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              let v = board[r][c];
+              let d = document.createElement("div");
+              d.className = "tile";
+              if (v) d.classList.add("t" + v);
+              d.innerText = v || "";
+              b.appendChild(d);
+            }
+          }
+
+          document.getElementById("score").innerText = score;
+          document.getElementById("level").innerText = level();
+          document.getElementById("time").innerText = formatTime();
+        }
+
+        /* SLIDE */
+        function slide(row) {
+          row = row.filter((v) => v);
+
+          for (let i = 0; i < row.length - 1; i++) {
+            if (row[i] === row[i + 1]) {
+              row[i] *= 2;
+              score += row[i];
+              row[i + 1] = 0;
+            }
+          }
+
+          row = row.filter((v) => v);
+          while (row.length < 4) row.push(0);
+          return row;
+        }
+
+        /* MOVES */
+        function moveLeft() {
+          for (let r = 0; r < 4; r++) board[r] = slide(board[r]);
+        }
+
+        function moveRight() {
+          for (let r = 0; r < 4; r++)
+            board[r] = slide(board[r].reverse()).reverse();
+        }
+
+        function moveUp() {
           for (let c = 0; c < 4; c++) {
-            if (board[r][c] === 0) empty.push({ r, c });
+            let col = [];
+            for (let r = 0; r < 4; r++) col.push(board[r][c]);
+            col = slide(col);
+            for (let r = 0; r < 4; r++) board[r][c] = col[r];
           }
         }
-        if (empty.length === 0) return;
 
-        let spot = empty[Math.floor(Math.random() * empty.length)];
-        board[spot.r][spot.c] = Math.random() > 0.9 ? 4 : 2;
-      }
-
-      /* DRAW */
-      function draw() {
-        let b = document.getElementById("board");
-        b.innerHTML = "";
-
-        for (let r = 0; r < 4; r++) {
+        function moveDown() {
           for (let c = 0; c < 4; c++) {
-            let v = board[r][c];
-            let d = document.createElement("div");
-            d.className = "tile";
-            if (v) d.classList.add("t" + v);
-            d.innerText = v || "";
-            b.appendChild(d);
+            let col = [];
+            for (let r = 0; r < 4; r++) col.push(board[r][c]);
+            col = slide(col.reverse()).reverse();
+            for (let r = 0; r < 4; r++) board[r][c] = col[r];
           }
         }
 
-        document.getElementById("score").innerText = score;
-        document.getElementById("level").innerText = level();
-        document.getElementById("time").innerText = formatTime();
-      }
+        /* CAN MOVE */
+        function canMove() {
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              if (board[r][c] === 0) return true;
+              if (c < 3 && board[r][c] === board[r][c + 1]) return true;
+              if (r < 3 && board[r][c] === board[r + 1][c]) return true;
+            }
+          }
+          return false;
+        }
 
-      /* SLIDE */
-      function slide(row) {
-        row = row.filter((v) => v);
+        /* MOVE */
+        function move(dir) {
+          let old = JSON.stringify(board);
 
-        for (let i = 0; i < row.length - 1; i++) {
-          if (row[i] === row[i + 1]) {
-            row[i] *= 2;
-            score += row[i];
-            row[i + 1] = 0;
+          if (dir === "left") moveLeft();
+          if (dir === "right") moveRight();
+          if (dir === "up") moveUp();
+          if (dir === "down") moveDown();
+
+          if (old !== JSON.stringify(board)) addTile();
+
+          draw();
+
+          if (score > best) {
+            best = score;
+            localStorage.setItem("best2048", best);
+          }
+
+          if (!canMove()) {
+            gameOver("NO MOVES ❌");
           }
         }
 
-        row = row.filter((v) => v);
-        while (row.length < 4) row.push(0);
-        return row;
-      }
+        /* GAME OVER */
+        function gameOver(text) {
+          clearInterval(timer);
 
-      /* MOVES */
-      function moveLeft() {
-        for (let r = 0; r < 4; r++) board[r] = slide(board[r]);
-      }
+          let overlay = document.getElementById("overlay");
+          let countdown = document.getElementById("countdown");
+          let title = document.getElementById("overText");
 
-      function moveRight() {
-        for (let r = 0; r < 4; r++)
-          board[r] = slide(board[r].reverse()).reverse();
-      }
+          title.innerText = text;
+          overlay.classList.add("show");
 
-      function moveUp() {
-        for (let c = 0; c < 4; c++) {
-          let col = [];
-          for (let r = 0; r < 4; r++) col.push(board[r][c]);
-          col = slide(col);
-          for (let r = 0; r < 4; r++) board[r][c] = col[r];
-        }
-      }
-
-      function moveDown() {
-        for (let c = 0; c < 4; c++) {
-          let col = [];
-          for (let r = 0; r < 4; r++) col.push(board[r][c]);
-          col = slide(col.reverse()).reverse();
-          for (let r = 0; r < 4; r++) board[r][c] = col[r];
-        }
-      }
-
-      /* CAN MOVE */
-      function canMove() {
-        for (let r = 0; r < 4; r++) {
-          for (let c = 0; c < 4; c++) {
-            if (board[r][c] === 0) return true;
-            if (c < 3 && board[r][c] === board[r][c + 1]) return true;
-            if (r < 3 && board[r][c] === board[r + 1][c]) return true;
-          }
-        }
-        return false;
-      }
-
-      /* MOVE */
-      function move(dir) {
-        let old = JSON.stringify(board);
-
-        if (dir === "left") moveLeft();
-        if (dir === "right") moveRight();
-        if (dir === "up") moveUp();
-        if (dir === "down") moveDown();
-
-        if (old !== JSON.stringify(board)) addTile();
-
-        draw();
-
-        if (score > best) {
-          best = score;
-          localStorage.setItem("best2048", best);
-        }
-
-        if (!canMove()) {
-          gameOver("NO MOVES ❌");
-        }
-      }
-
-      /* GAME OVER */
-      function gameOver(text) {
-        clearInterval(timer);
-
-        let overlay = document.getElementById("overlay");
-        let countdown = document.getElementById("countdown");
-        let title = document.getElementById("overText");
-
-        title.innerText = text;
-        overlay.classList.add("show");
-
-        let t = 3;
-        countdown.innerText = "Restarting in " + t + "...";
-
-        let cd = setInterval(() => {
-          t--;
+          let t = 3;
           countdown.innerText = "Restarting in " + t + "...";
 
-          if (t <= 0) {
-            clearInterval(cd);
-            overlay.classList.remove("show");
-            init();
-          }
-        }, 1000);
-      }
+          let cd = setInterval(() => {
+            t--;
+            countdown.innerText = "Restarting in " + t + "...";
 
-      /* CONTROLS */
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") move("left");
-        if (e.key === "ArrowRight") move("right");
-        if (e.key === "ArrowUp") move("up");
-        if (e.key === "ArrowDown") move("down");
-      });
+            if (t <= 0) {
+              clearInterval(cd);
+              overlay.classList.remove("show");
+              init();
+            }
+          }, 1000);
+        }
 
-      function newGame() {
+        /* CONTROLS */
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") move("left");
+          if (e.key === "ArrowRight") move("right");
+          if (e.key === "ArrowUp") move("up");
+          if (e.key === "ArrowDown") move("down");
+        });
+
+        function newGame() {
+          init();
+        }
+
         init();
-      }
+      </script>
+      <br />
+    </div>
 
-      init();
-    </script>
+    <div class="footer">
+      © 2026 Nisha Kiran Gnawaly <br />
+
+      gnawalynishakiran@gmail.com
+
+      <a
+        href="https://mail.google.com/mail/u/0/#sent?compose=new"
+        class="link-box"
+        target="_blank"
+      >
+        <button
+          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
+          style="font-size: 1.5vw"
+        >
+          📋
+        </button>
+      </a>
+      <br />
+      <a class="link-box" target="_blank" href="index.html">Back To Home</a>
+    </div>
   </body>
 </html>
