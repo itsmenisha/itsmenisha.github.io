@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Wordle Pro</title>
+
+    <style>
+      :root {
+        --bg: #121213;
+        --border: #3a3a3c;
+        --green: #538d4e;
+        --yellow: #b59f3b;
+        --gray: #3a3a3c;
+        --text: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: system-ui;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      .nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 55px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 14px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .title {
+        font-weight: 900;
+        letter-spacing: 2px;
+      }
+
+      .timer {
+        font-weight: 700;
+        font-size: 3vh;
+        color: #aaa;
+      }
+
+      .nav a {
+        color: #aaa;
+        text-decoration: none;
+        font-size: 3vh;
+      }
+
+      /* MODE */
+      .modes {
+        margin-top: 70px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .pill {
+        padding: 2.5vh;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        font-size: 12px;
+        color: #aaa;
+        text-decoration: none;
+      }
+
+      .pill.active {
+        background: white;
+        color: black;
+        font-weight: 800;
+      }
+
+      /* GRID */
+      .container {
+        text-align: center;
+        padding-bottom: 1vh;
+      }
+
+      .row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin: 5px 0;
+      }
+
+      .cell {
+        width: clamp(38px, 8vw, 52px);
+        height: clamp(38px, 8vw, 52px);
+        border: 2px solid var(--border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 900;
+        font-size: clamp(16px, 4vw, 22px);
+        text-transform: uppercase;
+      }
+
+      .correct {
+        background: var(--green);
+        border: none;
+      }
+      .present {
+        background: var(--yellow);
+        border: none;
+      }
+      .wrong {
+        background: var(--gray);
+        border: none;
+      }
+      .empty {
+        background: transparent;
+      }
+
+      /* INPUT */
+      .input-box {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      input {
+        width: 60%;
+        max-width: 240px;
+        padding: 10px;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: white;
+        font-weight: 700;
+      }
+
+      button {
+        margin-left: 8px;
+        padding: 10px 14px;
+        border: none;
+        border-radius: 6px;
+        background: var(--green);
+        color: white;
+        font-weight: 800;
+      }
+
+      /* KEYBOARD */
+      .keyboard {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+        padding: 0 10px;
+      }
+
+      .key {
+        width: 32px;
+        height: 42px;
+        background: #818384;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        border-radius: 4px;
+        text-transform: uppercase;
+        color: black;
+        font-size: 12px;
+      }
+
+      .key.correct {
+        background: var(--green);
+        color: white;
+      }
+      .key.present {
+        background: var(--yellow);
+        color: white;
+      }
+      .key.wrong {
+        background: var(--gray);
+        color: white;
+      }
+
+      /* OVERLAY */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 38px;
+        font-weight: 900;
+        text-align: center;
+        animation: pop 0.3s ease;
+        padding: 20px;
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .small {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAV -->
+    <div class="nav">
+      <div class="title">WORDLE</div>
+
+      <div class="timer" id="timer">03:00</div>
+
+      {% if status != 'idle' %}
+      <a href="/reset">RESET</a>
+      {% endif %}
+    </div>
+
+    <!-- MODE -->
+    <div class="modes">
+      <a class="pill {% if mode=='easy' %}active{% endif %}" href="/mode/easy"
+        >EASY</a
+      >
+      <a class="pill {% if mode=='hard' %}active{% endif %}" href="/mode/hard"
+        >HARD</a
+      >
+    </div>
+
+    <!-- GRID -->
+    <div class="container">
+      {% for row in grid %}
+      <div class="row">
+        {% for cell in row %}
+        <div class="cell {{cell[0]}}">{{cell[1]}}</div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <!-- KEYBOARD -->
+      <div class="keyboard">
+        {% for ch in "abcdefghijklmnopqrstuvwxyz" %}
+        <div class="key {{keyboard.get(ch,'')}}">{{ch}}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-box">
+      <form method="POST" action="/guess">
+        <input
+          name="guess"
+          maxlength="{{length}}"
+          required
+          autofocus
+          {%
+          if
+          status
+          in
+          ['won','lost']
+          %}disabled{%
+          endif
+          %}
+        />
+        <button {% if status in ['won','lost'] %}disabled{% endif %}>
+          ENTER
+        </button>
+      </form>
+    </div>
+
+    <!-- WIN / LOSE -->
+    {% if status == "won" %}
+    <div class="overlay">
+      🎉 YOU WIN
+      <div class="small">Correct word: {{word}}</div>
+    </div>
+    <script>
+      setTimeout(() => (location.href = "/reset"), 2500);
+    </script>
+
+    {% elif status == "lost" %}
+    <div class="overlay">
+      ❌ GAME OVER
+      <div class="small">Correct word: {{word}}</div>
+    </div>
+    <script>
+      setTimeout(() => (location.href = "/reset"), 3000);
+    </script>
+    {% endif %}
+
+    <!-- TIMER (starts only when session start_time exists) -->
+    <script>
+      const start = Number("{{ start_time or 0 }}");
+      const limit = 180;
+
+      function tick() {
+        if (!start) return;
+
+        let diff = Math.max(0, limit - Math.floor(Date.now() / 1000 - start));
+
+        let m = String(Math.floor(diff / 60)).padStart(2, "0");
+        let s = String(diff % 60).padStart(2, "0");
+
+        document.getElementById("timer").innerText = m + ":" + s;
+
+        if (diff <= 0) {
+          window.location.href = "/reset";
+        }
+      }
+
+      setInterval(tick, 1000);
+    </script>
+  </body>
+</html>
