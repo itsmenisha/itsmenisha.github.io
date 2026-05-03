@@ -2,442 +2,317 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Snake Pro Neon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Generate a QR code for Nepali bank accounts instantly."
+    />
+
+    <title>Nisha QR Generator</title>
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Orbitron", sans-serif;
       }
 
-      body {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: radial-gradient(
-          circle at top,
-          #1e3a8a,
-          #0f172a 55%,
-          #020617
-        );
-        overflow: hidden;
+      .pro-page123 {
+        font-family: Inter, sans-serif;
+        color: #f8fafc;
+        line-height: 1.6;
+
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22),
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2),
+            transparent 42%
+          ),
+          radial-gradient(circle at center, #050505, #020617, #01030a);
+        background-attachment: fixed;
+      }
+
+      .wrap123 {
+        max-width: 1180px;
+        margin: auto;
+        padding: 0 24px;
+      }
+
+      .hero1234 {
+        padding: 90px 0 30px;
+      }
+
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+        color: #38bdf8;
+      }
+
+      .hero1234 h1 {
+        font-size: 56px;
+        margin-top: 10px;
+      }
+
+      .sub {
+        color: #94a3b8;
+        font-size: 20px;
+        max-width: 700px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 24px;
+        padding: 30px 0 80px;
+      }
+
+      .card12345 {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 24px;
+        padding: 28px;
+      }
+
+      h3 {
+        margin-bottom: 12px;
+      }
+
+      p {
+        color: #94a3b8;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 6px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        background: #111827;
+        border: 1px solid #334155;
         color: white;
       }
 
-      /* stars */
-      body::before {
-        content: "";
-        position: absolute;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.08) 1px,
-          transparent 1px
-        );
-        background-size: 40px 40px;
-        animation: bgmove 18s linear infinite;
-        opacity: 0.25;
+      input:focus,
+      select:focus {
+        border-color: #38bdf8;
       }
 
-      @keyframes bgmove {
-        0% {
-          transform: translate(0, 0);
-        }
-        100% {
-          transform: translate(-80px, -80px);
-        }
+      .btn {
+        width: 100%;
+        margin-top: 20px;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        background: #38bdf8;
+        font-weight: 800;
+        cursor: pointer;
       }
 
-      .card {
-        position: relative;
-        z-index: 2;
-        width: 720px;
-        max-width: 95%;
-        padding: 22px;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(16px);
-        box-shadow:
-          0 0 25px rgba(56, 189, 248, 0.15),
-          0 20px 45px rgba(0, 0, 0, 0.5);
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      #qrCodeContainer {
         text-align: center;
+        margin-top: 20px;
       }
 
-      h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px #38bdf8;
-      }
-
-      .info {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 10px;
-      }
-
-      .pill {
-        flex: 1;
-        min-width: 120px;
-        padding: 10px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.08);
-        font-size: 14px;
-      }
-
-      canvas {
-        display: block;
-        margin: auto;
-        background: rgba(255, 255, 255, 0.04);
-        border: 2px solid rgba(56, 189, 248, 0.5);
+      #qrCodeContainer img {
+        max-width: 260px;
+        background: white;
+        padding: 12px;
         border-radius: 16px;
       }
 
-      .buttons {
-        margin-top: 10px;
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      button {
-        padding: 10px 14px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 800;
-        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-        color: #00111a;
-      }
-
-      .mobile {
-        margin-top: 8px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .mobbtn {
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: #0ea5e9;
+      .download-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 12px 16px;
+        background: #22c55e;
         color: black;
-        font-weight: 900;
-        cursor: pointer;
+        border-radius: 12px;
+        font-weight: 800;
       }
 
-      #msg {
-        margin-top: 8px;
-        color: #7dd3fc;
-        min-height: 20px;
+      .side-image {
+        width: 100%;
+        border-radius: 18px;
+        margin-top: 15px;
       }
 
-      /* popup */
-      #popup {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 50px;
-        font-weight: 900;
-        background: rgba(0, 0, 0, 0.75);
-        opacity: 0;
-        pointer-events: none;
+      .footer {
+        text-align: center;
+        padding: 50px;
+        color: #94a3b8;
+      }
+      .footer a {
+        text-decoration: none;
+        text-align: center;
+
+        color: #94a3b8;
       }
 
-      .show {
-        animation: pop 1.2s ease;
-      }
-
-      @keyframes pop {
-        0% {
-          opacity: 0;
-          transform: scale(0.6);
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
         }
-        20% {
-          opacity: 1;
-          transform: scale(1.1);
-        }
-        80% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0.9);
+
+        .hero h1 {
+          font-size: 38px;
         }
       }
     </style>
   </head>
 
   <body>
-    <div class="card">
-      <h1>🐍 SNAKE PRO</h1>
+     <body class="pro-page123">
+    <script src="js/loadhtml.js"></script>
+    <div id="navbar-placeholder"></div>
+    <script>
+      loadHTML("navbar-placeholder", "navbar.html");
+      loadHTML("footer-holder", "footer.html");
+    </script>
 
-      <div class="info">
-        <div class="pill">LEVEL <span id="level">1</span>/10</div>
-        <div class="pill">SCORE <span id="score">0</span></div>
-        <div class="pill">BEST <span id="best">0</span></div>
-      </div>
+    <div class="wrap123">
+      <section class="hero1234">
+        <div class="mono1234">payment.generate()</div>
+        <h1>Bank QR Code Generator</h1>
+        <p class="sub">
+          Generate instant QR codes for Nepali bank accounts and download them.
+        </p>
+      </section>
 
-      <canvas id="game" width="420" height="420"></canvas>
+      <section class="grid">
+        <!-- FORM -->
+        <div class="card12345">
+          <h3>Create QR</h3>
+          <p>Fill details and generate QR instantly</p>
 
-      <div class="buttons">
-        <button onclick="startGame()">START</button>
-        <button onclick="restartGame()">RESTART</button>
-      </div>
+          <form id="qrForm">
+            <label>Name</label>
+            <input type="text" id="name" required />
 
-      <div class="mobile">
-        <div class="mobbtn" onclick="moveDir('up')">⬆</div>
-        <div class="mobbtn" onclick="moveDir('left')">⬅</div>
-        <div class="mobbtn" onclick="moveDir('down')">⬇</div>
-        <div class="mobbtn" onclick="moveDir('right')">➡</div>
-      </div>
+            <label>Bank</label>
+            <select id="bank" name="bank" required>
+              <option value="" disabled selected>— Choose your bank —</option>
+              <option value="ADBLNPKA">
+                Agricultural Development Bank (ADBL)
+              </option>
+              <option value="CTZNNPKA">Citizens Bank International</option>
+              <option value="EVBLNPKA">Everest Bank</option>
+              <option value="GLBBNPKA">Global IME Bank</option>
+              <option value="HIMANPKA">Himalayan Bank</option>
+              <option value="KMBLNPKA">Kumari Bank</option>
+              <option value="LXBLNPKA">Laxmi Sunrise Bank</option>
+              <option value="MBLNNPKA">Machhapuchchhre Bank</option>
+              <option value="NARBNPKA">Nabil Bank</option>
+              <option value="NEBLNPKA">Nepal Bank Limited</option>
+              <option value="NINFNPKA">Nepal Infrastructure Bank</option>
+              <option value="NIBLNPKT">Nepal Investment Mega Bank</option>
+              <option value="NRBLNPKA">Nepal Rastra Bank</option>
+              <option value="NSBINPKA">Nepal SBI Bank</option>
+              <option value="BOALNPKA">NIC Asia Bank</option>
+              <option value="NMBBNPKA">NMB Bank</option>
+              <option value="PRVUNPKA">Prabhu Bank</option>
+              <option value="PCBLNPKA">Prime Commercial Bank</option>
+              <option value="RBBANPKA">Rastriya Banijya Bank</option>
+              <option value="SNMANPKA">Sanima Bank</option>
+              <option value="SIDDNPKA">Siddhartha Bank</option>
+              <option value="SCBLNPKA">Standard Chartered Bank Nepal</option>
+              <option value="SRDBNPKA">Shine Resunga Development Bank</option>
+            </select>
 
-      <div id="msg">Eat food, grow, survive 🚀</div>
-      <div id="popup"></div>
+            <label>Account Number</label>
+            <input type="text" id="accountNumber" required />
+
+            <button class="btn" type="submit">Generate QR</button>
+          </form>
+        </div>
+
+        <!-- INFO + IMAGE REPLACED BY QR -->
+        <div class="card12345">
+          <h3>Preview</h3>
+          <p>Your QR will appear below this section</p>
+
+          <!-- default image -->
+          <img src="images/qr.jpg" class="side-image" id="defaultImg" />
+
+          <!-- QR replaces here -->
+          <div id="qrCodeContainer"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      © 2026 Nisha Kiran Gnawaly <br />
+
+      gnawalynishakiran@gmail.com
+
+      <a
+        href="https://mail.google.com/mail/u/0/#sent?compose=new"
+        class="link-box"
+        target="_blank"
+      >
+        <button
+          onclick="navigator.clipboard.writeText('gnawalynishakiran@gmail.com')"
+          style="font-size: 1.5vw"
+        >
+          📋
+        </button>
+      </a>
+      <br />
+      <a class="link-box" target="_blank" href="index.html">Back To Home</a>
     </div>
 
     <script>
-      const canvas = document.getElementById("game");
-      const ctx = canvas.getContext("2d");
+      document
+        .getElementById("qrForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-      let level = 1,
-        score = 0,
-        target = 5;
-      let tile = 20,
-        count = 20;
-      let snake = [],
-        food = {},
-        dir = { x: 1, y: 0 };
-      let speed = 150,
-        loop;
-      let particles = [];
+          const name = document.getElementById("name").value;
+          const bank = document.getElementById("bank").value;
+          const accountNumber = document.getElementById("accountNumber").value;
 
-      /* HIGH SCORE */
-      let best = localStorage.getItem("snakeBest") || 0;
-      document.getElementById("best").innerText = best;
+          const data = {
+            accountNumber,
+            accountName: name,
+            bankCode: bank,
+          };
 
-      /* SOUND */
-      function beep(freq) {
-        const audio = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audio.createOscillator();
-        const gain = audio.createGain();
-        osc.connect(gain);
-        gain.connect(audio.destination);
-        osc.frequency.value = freq;
-        osc.start();
-        osc.stop(audio.currentTime + 0.08);
-      }
+          QRCode.toDataURL(JSON.stringify(data), function (err, url) {
+            if (err) return;
 
-      /* POPUP */
-      function popup(text) {
-        let p = document.getElementById("popup");
-        p.innerText = text;
-        p.classList.remove("show");
-        void p.offsetWidth;
-        p.classList.add("show");
-      }
+            // hide image
+            document.getElementById("defaultImg").style.display = "none";
 
-      /* LEVEL SETUP */
-      function setup() {
-        count = 20 + (level - 1) * 2;
-        tile = Math.floor(420 / count);
-        speed = Math.max(50, 150 - level * 12);
-
-        snake = [];
-        for (let i = 4 + level; i > 0; i--) {
-          snake.push({ x: i, y: 10 });
-        }
-
-        dir = { x: 1, y: 0 };
-        score = 0;
-        target = 4 + level;
-        spawnFood();
-
-        document.getElementById("level").innerText = level;
-        document.getElementById("score").innerText = score;
-
-        popup("LEVEL " + level);
-      }
-
-      /* FOOD */
-      function spawnFood() {
-        food = {
-          x: Math.floor(Math.random() * count),
-          y: Math.floor(Math.random() * count),
-        };
-      }
-
-      /* PARTICLES */
-      function addParticles(x, y) {
-        for (let i = 0; i < 10; i++) {
-          particles.push({
-            x: x,
-            y: y,
-            vx: (Math.random() - 0.5) * 3,
-            vy: (Math.random() - 0.5) * 3,
-            life: 20,
+            // show QR
+            document.getElementById("qrCodeContainer").innerHTML = `
+            <img src="${url}" />
+            <br>
+            <a class="download-btn" href="${url}" download="${bank}_${name}.png">
+              Download QR
+            </a>
+          `;
           });
-        }
-        beep(600);
-      }
-
-      /* DRAW */
-      function draw() {
-        ctx.clearRect(0, 0, 420, 420);
-
-        /* food glow */
-        ctx.fillStyle = "#f43f5e";
-        ctx.beginPath();
-        ctx.arc(
-          food.x * tile + tile / 2,
-          food.y * tile + tile / 2,
-          tile / 2.5,
-          0,
-          6.28,
-        );
-        ctx.fill();
-
-        /* snake */
-        snake.forEach((s, i) => {
-          ctx.fillStyle = i === 0 ? "#38bdf8" : "#0ea5e9";
-          ctx.beginPath();
-          ctx.roundRect(s.x * tile, s.y * tile, tile - 1, tile - 1, 6);
-          ctx.fill();
-
-          /* eyes */
-          if (i === 0) {
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(s.x * tile + 6, s.y * tile + 6, 2, 0, 6.28);
-            ctx.arc(s.x * tile + 14, s.y * tile + 6, 2, 0, 6.28);
-            ctx.fill();
-          }
         });
-
-        /* particles */
-        particles.forEach((p, i) => {
-          ctx.fillStyle = "rgba(56,189,248,.9)";
-          ctx.fillRect(p.x, p.y, 2, 2);
-          p.x += p.vx;
-          p.y += p.vy;
-          p.life--;
-          if (p.life <= 0) particles.splice(i, 1);
-        });
-      }
-
-      /* UPDATE */
-      function update() {
-        let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-        if (head.x < 0 || head.y < 0 || head.x >= count || head.y >= count) {
-          gameOver();
-          return;
-        }
-
-        for (let s of snake) {
-          if (s.x === head.x && s.y === head.y) {
-            gameOver();
-            return;
-          }
-        }
-
-        snake.unshift(head);
-
-        /* eat */
-        if (head.x === food.x && head.y === food.y) {
-          score++;
-          document.getElementById("score").innerText = score;
-
-          addParticles(head.x * tile, head.y * tile);
-
-          if (score > best) {
-            best = score;
-            localStorage.setItem("snakeBest", best);
-            document.getElementById("best").innerText = best;
-          }
-
-          beep(800);
-          spawnFood();
-
-          if (score >= target) {
-            nextLevel();
-            return;
-          }
-        } else {
-          snake.pop();
-        }
-
-        draw();
-      }
-
-      /* LOOP */
-      function startGame() {
-        clearInterval(loop);
-        level = 1;
-        setup();
-        draw();
-        loop = setInterval(update, speed);
-      }
-
-      function restartGame() {
-        startGame();
-      }
-
-      function nextLevel() {
-        clearInterval(loop);
-
-        if (level === 10) {
-          popup("YOU WIN 🏆");
-          beep(1000);
-          return;
-        }
-
-        level++;
-        popup("LEVEL UP!");
-        beep(900);
-
-        setTimeout(() => {
-          setup();
-          loop = setInterval(update, speed);
-        }, 1000);
-      }
-
-      function gameOver() {
-        clearInterval(loop);
-        popup("GAME OVER");
-        beep(200);
-      }
-
-      /* CONTROLS */
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowUp" && dir.y !== 1) dir = { x: 0, y: -1 };
-        if (e.key === "ArrowDown" && dir.y !== -1) dir = { x: 0, y: 1 };
-        if (e.key === "ArrowLeft" && dir.x !== 1) dir = { x: -1, y: 0 };
-        if (e.key === "ArrowRight" && dir.x !== -1) dir = { x: 1, y: 0 };
-      });
-
-      /* MOBILE */
-      function moveDir(d) {
-        if (d === "up" && dir.y !== 1) dir = { x: 0, y: -1 };
-        if (d === "down" && dir.y !== -1) dir = { x: 0, y: 1 };
-        if (d === "left" && dir.x !== 1) dir = { x: -1, y: 0 };
-        if (d === "right" && dir.x !== -1) dir = { x: 1, y: 0 };
-      }
-
-      draw();
     </script>
   </body>
 </html>
