@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Wordle JS</title>
+
+    <style>
+      :root {
+        --bg: #121213;
+        --border: #3a3a3c;
+        --green: #538d4e;
+        --yellow: #b59f3b;
+        --gray: #3a3a3c;
+        --text: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: system-ui;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      .nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 55px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 14px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .title {
+        font-weight: 900;
+        letter-spacing: 2px;
+      }
+
+      .timer {
+        font-weight: 700;
+        font-size: 18px;
+        color: #aaa;
+      }
+
+      .nav button {
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      /* MODES */
+      .modes {
+        margin-top: 70px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .pill {
+        padding: 12px 20px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        font-size: 12px;
+        color: #aaa;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .pill.active {
+        background: white;
+        color: black;
+        font-weight: 800;
+      }
+
+      /* GRID */
+      .container {
+        text-align: center;
+        padding-bottom: 130px;
+        margin-top: 20px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin: 5px 0;
+      }
+
+      .cell {
+        width: clamp(42px, 8vw, 52px);
+        height: clamp(42px, 8vw, 52px);
+        border: 2px solid var(--border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 900;
+        font-size: clamp(18px, 4vw, 24px);
+        text-transform: uppercase;
+      }
+
+      .correct {
+        background: var(--green);
+        border: none;
+      }
+
+      .present {
+        background: var(--yellow);
+        border: none;
+      }
+
+      .wrong {
+        background: var(--gray);
+        border: none;
+      }
+
+      .empty {
+        background: transparent;
+      }
+
+      /* INPUT */
+      .input-box {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input {
+        width: 60%;
+        max-width: 240px;
+        padding: 12px;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: white;
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      button {
+        margin-left: 8px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 6px;
+        background: var(--green);
+        color: white;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      /* KEYBOARD */
+      .keyboard {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+        padding: 0 10px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .key {
+        width: 32px;
+        height: 42px;
+        background: #818384;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        border-radius: 4px;
+        text-transform: uppercase;
+        color: black;
+        font-size: 12px;
+      }
+
+      .key.correct {
+        background: var(--green);
+        color: white;
+      }
+
+      .key.present {
+        background: var(--yellow);
+        color: white;
+      }
+
+      .key.wrong {
+        background: var(--gray);
+        color: white;
+      }
+
+      /* OVERLAY */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 38px;
+        font-weight: 900;
+        text-align: center;
+        animation: pop 0.3s ease;
+        padding: 20px;
+        z-index: 99;
+      }
+
+      .small {
+        font-size: 16px;
+        opacity: 0.8;
+        margin-top: 10px;
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAV -->
+    <div class="nav">
+      <div class="title">WORDLE</div>
+
+      <div class="timer" id="timer">03:00</div>
+
+      <button onclick="startGame()">RESET</button>
+    </div>
+
+    <!-- MODES -->
+    <div class="modes">
+      <button class="pill active" id="easyBtn">EASY</button>
+      <button class="pill" id="hardBtn">HARD</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="container">
+      <div id="grid"></div>
+
+      <!-- KEYBOARD -->
+      <div class="keyboard" id="keyboard"></div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-box">
+      <input id="guessInput" autocomplete="off" autofocus />
+
+      <button onclick="submitGuess()">ENTER</button>
+    </div>
+
+    <script>
+      let EASY_WORDS = [];
+      let HARD_WORDS = [];
+
+      let currentWord = "";
+      let guesses = [];
+      let keyboard = {};
+
+      let mode = "easy";
+
+      let startTime = null;
+
+      let gameEnded = false;
+
+      const limit = 180;
+
+      // ---------------- LOAD CSV ----------------
+      async function loadWords() {
+        const response = await fetch("./wordsforwordle.csv");
+
+        const text = await response.text();
+
+        const rows = text.trim().split("\n");
+
+        rows.forEach((row) => {
+          const [word, diff] = row.split(",");
+
+          if (!word || !diff) return;
+
+          if (diff.trim() === "4") {
+            EASY_WORDS.push(word.trim().toLowerCase());
+          } else if (diff.trim() === "5") {
+            HARD_WORDS.push(word.trim().toLowerCase());
+          }
+        });
+
+        initKeyboard();
+
+        startGame();
+      }
+
+      // ---------------- START GAME ----------------
+      function startGame() {
+        const pool = mode === "easy" ? EASY_WORDS : HARD_WORDS;
+
+        currentWord = pool[Math.floor(Math.random() * pool.length)];
+
+        guesses = [];
+
+        keyboard = {};
+
+        gameEnded = false;
+
+        startTime = null;
+
+        document.getElementById("guessInput").disabled = false;
+
+        document.getElementById("guessInput").value = "";
+
+        document.getElementById("guessInput").maxLength = currentWord.length;
+
+        document.getElementById("timer").innerText = "03:00";
+
+        removeOverlay();
+
+        renderGrid();
+
+        renderKeyboard();
+
+        console.log("WORD:", currentWord);
+      }
+
+      // ---------------- SCORE ----------------
+      function scoreGuess(word, guess) {
+        const wordList = word.split("");
+
+        const result = Array(guess.length).fill("wrong");
+
+        for (let i = 0; i < guess.length; i++) {
+          if (guess[i] === wordList[i]) {
+            result[i] = "correct";
+
+            wordList[i] = null;
+          }
+        }
+
+        for (let i = 0; i < guess.length; i++) {
+          if (result[i] === "correct") continue;
+
+          if (wordList.includes(guess[i])) {
+            result[i] = "present";
+
+            wordList[wordList.indexOf(guess[i])] = null;
+          }
+        }
+
+        return result;
+      }
+
+      // ---------------- GRID ----------------
+      function renderGrid() {
+        const grid = document.getElementById("grid");
+
+        grid.innerHTML = "";
+
+        for (let i = 0; i < 6; i++) {
+          const row = document.createElement("div");
+
+          row.className = "row";
+
+          if (i < guesses.length) {
+            const guess = guesses[i];
+
+            const colors = scoreGuess(currentWord, guess);
+
+            for (let j = 0; j < currentWord.length; j++) {
+              const cell = document.createElement("div");
+
+              cell.className = "cell " + colors[j];
+
+              cell.textContent = guess[j];
+
+              row.appendChild(cell);
+            }
+          } else {
+            for (let j = 0; j < currentWord.length; j++) {
+              const cell = document.createElement("div");
+
+              cell.className = "cell empty";
+
+              row.appendChild(cell);
+            }
+          }
+
+          grid.appendChild(row);
+        }
+      }
+
+      // ---------------- KEYBOARD ----------------
+      function initKeyboard() {
+        const keyboardDiv = document.getElementById("keyboard");
+
+        keyboardDiv.innerHTML = "";
+
+        "abcdefghijklmnopqrstuvwxyz".split("").forEach((ch) => {
+          const key = document.createElement("div");
+
+          key.className = "key";
+
+          key.id = "key-" + ch;
+
+          key.innerText = ch;
+
+          keyboardDiv.appendChild(key);
+        });
+      }
+
+      function renderKeyboard() {
+        Object.keys(keyboard).forEach((ch) => {
+          const key = document.getElementById("key-" + ch);
+
+          if (!key) return;
+
+          key.className = "key " + keyboard[ch];
+        });
+      }
+
+      function updateKeyboard(guess, colors) {
+        for (let i = 0; i < guess.length; i++) {
+          const ch = guess[i];
+
+          const c = colors[i];
+
+          if (keyboard[ch] === "correct") continue;
+
+          if (keyboard[ch] === "present" && c === "wrong") continue;
+
+          keyboard[ch] = c;
+        }
+
+        renderKeyboard();
+      }
+
+      // ---------------- SUBMIT ----------------
+      function submitGuess() {
+        if (gameEnded) return;
+
+        const input = document.getElementById("guessInput");
+
+        const guess = input.value.toLowerCase().trim();
+
+        if (guess.length !== currentWord.length) {
+          alert("Word must be " + currentWord.length + " letters");
+
+          return;
+        }
+
+        if (!startTime) {
+          startTime = Date.now();
+        }
+
+        guesses.push(guess);
+
+        const colors = scoreGuess(currentWord, guess);
+
+        updateKeyboard(guess, colors);
+
+        renderGrid();
+
+        input.value = "";
+
+        // WIN
+        if (guess === currentWord) {
+          gameEnded = true;
+
+          showOverlay("🎉 YOU WIN", "Correct word: " + currentWord);
+
+          return;
+        }
+
+        // LOSE
+        if (guesses.length >= 6) {
+          gameEnded = true;
+
+          showOverlay("❌ GAME OVER", "Correct word: " + currentWord);
+        }
+      }
+
+      // ---------------- TIMER ----------------
+      function tick() {
+        if (!startTime || gameEnded) return;
+
+        const diff = Math.max(
+          0,
+          limit - Math.floor((Date.now() - startTime) / 1000),
+        );
+
+        const m = String(Math.floor(diff / 60)).padStart(2, "0");
+
+        const s = String(diff % 60).padStart(2, "0");
+
+        document.getElementById("timer").innerText = m + ":" + s;
+
+        if (diff <= 0) {
+          gameEnded = true;
+
+          showOverlay("⏰ TIME UP", "Correct word: " + currentWord);
+        }
+      }
+
+      setInterval(tick, 1000);
+
+      // ---------------- OVERLAY ----------------
+      function showOverlay(title, subtitle) {
+        removeOverlay();
+
+        const overlay = document.createElement("div");
+
+        overlay.className = "overlay";
+
+        overlay.id = "overlay";
+
+        overlay.innerHTML = `
+        ${title}
+        <div class="small">${subtitle}</div>
+      `;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById("guessInput").disabled = true;
+
+        setTimeout(startGame, 3000);
+      }
+
+      function removeOverlay() {
+        const old = document.getElementById("overlay");
+
+        if (old) old.remove();
+      }
+
+      // ---------------- MODES ----------------
+      document.getElementById("easyBtn").onclick = () => {
+        mode = "easy";
+
+        document.getElementById("easyBtn").classList.add("active");
+
+        document.getElementById("hardBtn").classList.remove("active");
+
+        startGame();
+      };
+
+      document.getElementById("hardBtn").onclick = () => {
+        mode = "hard";
+
+        document.getElementById("hardBtn").classList.add("active");
+
+        document.getElementById("easyBtn").classList.remove("active");
+
+        startGame();
+      };
+
+      // ---------------- ENTER KEY ----------------
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          submitGuess();
+        }
+      });
+
+      // ---------------- START ----------------
+      loadWords();
+    </script>
+  </body>
+</html>
