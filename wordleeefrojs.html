@@ -261,8 +261,8 @@
 
     <!-- MODES -->
     <div class="modes">
-      <button class="pill active" id="easyBtn">EASY</button>
-      <button class="pill" id="hardBtn">HARD</button>
+      <button class="pill" id="easyBtn">EASY</button>
+      <button class="pill active" id="hardBtn">HARD</button>
     </div>
 
     <!-- GRID -->
@@ -288,7 +288,7 @@
       let guesses = [];
       let keyboard = {};
 
-      let mode = "easy";
+      let mode = "hard";
 
       let startTime = null;
 
@@ -346,6 +346,11 @@
         removeOverlay();
 
         renderGrid();
+
+        // RESET KEYBOARD COLORS
+        document.querySelectorAll(".key").forEach((key) => {
+          key.className = "key";
+        });
 
         renderKeyboard();
 
@@ -495,7 +500,10 @@
         if (guess === currentWord) {
           gameEnded = true;
 
-          showOverlay("🎉 YOU WIN", "Correct word: " + currentWord);
+          showOverlay(
+            "YOU WIN🎉 <br>Reloading<br>⌛",
+            "Correct word: " + currentWord,
+          );
 
           return;
         }
@@ -504,7 +512,10 @@
         if (guesses.length >= 6) {
           gameEnded = true;
 
-          showOverlay("❌ GAME OVER", "Correct word: " + currentWord);
+          showOverlay(
+            "GAME OVER❌<br> Reloading<br>⌛",
+            "Correct word: " + currentWord,
+          );
         }
       }
 
