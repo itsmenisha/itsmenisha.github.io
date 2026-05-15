@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Flip Adventure</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap");
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, sans-serif;
+        background: linear-gradient(180deg, #161616, #0f0f10);
+        color: white;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      /* TOP BAR */
+      .header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 60px;
+        background: rgba(18, 18, 19, 0.9);
+        border-bottom: 1px solid #2b2b2c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+        z-index: 999;
+        backdrop-filter: blur(10px);
+      }
+
+      .title {
+        font-weight: 900;
+        letter-spacing: 2px;
+        font-size: 20px;
+      }
+
+      .stats {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .badge {
+        background: #232325;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+
+      .reset {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        border: none;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      /* LEVEL BAR */
+      .level-bar {
+        margin-top: 75px;
+        padding: 0 14px;
+      }
+
+      .progress-bg {
+        width: 100%;
+        height: 12px;
+        background: #2a2a2c;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .progress {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(
+          90deg,
+          #ff5252,
+          #ff9800,
+          #ffeb3b,
+          #4caf50,
+          #03a9f4,
+          #9c27b0
+        );
+        transition: 0.5s;
+      }
+
+      .level-text {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+
+      /* GAME */
+      .game-wrap {
+        padding: 20px 12px 40px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .board {
+        display: grid;
+        gap: 10px;
+        width: 100%;
+        max-width: 650px;
+      }
+
+      /* CARDS */
+      .card {
+        aspect-ratio: 1/1;
+        position: relative;
+        perspective: 1000px;
+        cursor: pointer;
+      }
+
+      .card-inner {
+        position: absolute;
+        inset: 0;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .card.flipped .card-inner {
+        transform: rotateY(180deg) scale(1.03);
+      }
+
+      .front,
+      .back {
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+      }
+
+      .front {
+        background: linear-gradient(145deg, #2d2d30, #202022);
+        border: 2px solid #444;
+        overflow: hidden;
+      }
+
+      .front::before {
+        content: "";
+        position: absolute;
+        width: 160%;
+        height: 160%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.08),
+          transparent
+        );
+        transform: rotate(35deg);
+        animation: shine 2.5s infinite linear;
+      }
+
+      @keyframes shine {
+        from {
+          transform: translateX(-100%) rotate(35deg);
+        }
+        to {
+          transform: translateX(100%) rotate(35deg);
+        }
+      }
+
+      .front span {
+        font-size: 24px;
+        opacity: 0.8;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+        font-size: clamp(22px, 5vw, 42px);
+        font-weight: 900;
+        color: white;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+      }
+
+      /* COLORS */
+      .c1 {
+        background: linear-gradient(135deg, #ff5252, #d50000);
+      }
+      .c2 {
+        background: linear-gradient(135deg, #42a5f5, #1565c0);
+      }
+      .c3 {
+        background: linear-gradient(135deg, #66bb6a, #2e7d32);
+      }
+      .c4 {
+        background: linear-gradient(135deg, #ffca28, #ff8f00);
+      }
+      .c5 {
+        background: linear-gradient(135deg, #ab47bc, #6a1b9a);
+      }
+      .c6 {
+        background: linear-gradient(135deg, #26c6da, #00838f);
+      }
+      .c7 {
+        background: linear-gradient(135deg, #ec407a, #ad1457);
+      }
+      .c8 {
+        background: linear-gradient(135deg, #8d6e63, #4e342e);
+      }
+
+      .matched .back {
+        animation: pulse 0.6s;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: rotateY(180deg) scale(1);
+        }
+        50% {
+          transform: rotateY(180deg) scale(1.12);
+        }
+        100% {
+          transform: rotateY(180deg) scale(1);
+        }
+      }
+
+      /* LEVEL COMPLETE */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.88);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.4s;
+      }
+
+      .overlay.show {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .big {
+        font-size: clamp(38px, 10vw, 70px);
+        font-weight: 900;
+      }
+
+      .small {
+        margin-top: 12px;
+        color: #aaa;
+        font-size: 18px;
+      }
+
+      /* MOBILE */
+      @media (max-width: 600px) {
+        .board {
+          gap: 8px;
+        }
+
+        .front,
+        .back {
+          border-radius: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div class="header">
+      <div class="title">MEMORY FLIP</div>
+
+      <div class="stats">
+        <div class="badge" id="levelText">LEVEL 1</div>
+        <div class="badge" id="movesText">0 MOVES</div>
+      </div>
+
+      <button class="reset" onclick="resetGame()">RESET</button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="level-bar">
+      <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+      </div>
+
+      <div class="level-text">Complete all 20 levels</div>
+    </div>
+
+    <!-- BOARD -->
+    <div class="game-wrap">
+      <div class="board" id="board"></div>
+    </div>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay">
+      <div class="big">LEVEL COMPLETE 🎉</div>
+      <div class="small">Loading next level...</div>
+    </div>
+
+    <script>
+      const emojis = [
+        "🍎",
+        "🚀",
+        "🎮",
+        "🐱",
+        "⚽",
+        "🍕",
+        "🔥",
+        "🎵",
+        "👑",
+        "🧠",
+        "🌈",
+        "🍩",
+        "🐸",
+        "🦄",
+        "⚡",
+        "💎",
+        "🍉",
+        "🎲",
+        "👻",
+        "🌙",
+        "🍔",
+        "🎯",
+        "🧃",
+        "🎹",
+      ];
+
+      let level = 1;
+      let cards = [];
+      let flipped = [];
+      let lock = false;
+      let moves = 0;
+      let matched = 0;
+
+      const board = document.getElementById("board");
+
+      // START
+      function startLevel() {
+        flipped = [];
+        lock = false;
+        matched = 0;
+        moves = 0;
+
+        updateUI();
+
+        const pairCount = Math.min(3 + level, 12);
+
+        let chosen = emojis.slice(0, pairCount);
+
+        let data = [...chosen, ...chosen]
+          .sort(() => Math.random() - 0.5)
+          .map((emoji, i) => ({
+            id: i,
+            emoji,
+            flipped: false,
+            matched: false,
+            color: "c" + ((i % 8) + 1),
+          }));
+
+        cards = data;
+
+        generateGrid(pairCount * 2);
+
+        render();
+      }
+
+      // GRID
+      function generateGrid(total) {
+        if (total <= 8) {
+          board.style.gridTemplateColumns = "repeat(4,1fr)";
+        } else if (total <= 12) {
+          board.style.gridTemplateColumns = "repeat(4,1fr)";
+        } else if (total <= 20) {
+          board.style.gridTemplateColumns = "repeat(5,1fr)";
+        } else {
+          board.style.gridTemplateColumns = "repeat(6,1fr)";
+        }
+      }
+
+      // RENDER
+      function render() {
+        board.innerHTML = "";
+
+        cards.forEach((card) => {
+          const div = document.createElement("div");
+
+          div.className =
+            "card " +
+            (card.flipped ? "flipped " : "") +
+            (card.matched ? "matched " : "");
+
+          div.onclick = () => flip(card.id);
+
+          div.innerHTML = `
+            <div class="card-inner">
+              <div class="front">
+                <span>✦</span>
+              </div>
+
+              <div class="back ${card.color}">
+                ${card.emoji}
+              </div>
+            </div>
+          `;
+
+          board.appendChild(div);
+        });
+      }
+
+      // FLIP
+      function flip(id) {
+        if (lock) return;
+
+        const card = cards[id];
+
+        if (card.flipped || card.matched) return;
+
+        card.flipped = true;
+
+        flipped.push(card);
+
+        render();
+
+        if (flipped.length === 2) {
+          moves++;
+
+          updateUI();
+
+          check();
+        }
+      }
+
+      // CHECK
+      function check() {
+        lock = true;
+
+        const [a, b] = flipped;
+
+        if (a.emoji === b.emoji) {
+          a.matched = true;
+          b.matched = true;
+
+          matched += 2;
+
+          flipped = [];
+
+          lock = false;
+
+          render();
+
+          if (matched === cards.length) {
+            completeLevel();
+          }
+        } else {
+          setTimeout(() => {
+            a.flipped = false;
+            b.flipped = false;
+
+            flipped = [];
+
+            lock = false;
+
+            render();
+          }, 700);
+        }
+      }
+
+      // COMPLETE
+      function completeLevel() {
+        document.getElementById("overlay").classList.add("show");
+
+        setTimeout(() => {
+          document.getElementById("overlay").classList.remove("show");
+
+          level++;
+
+          if (level > 20) {
+            level = 1;
+          }
+
+          startLevel();
+        }, 2000);
+      }
+
+      // UI
+      function updateUI() {
+        document.getElementById("levelText").innerText = "LEVEL " + level;
+
+        document.getElementById("movesText").innerText = moves + " MOVES";
+
+        document.getElementById("progress").style.width =
+          ((level - 1) / 20) * 100 + "%";
+      }
+
+      // RESET
+      function resetGame() {
+        level = 1;
+        startLevel();
+      }
+
+      // START
+      startLevel();
+    </script>
+  </body>
+</html>
