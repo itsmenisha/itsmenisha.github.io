@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Flip Adventure</title>
+    <title>Memory Flip Adventure - Pro Edition</title>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap");
@@ -11,234 +11,310 @@
       * {
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
+        margin: 0;
+        padding: 0;
       }
 
       body {
-        margin: 0;
         font-family: Inter, sans-serif;
-        background: linear-gradient(180deg, #161616, #0f0f10);
+        background: radial-gradient(circle at center, #18181c 0%, #09090b 100%);
         color: white;
-        overflow-x: hidden;
-        min-height: 100vh;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
       }
 
       /* TOP BAR */
       .header {
-        position: fixed;
-        top: 0;
         width: 100%;
-        height: 60px;
-        background: rgba(18, 18, 19, 0.9);
-        border-bottom: 1px solid #2b2b2c;
+        min-height: 80px;
+        background: rgba(15, 15, 18, 0.95);
+        border-bottom: 1px solid #27272a;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 16px;
+        padding: 10px 20px;
         z-index: 999;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
+      }
+
+      .brand-container {
+        display: flex;
+        flex-direction: column;
       }
 
       .title {
         font-weight: 900;
         letter-spacing: 2px;
         font-size: 20px;
+        background: linear-gradient(45deg, #00f2fe, #4facfe);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
-      .stats {
+      .score-container {
         display: flex;
-        gap: 14px;
+        gap: 12px;
+        margin-top: 4px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+      }
+
+      .current-score {
+        color: #00ff87;
+      }
+      .high-score {
+        color: #ffea00;
+        opacity: 0.9;
+      }
+
+      .stats-grid {
+        display: flex;
+        gap: 6px;
         align-items: center;
-        font-size: 14px;
+        font-size: 11px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 55%;
       }
 
       .badge {
-        background: #232325;
-        padding: 8px 14px;
-        border-radius: 999px;
+        background: #1e1e22;
+        border: 1px solid #2d2d35;
+        padding: 6px 12px;
+        border-radius: 20px;
         font-weight: 700;
+        white-space: nowrap;
+        color: #efefef;
+      }
+
+      .badge-highlight {
+        border-color: #00f2fe;
+        color: #00f2fe;
+        background: rgba(0, 242, 254, 0.05);
       }
 
       .reset {
-        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
         border: none;
         color: white;
         padding: 10px 14px;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 800;
         cursor: pointer;
+        letter-spacing: 1px;
+        font-size: 11px;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        transition: transform 0.2s;
       }
 
-      /* LEVEL BAR */
+      .reset:hover {
+        transform: scale(1.03);
+      }
+
+      /* PROGRESS BAR */
       .level-bar {
-        margin-top: 75px;
-        padding: 0 14px;
+        margin: 15px auto 5px auto;
+        padding: 0 20px;
+        width: 100%;
+        max-width: 600px;
       }
 
       .progress-bg {
         width: 100%;
-        height: 12px;
-        background: #2a2a2c;
+        height: 6px;
+        background: #222226;
         border-radius: 999px;
         overflow: hidden;
+        border: 1px solid #2d2d35;
       }
 
       .progress {
         height: 100%;
         width: 0%;
-        background: linear-gradient(
-          90deg,
-          #ff5252,
-          #ff9800,
-          #ffeb3b,
-          #4caf50,
-          #03a9f4,
-          #9c27b0
-        );
-        transition: 0.5s;
+        background: linear-gradient(90deg, #00f2fe, #00ff87, #ffea00);
+        transition: width 0.4s ease;
       }
 
-      .level-text {
-        text-align: center;
-        margin-top: 10px;
-        font-weight: 800;
-        letter-spacing: 1px;
-      }
-
-      /* GAME */
+      /* GAME BOARD FRAMEWORK */
       .game-wrap {
-        padding: 20px 12px 40px;
+        flex: 1;
         display: flex;
+        align-items: center;
         justify-content: center;
+        padding: 12px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
 
       .board {
-        display: grid;
-        gap: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+        gap: var(--gap-size, 10px);
         width: 100%;
-        max-width: 650px;
+        max-width: var(--board-max-width, 600px);
+        margin: 0 auto;
       }
 
-      /* CARDS */
+      /* CARD STRUCTURAL ENGINE */
       .card {
-        aspect-ratio: 1/1;
+        aspect-ratio: 1 / 1;
         position: relative;
         perspective: 1000px;
         cursor: pointer;
+        width: var(--card-size, 85px);
+        height: var(--card-size, 85px);
       }
 
       .card-inner {
         position: absolute;
         inset: 0;
-        transition: transform 0.6s;
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25);
         transform-style: preserve-3d;
       }
 
       .card.flipped .card-inner {
-        transform: rotateY(180deg) scale(1.03);
+        transform: rotateY(180deg);
       }
 
       .front,
       .back {
         position: absolute;
         inset: 0;
-        border-radius: 18px;
+        border-radius: var(--card-radius, 14px);
         backface-visibility: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
         user-select: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       }
 
+      /* SHINING FRONT CARD LAYER */
       .front {
-        background: linear-gradient(145deg, #2d2d30, #202022);
-        border: 2px solid #444;
+        background: linear-gradient(145deg, #25252b 0%, #161619 100%);
+        border: 2px solid #3f3f46;
         overflow: hidden;
       }
 
       .front::before {
         content: "";
         position: absolute;
-        width: 160%;
-        height: 160%;
+        width: 170%;
+        height: 170%;
         background: linear-gradient(
           45deg,
           transparent,
-          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.12),
           transparent
         );
         transform: rotate(35deg);
-        animation: shine 2.5s infinite linear;
+        animation: cardShine 3s infinite linear;
       }
 
-      @keyframes shine {
-        from {
-          transform: translateX(-100%) rotate(35deg);
+      @keyframes cardShine {
+        0% {
+          transform: translateX(-120%) rotate(35deg);
         }
-        to {
-          transform: translateX(100%) rotate(35deg);
+        100% {
+          transform: translateX(120%) rotate(35deg);
         }
       }
 
       .front span {
-        font-size: 24px;
-        opacity: 0.8;
+        font-size: var(--sparkle-size, 20px);
+        color: #52525b;
+        font-weight: 700;
       }
 
       .back {
         transform: rotateY(180deg);
-        font-size: clamp(22px, 5vw, 42px);
-        font-weight: 900;
+        font-size: var(--emoji-size, 34px);
         color: white;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+        border: 2px solid rgba(255, 255, 255, 0.2);
       }
 
-      /* COLORS */
-      .c1 {
-        background: linear-gradient(135deg, #ff5252, #d50000);
-      }
-      .c2 {
-        background: linear-gradient(135deg, #42a5f5, #1565c0);
-      }
-      .c3 {
-        background: linear-gradient(135deg, #66bb6a, #2e7d32);
-      }
-      .c4 {
-        background: linear-gradient(135deg, #ffca28, #ff8f00);
-      }
-      .c5 {
-        background: linear-gradient(135deg, #ab47bc, #6a1b9a);
-      }
-      .c6 {
-        background: linear-gradient(135deg, #26c6da, #00838f);
-      }
-      .c7 {
-        background: linear-gradient(135deg, #ec407a, #ad1457);
-      }
-      .c8 {
-        background: linear-gradient(135deg, #8d6e63, #4e342e);
-      }
-
+      /* PULSING SHINE WHEN MATCHED */
       .matched .back {
-        animation: pulse 0.6s;
+        animation: pulseGlow 0.8s ease-out infinite alternate;
+        border-color: #ffffff;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.7);
       }
 
-      @keyframes pulse {
+      @keyframes pulseGlow {
         0% {
-          transform: rotateY(180deg) scale(1);
-        }
-        50% {
-          transform: rotateY(180deg) scale(1.12);
+          transform: rotateY(180deg) scale(0.95);
+          opacity: 0.7;
         }
         100% {
-          transform: rotateY(180deg) scale(1);
+          transform: rotateY(180deg) scale(1.02);
+          opacity: 1;
         }
       }
 
-      /* LEVEL COMPLETE */
+      /* COMBO NOTIFICATION FLOATER */
+      .combo-popup {
+        position: absolute;
+        color: #ffea00;
+        font-weight: 900;
+        font-size: 24px;
+        text-shadow: 0 0 10px rgba(255, 234, 0, 0.8);
+        pointer-events: none;
+        animation: floatUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        z-index: 100;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(10px) scale(0.5);
+          opacity: 0;
+        }
+        20% {
+          transform: translateY(-5px) scale(1.2);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-50px) scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* ACCENT COLOR SCHEMES */
+      .c1 {
+        background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+      }
+      .c2 {
+        background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+      }
+      .c3 {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      }
+      .c4 {
+        background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+      }
+      .c5 {
+        background: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
+      }
+      .c6 {
+        background: linear-gradient(135deg, #3a1c71 0%, #d76d77 100%);
+      }
+      .c7 {
+        background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+      }
+      .c8 {
+        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+      }
+
+      /* LEVEL COMPLETION POPUP */
       .overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.88);
+        background: rgba(10, 10, 12, 0.96);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -246,7 +322,7 @@
         z-index: 1000;
         opacity: 0;
         pointer-events: none;
-        transition: 0.4s;
+        transition: opacity 0.3s ease;
       }
 
       .overlay.show {
@@ -255,61 +331,89 @@
       }
 
       .big {
-        font-size: clamp(38px, 10vw, 70px);
+        font-size: 36px;
         font-weight: 900;
+        background: linear-gradient(45deg, #00ff87, #60efff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
       }
 
-      .small {
-        margin-top: 12px;
-        color: #aaa;
-        font-size: 18px;
+      .summary-text {
+        color: #a1a1aa;
+        font-size: 16px;
+        margin-bottom: 6px;
+        font-weight: 500;
       }
 
-      /* MOBILE */
+      /* MOBILE STYLING OVERRIDES */
       @media (max-width: 600px) {
-        .board {
+        .header {
+          flex-direction: column;
           gap: 8px;
+          padding: 12px 10px;
+          min-height: auto;
         }
-
-        .front,
-        .back {
-          border-radius: 14px;
+        .stats-grid {
+          max-width: 100%;
+          gap: 4px;
+        }
+        .badge {
+          padding: 4px 8px;
+          font-size: 10px;
+        }
+        .reset {
+          padding: 6px 12px;
+          font-size: 11px;
+        }
+        .score-container {
+          justify-content: center;
         }
       }
     </style>
   </head>
 
   <body>
-    <!-- HEADER -->
+    <!-- INTERACTIVE ARCADE HEADER -->
     <div class="header">
-      <div class="title">MEMORY FLIP</div>
-
-      <div class="stats">
-        <div class="badge" id="levelText">LEVEL 1</div>
-        <div class="badge" id="movesText">0 MOVES</div>
+      <div class="brand-container">
+        <div class="title">MEMORY FLIP</div>
+        <div class="score-container">
+          <div class="current-score" id="scoreText">SCORE: 0</div>
+          <div class="high-score" id="highScoreText">HI-SCORE: 0</div>
+        </div>
       </div>
 
-      <button class="reset" onclick="resetGame()">RESET</button>
+      <div class="stats-grid">
+        <div class="badge badge-highlight" id="levelText">LEVEL 1</div>
+        <div class="badge" id="movesText">0 MOVES</div>
+        <div class="badge" id="bestMovesText">BEST MOVES: --</div>
+        <div class="badge" id="streakText">STREAK: 0 🔥</div>
+      </div>
+
+      <button class="reset" onclick="resetGame()">CLEAR DATA</button>
     </div>
 
-    <!-- PROGRESS -->
+    <!-- LEVEL MAP PROGRESSION TRANSITION LINE -->
     <div class="level-bar">
       <div class="progress-bg">
         <div class="progress" id="progress"></div>
       </div>
-
-      <div class="level-text">Complete all 20 levels</div>
     </div>
 
-    <!-- BOARD -->
-    <div class="game-wrap">
+    <!-- GAME BOARD SCALING LAYER -->
+    <div class="game-wrap" id="gameViewport">
       <div class="board" id="board"></div>
     </div>
 
-    <!-- OVERLAY -->
+    <!-- TRANSITION MODAL INTERCEPTOR -->
     <div class="overlay" id="overlay">
-      <div class="big">LEVEL COMPLETE 🎉</div>
-      <div class="small">Loading next level...</div>
+      <div class="big" id="overlayTitle">LEVEL COMPLETE! 🎉</div>
+      <div class="summary-text" id="movesSummary">Moves taken: 0</div>
+      <div class="summary-text" id="bonusSummary" style="color: #00ff87">
+        Streak Bonus: +0 PTS
+      </div>
     </div>
 
     <script>
@@ -338,182 +442,284 @@
         "🎯",
         "🧃",
         "🎹",
+        "🔮",
+        "👽",
+        "🐼",
+        "🎨",
+        "🍿",
+        "🍦",
+        "🏄",
+        "🎸",
       ];
 
-      let level = 1;
+      // PERSISTENT SCORE & CONFIGURATION STATE ENGINE
+      let level = parseInt(localStorage.getItem("m_flip_level")) || 1;
+      let score = parseInt(localStorage.getItem("m_flip_score")) || 0;
+      let highScore = parseInt(localStorage.getItem("m_flip_high")) || 0;
+
       let cards = [];
       let flipped = [];
       let lock = false;
       let moves = 0;
       let matched = 0;
+      let streak = 0;
+      let highestStreakThisLevel = 0;
 
       const board = document.getElementById("board");
 
-      // START
       function startLevel() {
         flipped = [];
         lock = false;
         matched = 0;
         moves = 0;
+        streak = 0;
+        highestStreakThisLevel = 0;
 
         updateUI();
 
-        const pairCount = Math.min(3 + level, 12);
+        // Dynamically compute unique pairs matching the level range layout (Capped at 32 array limit)
+        const pairsCount = Math.min(
+          2 + Math.floor(level * 0.65),
+          emojis.length,
+        );
+        let selectedEmojis = emojis.slice(0, pairsCount);
 
-        let chosen = emojis.slice(0, pairCount);
-
-        let data = [...chosen, ...chosen]
+        let data = [...selectedEmojis, ...selectedEmojis]
           .sort(() => Math.random() - 0.5)
-          .map((emoji, i) => ({
-            id: i,
+          .map((emoji, index) => ({
+            id: index,
             emoji,
             flipped: false,
             matched: false,
-            color: "c" + ((i % 8) + 1),
+            color: "c" + ((selectedEmojis.indexOf(emoji) % 8) + 1),
           }));
 
         cards = data;
-
-        generateGrid(pairCount * 2);
-
+        arrangeResponsiveGrid(cards.length);
         render();
       }
 
-      // GRID
-      function generateGrid(total) {
-        if (total <= 8) {
-          board.style.gridTemplateColumns = "repeat(4,1fr)";
-        } else if (total <= 12) {
-          board.style.gridTemplateColumns = "repeat(4,1fr)";
-        } else if (total <= 20) {
-          board.style.gridTemplateColumns = "repeat(5,1fr)";
-        } else {
-          board.style.gridTemplateColumns = "repeat(6,1fr)";
+      /* DYNAMIC VECTOR MATRIX ARRANGER AND RESIZER */
+      function arrangeResponsiveGrid(totalCards) {
+        const viewport = document.getElementById("gameViewport");
+        const areaWidth = viewport.clientWidth - 24;
+        const areaHeight = viewport.clientHeight - 24;
+
+        // Auto column structural wrapping determination rules
+        let columns = 4;
+        if (totalCards > 16) columns = 5;
+        if (totalCards > 24) columns = 6;
+        if (totalCards > 36) columns = 8;
+
+        const rows = Math.ceil(totalCards / columns);
+
+        // Dynamically extract card sizing boundaries to avoid system scroll overflows
+        const dynamicW = Math.floor((areaWidth - columns * 10) / columns);
+        const dynamicH = Math.floor((areaHeight - rows * 10) / rows);
+
+        let targetSize = Math.min(dynamicW, dynamicH, 110);
+        if (targetSize < 46) targetSize = 46; // Mobile-safeguard minimum scale limits
+
+        // Responsive font rendering scaling conditions based on layout container sizes
+        let emojiFont = "34px";
+        let sparkleFont = "20px";
+        let cardRadius = "14px";
+
+        if (targetSize < 65) {
+          emojiFont = "22px";
+          sparkleFont = "12px";
+          cardRadius = "8px";
+        } else if (targetSize < 85) {
+          emojiFont = "28px";
+          sparkleFont = "16px";
+          cardRadius = "11px";
         }
+
+        board.style.setProperty("--card-size", `${targetSize}px`);
+        board.style.setProperty("--emoji-size", emojiFont);
+        board.style.setProperty("--sparkle-size", sparkleFont);
+        board.style.setProperty("--card-radius", cardRadius);
+        board.style.setProperty(
+          "--board-max-width",
+          `${(targetSize + 10) * columns}px`,
+        );
       }
 
-      // RENDER
       function render() {
         board.innerHTML = "";
-
         cards.forEach((card) => {
           const div = document.createElement("div");
+          div.className = `card ${card.flipped ? "flipped " : ""}${card.matched ? "matched " : ""}`;
 
-          div.className =
-            "card " +
-            (card.flipped ? "flipped " : "") +
-            (card.matched ? "matched " : "");
-
-          div.onclick = () => flip(card.id);
+          const currentId = card.id;
+          div.onclick = (e) => triggerCardInteraction(currentId, e);
 
           div.innerHTML = `
             <div class="card-inner">
-              <div class="front">
-                <span>✦</span>
-              </div>
-
-              <div class="back ${card.color}">
-                ${card.emoji}
-              </div>
+              <div class="front"><span>✦</span></div>
+              <div class="back ${card.color}">${card.emoji}</div>
             </div>
           `;
-
           board.appendChild(div);
         });
       }
 
-      // FLIP
-      function flip(id) {
+      function triggerCardInteraction(id, event) {
         if (lock) return;
 
-        const card = cards[id];
-
-        if (card.flipped || card.matched) return;
+        const card = cards.find((c) => c.id === id);
+        if (!card || card.flipped || card.matched) return;
 
         card.flipped = true;
-
         flipped.push(card);
-
         render();
 
         if (flipped.length === 2) {
           moves++;
-
           updateUI();
-
-          check();
+          processValidationMatch(event);
         }
       }
 
-      // CHECK
-      function check() {
+      function processValidationMatch(event) {
         lock = true;
+        const [cardA, cardB] = flipped;
 
-        const [a, b] = flipped;
-
-        if (a.emoji === b.emoji) {
-          a.matched = true;
-          b.matched = true;
-
+        if (cardA.emoji === cardB.emoji) {
+          cardA.matched = true;
+          cardB.matched = true;
           matched += 2;
-
           flipped = [];
-
           lock = false;
 
+          streak++;
+          if (streak > highestStreakThisLevel) {
+            highestStreakThisLevel = streak;
+          }
+
+          // Exponential scoring linked directly to match combinations
+          score += 100 * streak;
+          if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("m_flip_high", highScore);
+          }
+
+          localStorage.setItem("m_flip_score", score);
+
+          if (streak >= 2) {
+            generateParticleText(event, `STREAK X${streak}!`);
+          }
+
           render();
+          updateUI();
 
           if (matched === cards.length) {
-            completeLevel();
+            executeNextLevelSequence();
           }
         } else {
+          streak = 0; // Breaks ongoing combo chain calculation
+          updateUI();
+
           setTimeout(() => {
-            a.flipped = false;
-            b.flipped = false;
-
+            cardA.flipped = false;
+            cardB.flipped = false;
             flipped = [];
-
             lock = false;
-
             render();
-          }, 700);
+          }, 650);
         }
       }
 
-      // COMPLETE
-      function completeLevel() {
+      function generateParticleText(event, labelText) {
+        const container = document.getElementById("gameViewport");
+        const element = document.createElement("div");
+        element.className = "combo-popup";
+        element.innerText = labelText;
+
+        const offset = container.getBoundingClientRect();
+        element.style.left = `${event.clientX - offset.left}px`;
+        element.style.top = `${event.clientY - offset.top}px`;
+
+        container.appendChild(element);
+        setTimeout(() => element.remove(), 800);
+      }
+
+      function executeNextLevelSequence() {
+        const levelBestRecordKey = `m_flip_best_l_${level}`;
+        const previousBestMoves =
+          parseInt(localStorage.getItem(levelBestRecordKey)) || 9999;
+
+        let isNewLevelRecord = false;
+        if (moves < previousBestMoves) {
+          localStorage.setItem(levelBestRecordKey, moves);
+          isNewLevelRecord = true;
+        }
+
+        // Calculate a performance bonus based on the max streak achieved
+        const streakBonusReward = highestStreakThisLevel * 150;
+        score += streakBonusReward;
+        localStorage.setItem("m_flip_score", score);
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("m_flip_high", highScore);
+        }
+
+        // Setup display details on level transition panel
+        document.getElementById("movesSummary").innerText =
+          `Moves used: ${moves} ${isNewLevelRecord ? "(NEW BEST!)" : ""}`;
+        document.getElementById("bonusSummary").innerText =
+          `Streak Bonus: +${streakBonusReward} PTS`;
         document.getElementById("overlay").classList.add("show");
 
         setTimeout(() => {
           document.getElementById("overlay").classList.remove("show");
-
           level++;
-
-          if (level > 20) {
-            level = 1;
-          }
-
+          localStorage.setItem("m_flip_level", level);
           startLevel();
-        }, 2000);
+        }, 2200);
       }
 
-      // UI
       function updateUI() {
-        document.getElementById("levelText").innerText = "LEVEL " + level;
+        const levelBestRecordKey = `m_flip_best_l_${level}`;
+        const currentBestRecord = localStorage.getItem(levelBestRecordKey);
 
-        document.getElementById("movesText").innerText = moves + " MOVES";
+        document.getElementById("levelText").innerText = `LEVEL ${level}`;
+        document.getElementById("movesText").innerText = `${moves} MOVES`;
+        document.getElementById("streakText").innerText =
+          `STREAK: ${streak} 🔥`;
+        document.getElementById("scoreText").innerText = `SCORE: ${score}`;
+        document.getElementById("highScoreText").innerText =
+          `HI-SCORE: ${highScore}`;
+        document.getElementById("bestMovesText").innerText =
+          `LEVEL BEST: ${currentBestRecord ? currentBestRecord + " Mvs" : "--"}`;
 
-        document.getElementById("progress").style.width =
-          ((level - 1) / 20) * 100 + "%";
+        // Progress percentage calculation mapped smoothly relative to a 30-level progression cap
+        const percentageRatio = Math.min((level / 30) * 100, 100);
+        document.getElementById("progress").style.width = `${percentageRatio}%`;
       }
 
-      // RESET
       function resetGame() {
-        level = 1;
-        startLevel();
+        if (
+          confirm(
+            "Are you sure you want to clear your high score, current level, and all historical records?",
+          )
+        ) {
+          localStorage.clear();
+          level = 1;
+          score = 0;
+          highScore = 0;
+          startLevel();
+        }
       }
 
-      // START
+      window.addEventListener("resize", () => {
+        if (cards.length > 0) {
+          arrangeResponsiveGrid(cards.length);
+          render();
+        }
+      });
+
+      // INITIALIZE GAME RUNTIME ENGINE
       startLevel();
     </script>
   </body>
