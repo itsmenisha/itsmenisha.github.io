@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Flip Adventure - Pro Edition</title>
+    <title>Memory Flip Adventure - Arcade Pro</title>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap");
@@ -388,11 +388,11 @@
       <div class="stats-grid">
         <div class="badge badge-highlight" id="levelText">LEVEL 1</div>
         <div class="badge" id="movesText">0 MOVES</div>
-        <div class="badge" id="bestMovesText">BEST MOVES: --</div>
+        <div class="badge" id="bestMovesText">LEVEL BEST: --</div>
         <div class="badge" id="streakText">STREAK: 0 🔥</div>
       </div>
 
-      <button class="reset" onclick="resetGame()">CLEAR DATA</button>
+      <button class="reset" onclick="resetGame()">RESET RUN</button>
     </div>
 
     <!-- LEVEL MAP PROGRESSION TRANSITION LINE -->
@@ -410,7 +410,7 @@
     <!-- TRANSITION MODAL INTERCEPTOR -->
     <div class="overlay" id="overlay">
       <div class="big" id="overlayTitle">LEVEL COMPLETE! 🎉</div>
-      <div class="summary-text" id="movesSummary">Moves taken: 0</div>
+      <div class="summary-text" id="movesSummary">Moves used: 0</div>
       <div class="summary-text" id="bonusSummary" style="color: #00ff87">
         Streak Bonus: +0 PTS
       </div>
@@ -452,10 +452,12 @@
         "🎸",
       ];
 
-      // PERSISTENT SCORE & CONFIGURATION STATE ENGINE
+      // ACTIVE SESSION STATE
       let level = parseInt(localStorage.getItem("m_flip_level")) || 1;
       let score = parseInt(localStorage.getItem("m_flip_score")) || 0;
-      let highScore = parseInt(localStorage.getItem("m_flip_high")) || 0;
+
+      // JSON LEADBOARD ARCHITECTURE ENGINE
+      let leaderboard = loadLeaderboardFromJSON();
 
       let cards = [];
       let flipped = [];
@@ -467,6 +469,33 @@
 
       const board = document.getElementById("board");
 
+      // RETRIEVE AND PARSE JSON RECORDS
+      function loadLeaderboardFromJSON() {
+        const rawData = localStorage.getItem("m_flip_leaderboard_json");
+        if (rawData) {
+          try {
+            return JSON.parse(rawData);
+          } catch (e) {
+            console.error(
+              "Error reading JSON payload data, reverting to defaults.",
+            );
+          }
+        }
+        // Baseline JSON structure definition template
+        return {
+          highScore: 0,
+          levelBests: {},
+        };
+      }
+
+      // STRINGIFY AND STORE BACK TO LOCALSTORAGE
+      function saveLeaderboardToJSON() {
+        localStorage.setItem(
+          "m_flip_leaderboard_json",
+          JSON.stringify(leaderboard),
+        );
+      }
+
       function startLevel() {
         flipped = [];
         lock = false;
@@ -477,7 +506,6 @@
 
         updateUI();
 
-        // Dynamically compute unique pairs matching the level range layout (Capped at 32 array limit)
         const pairsCount = Math.min(
           2 + Math.floor(level * 0.65),
           emojis.length,
@@ -499,13 +527,12 @@
         render();
       }
 
-      /* DYNAMIC VECTOR MATRIX ARRANGER AND RESIZER */
+      /* DYNAMIC CONTAINER GRID MATRIX ADJUSTER */
       function arrangeResponsiveGrid(totalCards) {
         const viewport = document.getElementById("gameViewport");
         const areaWidth = viewport.clientWidth - 24;
         const areaHeight = viewport.clientHeight - 24;
 
-        // Auto column structural wrapping determination rules
         let columns = 4;
         if (totalCards > 16) columns = 5;
         if (totalCards > 24) columns = 6;
@@ -513,14 +540,12 @@
 
         const rows = Math.ceil(totalCards / columns);
 
-        // Dynamically extract card sizing boundaries to avoid system scroll overflows
         const dynamicW = Math.floor((areaWidth - columns * 10) / columns);
         const dynamicH = Math.floor((areaHeight - rows * 10) / rows);
 
         let targetSize = Math.min(dynamicW, dynamicH, 110);
-        if (targetSize < 46) targetSize = 46; // Mobile-safeguard minimum scale limits
+        if (targetSize < 46) targetSize = 46;
 
-        // Responsive font rendering scaling conditions based on layout container sizes
         let emojiFont = "34px";
         let sparkleFont = "20px";
         let cardRadius = "14px";
@@ -597,11 +622,12 @@
             highestStreakThisLevel = streak;
           }
 
-          // Exponential scoring linked directly to match combinations
           score += 100 * streak;
-          if (score > highScore) {
-            highScore = score;
-            localStorage.setItem("m_flip_high", highScore);
+
+          // JSON Highscore comparisons
+          if (score > leaderboard.highScore) {
+            leaderboard.highScore = score;
+            saveLeaderboardToJSON();
           }
 
           localStorage.setItem("m_flip_score", score);
@@ -617,7 +643,7 @@
             executeNextLevelSequence();
           }
         } else {
-          streak = 0; // Breaks ongoing combo chain calculation
+          streak = 0;
           updateUI();
 
           setTimeout(() => {
@@ -645,26 +671,25 @@
       }
 
       function executeNextLevelSequence() {
-        const levelBestRecordKey = `m_flip_best_l_${level}`;
-        const previousBestMoves =
-          parseInt(localStorage.getItem(levelBestRecordKey)) || 9999;
+        const levelKey = `level_${level}`;
+        const previousBestMoves = leaderboard.levelBests[levelKey] || 9999;
 
         let isNewLevelRecord = false;
         if (moves < previousBestMoves) {
-          localStorage.setItem(levelBestRecordKey, moves);
+          leaderboard.levelBests[levelKey] = moves;
+          saveLeaderboardToJSON(); // Write down to storage payload
           isNewLevelRecord = true;
         }
 
-        // Calculate a performance bonus based on the max streak achieved
         const streakBonusReward = highestStreakThisLevel * 150;
         score += streakBonusReward;
         localStorage.setItem("m_flip_score", score);
-        if (score > highScore) {
-          highScore = score;
-          localStorage.setItem("m_flip_high", highScore);
+
+        if (score > leaderboard.highScore) {
+          leaderboard.highScore = score;
+          saveLeaderboardToJSON();
         }
 
-        // Setup display details on level transition panel
         document.getElementById("movesSummary").innerText =
           `Moves used: ${moves} ${isNewLevelRecord ? "(NEW BEST!)" : ""}`;
         document.getElementById("bonusSummary").innerText =
@@ -680,8 +705,8 @@
       }
 
       function updateUI() {
-        const levelBestRecordKey = `m_flip_best_l_${level}`;
-        const currentBestRecord = localStorage.getItem(levelBestRecordKey);
+        const levelKey = `level_${level}`;
+        const currentBestRecord = leaderboard.levelBests[levelKey];
 
         document.getElementById("levelText").innerText = `LEVEL ${level}`;
         document.getElementById("movesText").innerText = `${moves} MOVES`;
@@ -689,11 +714,10 @@
           `STREAK: ${streak} 🔥`;
         document.getElementById("scoreText").innerText = `SCORE: ${score}`;
         document.getElementById("highScoreText").innerText =
-          `HI-SCORE: ${highScore}`;
+          `HI-SCORE: ${leaderboard.highScore}`;
         document.getElementById("bestMovesText").innerText =
           `LEVEL BEST: ${currentBestRecord ? currentBestRecord + " Mvs" : "--"}`;
 
-        // Progress percentage calculation mapped smoothly relative to a 30-level progression cap
         const percentageRatio = Math.min((level / 30) * 100, 100);
         document.getElementById("progress").style.width = `${percentageRatio}%`;
       }
@@ -701,13 +725,13 @@
       function resetGame() {
         if (
           confirm(
-            "Are you sure you want to clear your high score, current level, and all historical records?",
+            "Reset current run back to Level 1? Your JSON records (Hi-Score and Level Bests) will remain untouched!",
           )
         ) {
-          localStorage.clear();
           level = 1;
           score = 0;
-          highScore = 0;
+          localStorage.setItem("m_flip_level", level);
+          localStorage.setItem("m_flip_score", score);
           startLevel();
         }
       }
