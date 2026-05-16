@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wand Velocity - Potterhead Edition</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: radial-gradient(circle at center, #13111a 0%, #07060a 100%);
+        color: white;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* TOP BAR */
+      .header {
+        width: 100%;
+        min-height: 80px;
+        background: rgba(12, 10, 16, 0.95);
+        border-bottom: 1px solid #3b2d54;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        z-index: 999;
+        backdrop-filter: blur(12px);
+      }
+
+      .brand-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .title {
+        font-weight: 900;
+        letter-spacing: 2px;
+        font-size: 20px;
+        background: linear-gradient(45deg, #ffbd59, #ff914d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .score-container {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+      }
+
+      .current-score {
+        color: #00ff87;
+      }
+      .high-score {
+        color: #ffbd59;
+        opacity: 0.9;
+      }
+
+      .stats-grid {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 11px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 55%;
+      }
+
+      .badge {
+        background: #1a1625;
+        border: 1px solid #342a45;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        white-space: nowrap;
+        color: #efefef;
+      }
+
+      .badge-highlight {
+        border-color: #ffbd59;
+        color: #ffbd59;
+        background: rgba(255, 189, 89, 0.05);
+      }
+
+      .reset {
+        background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+        border: none;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        letter-spacing: 1px;
+        font-size: 11px;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .reset:hover {
+        transform: scale(1.03);
+      }
+
+      /* PROGRESS BAR */
+      .level-bar {
+        margin: 15px auto 5px auto;
+        padding: 0 20px;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .progress-bg {
+        width: 100%;
+        height: 6px;
+        background: #1b1626;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid #342a45;
+      }
+
+      .progress {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ffbd59, #00ff87, #00f2fe);
+        transition: width 0.1s linear;
+      }
+
+      /* DIALOGUE SOURCE DESCRIPTION BOX */
+      .quote-author {
+        font-size: 14px;
+        font-weight: 700;
+        color: #ffbd59;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+        opacity: 0.8;
+        text-align: center;
+      }
+
+      /* TYPING CORE ENGINE INTERFACES */
+      .game-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        width: 100%;
+        position: relative;
+      }
+
+      #hiddenInput {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .words-wrapper {
+        max-width: 850px;
+        width: 100%;
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+        cursor: text;
+      }
+
+      .words-container {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 24px;
+        line-height: 1.7;
+        color: #524669;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        user-select: none;
+        transform: translateY(0px);
+        transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      .word {
+        position: relative;
+        display: inline-block;
+      }
+
+      .letter {
+        position: relative;
+        transition: color 0.08s ease;
+      }
+
+      .letter.correct {
+        color: #f8fafc;
+      }
+      .letter.incorrect {
+        color: #ef4444;
+        border-bottom: 2px solid #ef4444;
+      }
+
+      /* HIGH-PERFORMANCE ACCELERATED CARET */
+      .caret {
+        position: absolute;
+        width: 2.5px;
+        height: 28px;
+        background-color: #ffbd59;
+        box-shadow: 0 0 10px rgba(255, 189, 89, 0.8);
+        animation: blink 1.1s infinite;
+        pointer-events: none;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.09s cubic-bezier(0.25, 1, 0.5, 1);
+        z-index: 10;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* PRE-GAME WELCOME PANEL */
+      .start-screen {
+        position: absolute;
+        inset: 0;
+        background: rgba(7, 6, 10, 0.97);
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        transition: opacity 0.3s ease;
+      }
+
+      .start-title {
+        font-size: 32px;
+        font-weight: 900;
+        color: white;
+        letter-spacing: 1px;
+      }
+
+      .action-btn {
+        background: linear-gradient(135deg, #ffbd59 0%, #ff914d 100%);
+        border: none;
+        color: #07060a;
+        font-weight: 900;
+        font-size: 16px;
+        padding: 14px 32px;
+        border-radius: 14px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(255, 189, 89, 0.3);
+        letter-spacing: 1px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .action-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 189, 89, 0.5);
+      }
+
+      /* STATS OVERLAY CHARTS DASHBOARD */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: #07060a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        padding: 30px;
+      }
+
+      .overlay.show {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .stats-dashboard {
+        width: 100%;
+        max-width: 800px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        margin-top: 20px;
+      }
+
+      .metrics-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .metric-card {
+        background: #14111c;
+        border: 1px solid #342a45;
+        padding: 20px;
+        border-radius: 16px;
+      }
+
+      .metric-val {
+        font-size: 38px;
+        font-weight: 900;
+        color: #00ff87;
+      }
+
+      /* GRAPH CHART VECTOR LAYER */
+      .chart-container {
+        background: #14111c;
+        border: 1px solid #342a45;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .chart-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #a1a1aa;
+        margin-bottom: 12px;
+      }
+
+      .chart-bars {
+        flex: 1;
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        height: 180px;
+        border-bottom: 2px solid #342a45;
+        padding-bottom: 4px;
+      }
+
+      .chart-column-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+      }
+
+      .chart-bar {
+        width: 100%;
+        background: linear-gradient(to top, #ff914d, #ffbd59);
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        height: 0%;
+        transition: height 1s cubic-bezier(0.25, 1, 0.5, 1);
+        position: relative;
+      }
+
+      .chart-label {
+        font-size: 9px;
+        color: #71717a;
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER DASHBOARD -->
+    <div class="header">
+      <div class="brand-container">
+        <div class="title">WAND VELOCITY</div>
+        <div class="score-container">
+          <div class="current-score" id="wpmLiveText">WPM: 0</div>
+          <div class="high-score" id="highScoreText">HI-SCORE: 0 WPM</div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="badge badge-highlight" id="timerText">30s READY</div>
+        <div class="badge" id="accuracyText">100% ACC</div>
+        <div class="badge" id="rawCharsText">CHARS: 0</div>
+      </div>
+
+      <button class="reset" onclick="resetTest()">RESET RUN</button>
+    </div>
+
+    <div class="level-bar">
+      <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+      </div>
+    </div>
+
+    <!-- MAIN ENGINE STAGE PANEL -->
+    <div class="game-wrap" id="viewport">
+      <!-- START MODAL TRIGGER SCREEN -->
+      <div class="start-screen" id="startScreen">
+        <div class="start-title">Mischief Managed?</div>
+        <button class="action-btn" onclick="initializeEnginePlayback()">
+          ENGAGE WAND FOCUS
+        </button>
+      </div>
+
+      <input
+        type="text"
+        id="hiddenInput"
+        autocomplete="off"
+        autocapitalize="off"
+      />
+
+      <div class="words-wrapper" onclick="focusInput()">
+        <div class="quote-author" id="quoteAuthor">LOADING LORE...</div>
+        <div class="caret" id="caret"></div>
+        <div class="words-container" id="wordsContainer"></div>
+      </div>
+    </div>
+
+    <!-- END-GAME REVELATION DASHBOARD -->
+    <div class="overlay" id="overlay">
+      <div class="start-title" style="color: #ffbd59; margin-bottom: 10px">
+        OWL POST REPORT ⚡
+      </div>
+
+      <div class="stats-dashboard">
+        <div class="metrics-sidebar">
+          <div class="metric-card">
+            <div style="font-size: 12px; color: #a1a1aa; font-weight: 700">
+              CASTING SPEED
+            </div>
+            <div class="metric-val" id="wpmSummary">0 WPM</div>
+          </div>
+          <div class="metric-card">
+            <div style="font-size: 12px; color: #a1a1aa; font-weight: 700">
+              SPELL ACCURACY
+            </div>
+            <div class="metric-val" id="accSummary" style="color: #00f2fe">
+              100%
+            </div>
+          </div>
+        </div>
+
+        <!-- PERFORMANCE CHART MODULE -->
+        <div class="chart-container">
+          <div class="chart-title">Speed Intervals (Words Per Minute)</div>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+      </div>
+
+      <button
+        class="action-btn"
+        style="margin-top: 30px"
+        onclick="closeSummaryScreen()"
+      >
+        CAST AGAIN
+      </button>
+    </div>
+
+    <script>
+      // FAMOUS DIALOGUE DATABASE ARCHITECTURE
+      const harryPotterQuotes = [
+        {
+          text: "It does not do to dwell on dreams and forget to live.",
+          author: "Albus Dumbledore",
+        },
+        {
+          text: "If you want to know what a man's like, take a good look at how he treats his inferiors, not his equals.",
+          author: "Sirius Black",
+        },
+        {
+          text: "Do not pity the dead, Harry. Pity the living, and, above all, those who live without love.",
+          author: "Albus Dumbledore",
+        },
+        { text: "After all this time? Always.", author: "Severus Snape" },
+        {
+          text: "I am what I am, an' I'm not ashamed. Never be ashamed, my ol' dad used to say, there's some who'll hold it against you, but they're not worth botherin' with.",
+          author: "Rubeus Hagrid",
+        },
+        {
+          text: "Happiness can be found, even in the darkest of times, if one only remembers to turn on the light.",
+          author: "Albus Dumbledore",
+        },
+        {
+          text: "It is our choices, Harry, that show what we truly are, far more than our abilities.",
+          author: "Albus Dumbledore",
+        },
+        {
+          text: "The ones that love us never really leave us. You can always find them in here.",
+          author: "Sirius Black",
+        },
+        {
+          text: "I solemnly swear that I am up to no good.",
+          author: "Harry Potter",
+        },
+        {
+          text: "Working hard is important, but there is something that matters even more, believing in yourself.",
+          author: "Harry Potter",
+        },
+        {
+          text: "We've all got both light and dark inside us. What matters is the part we choose to act on. That's who we really are.",
+          author: "Sirius Black",
+        },
+        {
+          text: "Fear of a name increases fear of the thing itself.",
+          author: "Hermione Granger",
+        },
+      ];
+
+      const TEST_DURATION = 30;
+      let leaderboard = loadLeaderboardFromJSON();
+
+      let timer = TEST_DURATION;
+      let timerInterval = null;
+      let isTesting = false;
+      let activeEngine = false;
+
+      let currentWordIndex = 0;
+      let currentLetterIndex = 0;
+      let typedCharactersCount = 0;
+      let correctCharactersCount = 0;
+      let timelineWpmHistory = [];
+
+      const wordsContainer = document.getElementById("wordsContainer");
+      const hiddenInput = document.getElementById("hiddenInput");
+      const caret = document.getElementById("caret");
+      const quoteAuthorElement = document.getElementById("quoteAuthor");
+
+      function loadLeaderboardFromJSON() {
+        const rawData = localStorage.getItem("m_potter_type_json");
+        if (rawData) {
+          try {
+            return JSON.parse(rawData);
+          } catch (e) {}
+        }
+        return { highScore: 0 };
+      }
+
+      function saveLeaderboardToJSON() {
+        localStorage.setItem("m_potter_type_json", JSON.stringify(leaderboard));
+      }
+
+      // LOAD RANDOM INTEGRATED DIALOGUE FRAMEWORK
+      function generateTestParagraph() {
+        wordsContainer.innerHTML = "";
+
+        // Select a collection of 3 random quotes to chain together smoothly
+        let selectedQuotesText = "";
+        let authorCredit = "";
+
+        for (let k = 0; k < 3; k++) {
+          const selectedQuote =
+            harryPotterQuotes[
+              Math.floor(Math.random() * harryPotterQuotes.length)
+            ];
+          selectedQuotesText += selectedQuote.text + " ";
+          if (!authorCredit) {
+            authorCredit = selectedQuote.author;
+          } else {
+            authorCredit += " & " + selectedQuote.author;
+          }
+        }
+
+        quoteAuthorElement.innerText = `Dialogue Log: ${harryPotterQuotes[Math.floor(Math.random() * harryPotterQuotes.length)].author}`;
+
+        const textWords = selectedQuotesText.trim().split(" ");
+
+        textWords.forEach((wordStr) => {
+          const wordSpan = document.createElement("span");
+          wordSpan.className = "word";
+
+          for (let j = 0; j < wordStr.length; j++) {
+            const letterSpan = document.createElement("span");
+            letterSpan.className = "letter";
+            letterSpan.innerText = wordStr[j];
+            wordSpan.appendChild(letterSpan);
+          }
+          wordsContainer.appendChild(wordSpan);
+        });
+
+        currentWordIndex = 0;
+        currentLetterIndex = 0;
+        wordsContainer.style.transform = "translateY(0px)";
+        setTimeout(updateCaretPosition, 10);
+      }
+
+      function initializeEnginePlayback() {
+        document.getElementById("startScreen").style.opacity = "0";
+        document.getElementById("startScreen").style.pointerEvents = "none";
+        activeEngine = true;
+        focusInput();
+      }
+
+      function focusInput() {
+        if (activeEngine) hiddenInput.focus();
+      }
+
+      function startTimer() {
+        isTesting = true;
+        timelineWpmHistory = [];
+
+        timerInterval = setInterval(() => {
+          timer--;
+
+          const currentStats = calculateCurrentStats();
+          timelineWpmHistory.push(currentStats.wpm);
+
+          updateUI();
+
+          if (timer <= 0) {
+            clearInterval(timerInterval);
+            finishTestRun();
+          }
+        }, 1000);
+      }
+
+      function updateCaretPosition() {
+        const activeWord = wordsContainer.children[currentWordIndex];
+        if (!activeWord) return;
+
+        const activeLetter = activeWord.children[currentLetterIndex];
+        let leftPosition = 0;
+        let topPosition = 0;
+
+        if (activeLetter) {
+          leftPosition = activeLetter.offsetLeft;
+          topPosition = activeLetter.offsetTop;
+        } else {
+          const lastLetter =
+            activeWord.children[activeWord.children.length - 1];
+          leftPosition = lastLetter.offsetLeft + lastLetter.offsetWidth;
+          topPosition = lastLetter.offsetTop;
+        }
+
+        if (topPosition > 45) {
+          wordsContainer.style.transform = `translateY(-${topPosition - 6}px)`;
+          caret.style.transform = `translate3d(${leftPosition}px, 12px, 0)`;
+        } else {
+          wordsContainer.style.transform = "translateY(0px)";
+          caret.style.transform = `translate3d(${leftPosition}px, ${topPosition + 4}px, 0)`;
+        }
+      }
+
+      hiddenInput.addEventListener("input", (e) => {
+        if (!activeEngine || timer <= 0) return;
+        if (!isTesting) startTimer();
+
+        const value = e.target.value;
+        const activeWord = wordsContainer.children[currentWordIndex];
+        if (!activeWord) return;
+
+        const letters = activeWord.children;
+        const keyTyped = value[value.length - 1];
+
+        if (e.inputType === "insertText" && keyTyped === " ") {
+          if (value.trim().length > 0 || currentLetterIndex > 0) {
+            currentWordIndex++;
+            currentLetterIndex = 0;
+            e.target.value = "";
+
+            if (currentWordIndex >= wordsContainer.children.length) {
+              finishTestRun();
+            }
+          }
+          updateCaretPosition();
+          return;
+        }
+
+        if (e.inputType === "deleteContentBackward") {
+          if (currentLetterIndex > 0) {
+            currentLetterIndex--;
+            letters[currentLetterIndex].classList.remove(
+              "correct",
+              "incorrect",
+            );
+          }
+          updateCaretPosition();
+          updateUI();
+          return;
+        }
+
+        if (currentLetterIndex < letters.length && keyTyped) {
+          const targetLetter = letters[currentLetterIndex];
+          typedCharactersCount++;
+
+          if (keyTyped === targetLetter.innerText) {
+            targetLetter.classList.add("correct");
+            correctCharactersCount++;
+          } else {
+            targetLetter.classList.add("incorrect");
+          }
+
+          currentLetterIndex++;
+          updateCaretPosition();
+          updateUI();
+        }
+      });
+
+      function calculateCurrentStats() {
+        const timeElapsed = TEST_DURATION - timer;
+        if (timeElapsed <= 0) return { wpm: 0, accuracy: 100 };
+
+        const minutesRatio = timeElapsed / 60;
+        const currentWPM =
+          Math.round(correctCharactersCount / 5 / minutesRatio) || 0;
+        const currentAccuracy =
+          typedCharactersCount > 0
+            ? Math.round((correctCharactersCount / typedCharactersCount) * 100)
+            : 100;
+
+        return { wpm: currentWPM, accuracy: currentAccuracy };
+      }
+
+      function updateUI() {
+        const stats = calculateCurrentStats();
+
+        document.getElementById("timerText").innerText = `${timer}s LEFT`;
+        document.getElementById("wpmLiveText").innerText = `WPM: ${stats.wpm}`;
+        document.getElementById("accuracyText").innerText =
+          `${stats.accuracy}% ACC`;
+        document.getElementById("rawCharsText").innerText =
+          `CHARS: ${typedCharactersCount}`;
+        document.getElementById("highScoreText").innerText =
+          `HI-SCORE: ${leaderboard.highScore} WPM`;
+
+        const percentageRatio = ((TEST_DURATION - timer) / TEST_DURATION) * 100;
+        document.getElementById("progress").style.width = `${percentageRatio}%`;
+      }
+
+      function buildAnalyticsChart() {
+        const chartBarsContainer = document.getElementById("chartBars");
+        chartBarsContainer.innerHTML = "";
+
+        const maxRecordedWpm = Math.max(...timelineWpmHistory, 10);
+
+        timelineWpmHistory.forEach((wpmPoint, idx) => {
+          if (idx % 2 === 0 || idx === timelineWpmHistory.length - 1) {
+            const heightRatio = (wpmPoint / maxRecordedWpm) * 100;
+
+            const columnWrap = document.createElement("div");
+            columnWrap.className = "chart-column-wrap";
+
+            const barNode = document.createElement("div");
+            barNode.className = "chart-bar";
+            barNode.style.height = `0%`;
+            barNode.title = `${wpmPoint} WPM`;
+
+            const labelNode = document.createElement("div");
+            labelNode.className = "chart-label";
+            labelNode.innerText = `${idx + 1}s`;
+
+            columnWrap.appendChild(barNode);
+            columnWrap.appendChild(labelNode);
+            chartBarsContainer.appendChild(columnWrap);
+
+            setTimeout(() => {
+              barNode.style.height = `${heightRatio}%`;
+            }, 100);
+          }
+        });
+      }
+
+      function finishTestRun() {
+        clearInterval(timerInterval);
+        isTesting = false;
+        activeEngine = false;
+        const finalStats = calculateCurrentStats();
+
+        if (finalStats.wpm > leaderboard.highScore) {
+          leaderboard.highScore = finalStats.wpm;
+          saveLeaderboardToJSON();
+        }
+
+        document.getElementById("wpmSummary").innerText =
+          `${finalStats.wpm} WPM`;
+        document.getElementById("accSummary").innerText =
+          `${finalStats.accuracy}%`;
+
+        buildAnalyticsChart();
+        document.getElementById("overlay").classList.add("show");
+      }
+
+      function closeSummaryScreen() {
+        document.getElementById("overlay").classList.remove("show");
+        resetTest();
+      }
+
+      function resetTest() {
+        clearInterval(timerInterval);
+        timer = TEST_DURATION;
+        isTesting = false;
+        typedCharactersCount = 0;
+        correctCharactersCount = 0;
+        hiddenInput.value = "";
+
+        generateTestParagraph();
+        updateUI();
+
+        document.getElementById("startScreen").style.opacity = "1";
+        document.getElementById("startScreen").style.pointerEvents = "all";
+        activeEngine = false;
+      }
+
+      window.addEventListener("resize", updateCaretPosition);
+
+      // SYSTEM INITIALIZATION
+      generateTestParagraph();
+      updateUI();
+    </script>
+  </body>
+</html>
