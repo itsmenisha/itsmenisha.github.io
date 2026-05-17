@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Step-by-Step BMI Calculator</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Inter", sans-serif;
+        color: #f8fafc;
+        line-height: 1.5;
+
+        /* Your exact premium radial gradient background design */
+        background:
+          radial-gradient(
+            circle at left center,
+            rgba(34, 197, 94, 0.22),
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at right center,
+            rgba(56, 189, 248, 0.2),
+            transparent 42%
+          ),
+          radial-gradient(circle at center, #050505, #020617, #01030a);
+        background-attachment: fixed;
+        padding: 20px;
+      }
+
+      .calculator-card {
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        width: 100%;
+        max-width: 440px;
+        padding: 30px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+        background: linear-gradient(45deg, #38bdf8, #22c55e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+      }
+
+      .steps-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 25px;
+      }
+
+      .step-dot {
+        width: 24px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 9999px;
+        transition: all 0.3s ease;
+      }
+
+      .step-dot.active {
+        background: #22c55e;
+        width: 32px;
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+      }
+
+      .step-view {
+        display: none;
+      }
+
+      .step-view.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .input-row-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 25px;
+      }
+
+      .dual-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .input-group {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      .label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+      }
+
+      .label-row label {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        font-weight: 500;
+      }
+
+      .value-display {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #38bdf8;
+      }
+
+      .value-display span {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-left: 2px;
+        font-weight: 500;
+      }
+
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 6px;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+      }
+
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #22c55e;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        transition: transform 0.1s;
+      }
+
+      .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.3);
+      }
+
+      .slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border: none;
+        border-radius: 50%;
+        background: #22c55e;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        transition: transform 0.1s;
+      }
+
+      .slider::-moz-range-thumb:hover {
+        transform: scale(1.3);
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #22c55e, #15803d);
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.25);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.06);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+      }
+
+      .result-section {
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      .bmi-score {
+        font-size: 4.2rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 12px;
+        color: #f8fafc;
+      }
+
+      .bmi-status {
+        display: inline-block;
+        padding: 6px 18px;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+
+      .status-underweight {
+        background: rgba(56, 189, 248, 0.12);
+        color: #38bdf8;
+      }
+      .status-normal {
+        background: rgba(34, 197, 94, 0.12);
+        color: #22c55e;
+      }
+      .status-overweight {
+        background: rgba(234, 179, 8, 0.12);
+        color: #eab308;
+      }
+      .status-obese {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator-card">
+      <h1>BMI Calculator</h1>
+
+      <!-- Top Step Pagination Tracker -->
+      <div class="steps-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+      </div>
+
+      <!-- STAGE 1: WEIGHT SYSTEM INPUTS FIRST -->
+      <div class="step-view active" id="step-1">
+        <div class="section-title">1. Put Your Weight</div>
+        <div class="input-row-grid">
+          <!-- Weight Imperial (Lbs) -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="weight-lbs">Pounds</label>
+              <div class="value-display">
+                <span id="val-lbs">132</span><span>lbs</span>
+              </div>
+            </div>
+            <input
+              type="range"
+              id="weight-lbs"
+              class="slider"
+              min="50"
+              max="400"
+              value="132"
+              oninput="syncFromLbs()"
+            />
+          </div>
+
+          <!-- Weight Metric (Kg) -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="weight-kg">Kilograms</label>
+              <div class="value-display">
+                <span id="val-kg">60</span><span>kg</span>
+              </div>
+            </div>
+            <input
+              type="range"
+              id="weight-kg"
+              class="slider"
+              min="20"
+              max="180"
+              value="60"
+              oninput="syncFromKg()"
+            />
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button class="action-btn btn-primary" onclick="navigateToStep(2)">
+            Next: Height &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- STAGE 2: HEIGHT SYSTEM INPUTS SECOND -->
+      <div class="step-view" id="step-2">
+        <div class="section-title">2. Put Your Height</div>
+        <div class="input-row-grid">
+          <!-- Imperial Height Options (Ft / In) -->
+          <div class="dual-columns">
+            <div class="input-group">
+              <div class="label-row">
+                <label for="height-ft">Feet</label>
+                <div class="value-display">
+                  <span id="val-ft">5</span><span>ft</span>
+                </div>
+              </div>
+              <input
+                type="range"
+                id="height-ft"
+                class="slider"
+                min="3"
+                max="7"
+                value="5"
+                oninput="syncFromImperialHeight()"
+              />
+            </div>
+            <div class="input-group">
+              <div class="label-row">
+                <label for="height-in">Inches</label>
+                <div class="value-display">
+                  <span id="val-in">5</span><span>in</span>
+                </div>
+              </div>
+              <input
+                type="range"
+                id="height-in"
+                class="slider"
+                min="0"
+                max="11"
+                value="5"
+                oninput="syncFromImperialHeight()"
+              />
+            </div>
+          </div>
+
+          <!-- Metric Height Option (CM) -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="height-cm">Centimeters</label>
+              <div class="value-display">
+                <span id="val-cm">165</span><span>cm</span>
+              </div>
+            </div>
+            <input
+              type="range"
+              id="height-cm"
+              class="slider"
+              min="90"
+              max="240"
+              value="165"
+              oninput="syncFromMetricHeight()"
+            />
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button class="action-btn btn-secondary" onclick="navigateToStep(1)">
+            &larr; Back
+          </button>
+          <button class="action-btn btn-primary" onclick="processFinalBMI()">
+            Calculate BMI
+          </button>
+        </div>
+      </div>
+
+      <!-- STAGE 3: OUTPUT RESULT CARD DISPLAY -->
+      <div class="step-view" id="step-3">
+        <div class="section-title">Your Result</div>
+        <div class="result-section">
+          <div class="bmi-score" id="bmi-val">22.0</div>
+          <div class="bmi-status status-normal" id="bmi-status">
+            Normal Weight
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button class="action-btn btn-secondary" onclick="navigateToStep(2)">
+            Edit Info
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Universal state values
+      let globalHeightCm = 165;
+      let globalWeightKg = 60;
+
+      // Converts CM into clean Feet + Inches values
+      function cmToFtIn(cm) {
+        const realInches = cm / 2.54;
+        const ft = Math.floor(realInches / 12);
+        const inch = Math.round(realInches % 12);
+        if (inch === 12) {
+          return { ft: ft + 1, inch: 0 };
+        }
+        return { ft: ft, inch: inch };
+      }
+
+      // Wizard Panels Navigation Engine
+      function navigateToStep(stepNumber) {
+        document
+          .querySelectorAll(".step-view")
+          .forEach((view) => view.classList.remove("active"));
+        document.getElementById(`step-${stepNumber}`).classList.add("active");
+
+        document
+          .querySelectorAll(".step-dot")
+          .forEach((dot) => dot.classList.remove("active"));
+        document.getElementById(`dot-${stepNumber}`).classList.add("active");
+      }
+
+      // Real-time synchronization functions
+      function syncFromImperialHeight() {
+        const ft = parseInt(document.getElementById("height-ft").value);
+        const inch = parseInt(document.getElementById("height-in").value);
+
+        const totalInches = ft * 12 + inch;
+        globalHeightCm = totalInches * 2.54;
+
+        document.getElementById("height-cm").value = Math.round(globalHeightCm);
+        updateUIStrings();
+      }
+
+      function syncFromMetricHeight() {
+        globalHeightCm = parseFloat(document.getElementById("height-cm").value);
+
+        const converted = cmToFtIn(globalHeightCm);
+        document.getElementById("height-ft").value = converted.ft;
+        document.getElementById("height-in").value = converted.inch;
+        updateUIStrings();
+      }
+
+      function syncFromLbs() {
+        const lbs = parseFloat(document.getElementById("weight-lbs").value);
+        globalWeightKg = lbs / 2.20462;
+
+        document.getElementById("weight-kg").value = Math.round(globalWeightKg);
+        updateUIStrings();
+      }
+
+      function syncFromKg() {
+        globalWeightKg = parseFloat(document.getElementById("weight-kg").value);
+
+        document.getElementById("weight-lbs").value = Math.round(
+          globalWeightKg * 2.20462,
+        );
+        updateUIStrings();
+      }
+
+      // Refresh display labels
+      function updateUIStrings() {
+        // Height Strings
+        document.getElementById("val-cm").innerText =
+          Math.round(globalHeightCm);
+        const convertedHeight = cmToFtIn(globalHeightCm);
+        document.getElementById("val-ft").innerText = convertedHeight.ft;
+        document.getElementById("val-in").innerText = convertedHeight.inch;
+
+        // Weight Strings
+        document.getElementById("val-kg").innerText =
+          Math.round(globalWeightKg);
+        document.getElementById("val-lbs").innerText = Math.round(
+          globalWeightKg * 2.20462,
+        );
+      }
+
+      // Calculate final metrics
+      function processFinalBMI() {
+        const meters = globalHeightCm / 100;
+        const bmi = globalWeightKg / (meters * meters);
+
+        const scoreDisplay = document.getElementById("bmi-val");
+        const statusDisplay = document.getElementById("bmi-status");
+
+        if (!isFinite(bmi) || bmi <= 0) {
+          scoreDisplay.innerText = "0.0";
+          statusDisplay.innerText = "Missing Info";
+          statusDisplay.className = "bmi-status status-normal";
+        } else {
+          scoreDisplay.innerText = bmi.toFixed(1);
+          statusDisplay.className = "bmi-status";
+
+          if (bmi < 18.5) {
+            statusDisplay.innerText = "Underweight";
+            statusDisplay.classList.add("status-underweight");
+          } else if (bmi >= 18.5 && bmi < 25) {
+            statusDisplay.innerText = "Normal Weight";
+            statusDisplay.classList.add("status-normal");
+          } else if (bmi >= 25 && bmi < 30) {
+            statusDisplay.innerText = "Overweight";
+            statusDisplay.classList.add("status-overweight");
+          } else {
+            statusDisplay.innerText = "Obese";
+            statusDisplay.classList.add("status-obese");
+          }
+        }
+
+        navigateToStep(3);
+      }
+
+      // Run calibration update on loading
+      updateUIStrings();
+    </script>
+  </body>
+</html>
