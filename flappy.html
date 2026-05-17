@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy Basketball 2.0</title>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: white;
+        background: #0b0b16;
+        user-select: none;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .hud {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-weight: bold;
+        font-size: 18px;
+        z-index: 10;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        background: rgba(15, 15, 30, 0.6);
+        padding: 8px 18px;
+        border-radius: 20px;
+        pointer-events: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(4px);
+      }
+
+      .menu {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: rgba(10, 10, 20, 0.88);
+        text-align: center;
+        z-index: 20;
+        backdrop-filter: blur(8px);
+        transition: opacity 0.3s ease;
+      }
+
+      /* Dramatic Countdown Overlay */
+      #countdown-overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 120px;
+        font-weight: 900;
+        color: #ff8c00;
+        text-shadow: 0 0 30px rgba(255, 140, 0, 0.6);
+        z-index: 15;
+        pointer-events: none;
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      .count-animate {
+        animation: popAndFade 0.9s ease-in-out forwards;
+      }
+
+      @keyframes popAndFade {
+        0% {
+          opacity: 0;
+          transform: scale(0.3) rotate(-10deg);
+        }
+        30% {
+          opacity: 1;
+          transform: scale(1.1) rotate(0deg);
+        }
+        70% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.4) rotate(10deg);
+        }
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        background: linear-gradient(45deg, #ff8c00, #ffea00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 4px 15px rgba(255, 140, 0, 0.4));
+      }
+
+      p {
+        font-size: 1.2rem;
+        color: #aaa;
+        margin-bottom: 25px;
+      }
+
+      button {
+        padding: 16px 36px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff5500, #ff9900);
+        color: white;
+        box-shadow: 0 6px 20px rgba(255, 85, 0, 0.4);
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(255, 85, 0, 0.6);
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      .skins {
+        display: flex;
+        gap: 15px;
+        margin: 25px;
+      }
+
+      .skin {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        transition:
+          transform 0.2s,
+          border-color 0.2s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      }
+
+      .skin:hover {
+        transform: scale(1.15);
+      }
+
+      .skin.active {
+        border-color: #ffffff;
+        transform: scale(1.2);
+        box-shadow: 0 0 15px currentColor;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hud">
+      Score: <span id="score">0</span> | Global High:
+      <span id="high">Loading...</span> | Power:
+      <span id="power" style="color: #00ffff">None</span>
+    </div>
+
+    <!-- Countdown Structure -->
+    <div id="countdown-overlay"></div>
+
+    <canvas id="game"></canvas>
+
+    <div class="menu" id="menu">
+      <div id="menu-content">
+        <h1>🏀 Flappy Basketball 2.0</h1>
+        <p>Press <b>Spacebar</b> or <b>Tap Screen</b> to bounce</p>
+
+        <div class="skins">
+          <div
+            class="skin active"
+            style="background: #ff8c00; color: #ff8c00"
+            data-color="#ff8c00"
+          ></div>
+          <div
+            class="skin"
+            style="background: #00d4ff; color: #00d4ff"
+            data-color="#00d4ff"
+          ></div>
+          <div
+            class="skin"
+            style="background: #ff3b3b; color: #ff3b3b"
+            data-color="#ff3b3b"
+          ></div>
+          <div
+            class="skin"
+            style="background: #a855f7; color: #a855f7"
+            data-color="#a855f7"
+          ></div>
+        </div>
+
+        <button onclick="triggerCountdown()">Start Game</button>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+
+      let W, H;
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      const API_URL =
+        "https://kvdb.io/MN86Sg88uH6fG7vSgK696w/global_flappy_high";
+      let globalHighScore = 0;
+
+      async function fetchGlobalHighScore() {
+        try {
+          const response = await fetch(API_URL);
+          if (response.ok) {
+            const val = await response.text();
+            globalHighScore = parseInt(val) || 0;
+            document.getElementById("high").innerText = globalHighScore;
+          }
+        } catch (e) {
+          globalHighScore = localStorage.getItem("bb_high") || 0;
+          document.getElementById("high").innerText =
+            globalHighScore + " (Local)";
+        }
+      }
+
+      async function updateGlobalHighScore(newScore) {
+        globalHighScore = newScore;
+        document.getElementById("high").innerText = globalHighScore;
+        localStorage.setItem("bb_high", newScore);
+        try {
+          await fetch(API_URL, { method: "POST", body: newScore.toString() });
+        } catch (e) {}
+      }
+
+      fetchGlobalHighScore();
+
+      let audioCtx = null;
+      function beep(freq, duration, type = "sine") {
+        try {
+          if (!audioCtx)
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === "suspended") audioCtx.resume();
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.frequency.value = freq;
+          osc.start();
+          gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioCtx.currentTime + duration,
+          );
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      // GAME OBJECTS
+      let ball,
+        hoops,
+        particles,
+        score,
+        gravity,
+        velocity,
+        running = false,
+        countingDown = false;
+      let skinColor = "#ff8c00";
+      let powerObj = null;
+      let slowMoTimer = 0;
+      let spawnInterval = 0;
+      let animationFrameId;
+      let ballRotation = 0;
+
+      document.querySelectorAll(".skin").forEach((s) => {
+        s.onclick = () => {
+          document
+            .querySelectorAll(".skin")
+            .forEach((sk) => sk.classList.remove("active"));
+          s.classList.add("active");
+          skinColor = s.dataset.color;
+          beep(400, 0.05);
+        };
+      });
+
+      function reset() {
+        ball = { x: W * 0.25, y: H * 0.5, r: 18 };
+        hoops = [];
+        particles = [];
+        score = 0;
+        velocity = 0;
+        gravity = 0.4;
+        powerObj = null;
+        slowMoTimer = 0;
+        spawnInterval = 0;
+        ballRotation = 0;
+        document.getElementById("score").innerText = score;
+      }
+
+      // 3-2-1 Dramatic Pause Sequence
+      function triggerCountdown() {
+        if (countingDown) return;
+        countingDown = true;
+        reset();
+
+        document.getElementById("menu").style.display = "none";
+        const el = document.getElementById("countdown-overlay");
+
+        let counts = ["3", "2", "1", "GO!"];
+        let step = 0;
+
+        function nextCount() {
+          if (step < counts.length) {
+            el.innerText = counts[step];
+            el.style.color = counts[step] === "GO!" ? "#00ffcc" : "#ff8c00";
+
+            // Audio beeps match countdown progression safely
+            if (counts[step] === "GO!") {
+              beep(880, 0.3, "triangle");
+            } else {
+              beep(440, 0.15, "sine");
+            }
+
+            el.classList.remove("count-animate");
+            void el.offsetWidth; // Force CSS Dom reflow trigger
+            el.classList.add("count-animate");
+
+            step++;
+            setTimeout(nextCount, 1000); // 1-second clean separation
+          } else {
+            countingDown = false;
+            running = true;
+            update(); // Unpause physics loop engine
+          }
+        }
+        nextCount();
+      }
+
+      function jump() {
+        if (!running || countingDown) return;
+        velocity = -7.5;
+        beep(580, 0.07, "triangle");
+
+        // Spawn energetic burst particles downwards
+        for (let i = 0; i < 6; i++) {
+          particles.push({
+            x: ball.x,
+            y: ball.y + ball.r,
+            vx: (Math.random() - 0.5) * 4,
+            vy: Math.random() * 3 + 2,
+            alpha: 1,
+            color: skinColor,
+            size: Math.random() * 4 + 2,
+          });
+        }
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          jump();
+        }
+      });
+      window.addEventListener(
+        "touchstart",
+        (e) => {
+          if (
+            e.target.tagName !== "BUTTON" &&
+            !e.target.classList.contains("skin")
+          ) {
+            e.preventDefault();
+            jump();
+          }
+        },
+        { passive: false },
+      );
+
+      function checkCollision(h) {
+        if (ball.x + ball.r > h.x && ball.x - ball.r < h.x + h.w) {
+          const topLimit = h.y - h.gap / 2;
+          const bottomLimit = h.y + h.gap / 2;
+          if (ball.y - ball.r < topLimit || ball.y + ball.r > bottomLimit)
+            return true;
+        }
+        return false;
+      }
+
+      // PRINCIPAL PHYSICS LOOP
+      function update() {
+        if (!running) return;
+
+        ctx.clearRect(0, 0, W, H);
+
+        // Cyber Grid space backdrop
+        ctx.fillStyle = "#0c0c1a";
+        ctx.fillRect(0, 0, W, H);
+
+        // Render stylized decorative neon line track context
+        ctx.strokeStyle = "rgba(255,255,255,0.03)";
+        ctx.lineWidth = 2;
+        for (let i = 0; i < W; i += 60) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, H);
+          ctx.stroke();
+        }
+
+        let gameSpeed = 4;
+        if (slowMoTimer > 0) {
+          gravity = 0.18;
+          gameSpeed = 2.0;
+          slowMoTimer--;
+          document.getElementById("power").innerText =
+            `SlowMo (${Math.ceil(slowMoTimer / 60)}s)`;
+          document.getElementById("power").style.color = "#00ffff";
+        } else {
+          gravity = 0.44;
+          document.getElementById("power").innerText = "None";
+          document.getElementById("power").style.color = "#ffffff";
+        }
+
+        velocity += gravity;
+        ball.y += velocity;
+        ballRotation += 0.05;
+
+        // Passive Trail Spawning Engine
+        if (Math.random() > 0.3) {
+          particles.push({
+            x: ball.x - 5,
+            y: ball.y,
+            vx: -gameSpeed * 0.4,
+            vy: (Math.random() - 0.5) * 2,
+            alpha: 0.8,
+            color: skinColor,
+            size: Math.random() * 5 + 3,
+          });
+        }
+
+        // Render Particle Buffers
+        for (let i = particles.length - 1; i >= 0; i--) {
+          let p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.02;
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1.0; // Reset canvas transparency states
+
+        // Render Basketball Player Canvas Matrix
+        ctx.save();
+        ctx.translate(ball.x, ball.y);
+        ctx.rotate(ballRotation);
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = skinColor;
+        ctx.fillStyle = skinColor;
+        ctx.beginPath();
+        ctx.arc(0, 0, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0; // Turn off shadows for details
+        ctx.strokeStyle = "#111";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        // Basketball Seam Art curves
+        ctx.beginPath();
+        ctx.arc(0, 0, ball.r, Math.PI * 0.25, Math.PI * 0.75);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, ball.r, Math.PI * 1.25, Math.PI * 1.75);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(-ball.r, 0);
+        ctx.lineTo(ball.r, 0);
+        ctx.stroke();
+        ctx.restore();
+
+        // Object generation clocks
+        spawnInterval++;
+        let spawnRate = slowMoTimer > 0 ? 120 : 70;
+        if (spawnInterval >= spawnRate) {
+          const gapY = Math.random() * (H - 320) + 160;
+          hoops.push({
+            x: W + 100,
+            y: gapY,
+            gap: 165,
+            w: 75,
+            passed: false,
+            move: Math.random() > 0.4,
+            seed: Math.random() * 50,
+          });
+          spawnInterval = 0;
+
+          if (Math.random() < 0.2 && !powerObj) {
+            powerObj = {
+              x: W + 120,
+              y: Math.random() * (H - 150) + 75,
+              size: 20,
+            };
+          }
+        }
+
+        // Processing Pipe Columns
+        for (let i = hoops.length - 1; i >= 0; i--) {
+          let h = hoops[i];
+          h.x -= gameSpeed;
+
+          if (h.move) h.y += Math.sin((Date.now() + h.seed * 10) / 250) * 1.8;
+
+          // Modernized Neon Glowing pillars
+          ctx.fillStyle = "rgba(22, 22, 45, 0.9)";
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+          ctx.lineWidth = 2;
+
+          // Render structures
+          ctx.fillRect(h.x, 0, h.w, h.y - h.gap / 2);
+          ctx.strokeRect(h.x, -5, h.w, h.y - h.gap / 2 + 5);
+          ctx.fillRect(h.x, h.y + h.gap / 2, h.w, H - (h.y + h.gap / 2));
+          ctx.strokeRect(h.x, h.y + h.gap / 2, h.w, H - (h.y + h.gap / 2) + 5);
+
+          // Orange rim indicators
+          ctx.fillStyle = "#ff6a00";
+          ctx.fillRect(h.x - 8, h.y - h.gap / 2 - 10, h.w + 16, 10);
+          ctx.fillRect(h.x - 8, h.y + h.gap / 2, h.w + 16, 10);
+
+          if (!h.passed && h.x + h.w / 2 < ball.x) {
+            score++;
+            h.passed = true;
+            document.getElementById("score").innerText = score;
+            beep(780, 0.06, "sine");
+          }
+
+          if (checkCollision(h)) {
+            gameOver();
+            return;
+          }
+          if (h.x + h.w < -20) hoops.splice(i, 1);
+        }
+
+        // Floating Diamond Tokens (SlowMo Buffs)
+        if (powerObj) {
+          powerObj.x -= gameSpeed;
+          ctx.save();
+          ctx.translate(powerObj.x + 10, powerObj.y + 10);
+          ctx.rotate(Date.now() / 200);
+          ctx.fillStyle = "#00ffff";
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = "#00ffff";
+          ctx.fillRect(-10, -10, powerObj.size, powerObj.size);
+          ctx.restore();
+
+          if (
+            ball.x + ball.r > powerObj.x &&
+            ball.x - ball.r < powerObj.x + powerObj.size &&
+            ball.y + ball.r > powerObj.y &&
+            ball.y - ball.r < powerObj.y + powerObj.size
+          ) {
+            slowMoTimer = 360;
+            powerObj = null;
+            beep(420, 0.3, "triangle");
+          } else if (powerObj.x < -40) powerObj = null;
+        }
+
+        if (ball.y - ball.r < 0 || ball.y + ball.r > H) {
+          gameOver();
+          return;
+        }
+
+        animationFrameId = requestAnimationFrame(update);
+      }
+
+      function gameOver() {
+        running = false;
+        cancelAnimationFrame(animationFrameId);
+        beep(120, 0.4, "sawtooth");
+
+        if (score > globalHighScore) updateGlobalHighScore(score);
+
+        document.getElementById("menu").style.display = "flex";
+        document.getElementById("menu-content").innerHTML = `
+          <h1>Game Over 🏀</h1>
+          <p style="font-size: 1.6rem; color: #ff8c00; font-weight: bold; margin: 5px 0;">Score: ${score}</p>
+          <p style="font-size: 1rem; margin-bottom: 20px;">Global Leaderboard Record: ${globalHighScore}</p>
+          
+          <div class="skins">
+            <div class="skin ${skinColor === "#ff8c00" ? "active" : ""}" style="background: #ff8c00; color: #ff8c00;" data-color="#ff8c00"></div>
+            <div class="skin ${skinColor === "#00d4ff" ? "active" : ""}" style="background: #00d4ff; color: #00d4ff;" data-color="#00d4ff"></div>
+            <div class="skin ${skinColor === "#ff3b3b" ? "active" : ""}" style="background: #ff3b3b; color: #ff3b3b;" data-color="#ff3b3b"></div>
+            <div class="skin ${skinColor === "#a855f7" ? "active" : ""}" style="background: #a855f7; color: #a855f7;" data-color="#a855f7"></div>
+          </div>
+          
+          <button onclick="triggerCountdown()">Play Again</button>
+        `;
+
+        document.querySelectorAll(".skin").forEach((s) => {
+          s.onclick = () => {
+            document
+              .querySelectorAll(".skin")
+              .forEach((sk) => sk.classList.remove("active"));
+            s.classList.add("active");
+            skinColor = s.dataset.color;
+            beep(400, 0.05);
+          };
+        });
+      }
+    </script>
+  </body>
+</html>
