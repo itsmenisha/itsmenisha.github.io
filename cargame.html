@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Custom Track Builder & Racer</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #1e1e1e;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      /* Top Navigation Button Panel */
+      #menu-panel {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+      }
+      .menu-btn {
+        padding: 10px 18px;
+        background: rgba(44, 62, 80, 0.85);
+        border: 2px solid #34495e;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+      }
+      .menu-btn.active {
+        background: #2ecc71;
+        border-color: #27ae60;
+      }
+      .menu-btn.danger {
+        background: #e74c3c;
+        border-color: #c0392b;
+      }
+      /* Mobile Input Layout Triggers */
+      #mobile-controls {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+        display: none;
+        justify-content: space-between;
+        padding: 0 30px;
+        pointer-events: none;
+      }
+      .touch-btn {
+        width: 85px;
+        height: 85px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 3px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 36px;
+        pointer-events: auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .touch-btn:active {
+        background: rgba(46, 204, 113, 0.6);
+        border-color: #2ecc71;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="menu-panel">
+      <button id="btn-mode" class="menu-btn">🛠️ Build Track</button>
+      <button id="btn-clear" class="menu-btn danger" style="display: none">
+        🗑️ Clear
+      </button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="mobile-controls">
+      <div id="btn-left" class="touch-btn">◀</div>
+      <div id="btn-right" class="touch-btn">▶</div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const mobileOverlay = document.getElementById("mobile-controls");
+      const modeBtn = document.getElementById("btn-mode");
+      const clearBtn = document.getElementById("btn-clear");
+
+      let WIDTH, HEIGHT;
+      let isBuilderMode = false;
+      let gameLoopId;
+
+      const keys = { Left: false, Right: false };
+
+      function resizeCanvas() {
+        WIDTH = window.innerWidth;
+        HEIGHT = window.innerHeight;
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+        checkControlVisibility();
+      }
+
+      function checkControlVisibility() {
+        const isTouchDevice =
+          "ontouchstart" in window ||
+          navigator.maxTouchPoints > 0 ||
+          WIDTH < 800;
+        if (isTouchDevice && !isBuilderMode) {
+          mobileOverlay.style.display = "flex";
+        } else {
+          mobileOverlay.style.display = "none";
+        }
+      }
+
+      // --- MANAGE CUSTOM TRACK DATA ---
+      class CustomTrack {
+        constructor() {
+          this.points = [];
+          this.trackWidth = WIDTH < 600 ? 65 : 95;
+          this.isClosed = false;
+          this.loadDefaultTrack();
+        }
+
+        loadDefaultTrack() {
+          this.points = [];
+          this.isClosed = true;
+          const cx = WIDTH / 2;
+          const cy = HEIGHT / 2;
+          const rx = WIDTH * 0.35;
+          const ry = HEIGHT * 0.26;
+          for (let i = 0; i < 360; i += 10) {
+            let rad = (i * Math.PI) / 180;
+            this.points.push({
+              x: cx + Math.cos(rad) * rx,
+              y: cy + Math.sin(rad) * ry,
+            });
+          }
+        }
+
+        clear() {
+          this.points = [];
+          this.isClosed = false;
+        }
+
+        // ENFORCING DESIGN RULES
+        addPoint(x, y) {
+          if (this.isClosed) return;
+
+          // Rule 1: Boundary protection (Keep track inside safe padding zones)
+          const padding = 40;
+          if (
+            x < padding ||
+            x > WIDTH - padding ||
+            y < padding ||
+            y > HEIGHT - padding
+          )
+            return;
+
+          if (this.points.length > 2) {
+            // Rule 2: Loop closure verification check against starting point
+            const startDist = Math.hypot(
+              x - this.points[0].x,
+              y - this.points[0].y,
+            );
+            if (startDist < 45) {
+              this.isClosed = true;
+              return;
+            }
+          }
+
+          if (this.points.length > 0) {
+            // Rule 3: Spacing proximity limit checks
+            const lastPt = this.points[this.points.length - 1];
+            const distance = Math.hypot(x - lastPt.x, y - lastPt.y);
+            if (distance < 50) return; // Too close to last node
+          }
+
+          this.points.push({ x: x, y: y });
+        }
+
+        getStartConfig() {
+          if (this.points.length < 2)
+            return { x: WIDTH / 2, y: HEIGHT / 2, angle: 0 };
+          const p1 = this.points[0];
+          const p2 = this.points[1];
+          return {
+            x: p1.x,
+            y: p1.y,
+            angle: Math.atan2(p2.y - p1.y, p2.x - p1.x),
+          };
+        }
+
+        draw() {
+          if (this.points.length === 0) return;
+
+          // Draw Core Road Structural Mesh Layer
+          ctx.beginPath();
+          ctx.moveTo(this.points[0].x, this.points[0].y);
+          for (let p of this.points) ctx.lineTo(p.x, p.y);
+
+          if (this.isClosed) ctx.closePath();
+
+          ctx.lineWidth = this.trackWidth * 2;
+          ctx.strokeStyle = "#323232";
+          ctx.lineJoin = "round";
+          ctx.lineCap = "round";
+          ctx.stroke();
+
+          // Draw Track Interactive Overlay lines
+          ctx.beginPath();
+          ctx.moveTo(this.points[0].x, this.points[0].y);
+          for (let p of this.points) ctx.lineTo(p.x, p.y);
+          if (this.isClosed) ctx.closePath();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = this.isClosed
+            ? "rgba(255, 255, 255, 0.2)"
+            : "#f1c40f";
+          if (this.isClosed) ctx.setLineDash([10, 15]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Draw individual structural marker nodes inside Builder view mode
+          if (isBuilderMode) {
+            this.points.forEach((p, index) => {
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, index === 0 ? 8 : 5, 0, Math.PI * 2);
+              ctx.fillStyle = index === 0 ? "#2ecc71" : "#e67e22";
+              ctx.fill();
+            });
+          }
+
+          // Render red start/finish gate line
+          if (this.isClosed && this.points.length > 1) {
+            const start = this.points[0];
+            const next = this.points[1];
+            const perpAngle =
+              Math.atan2(next.y - start.y, next.x - start.x) + Math.PI / 2;
+            ctx.beginPath();
+            ctx.moveTo(
+              start.x - Math.cos(perpAngle) * this.trackWidth,
+              start.y - Math.sin(perpAngle) * this.trackWidth,
+            );
+            ctx.lineTo(
+              start.x + Math.cos(perpAngle) * this.trackWidth,
+              start.y + Math.sin(perpAngle) * this.trackWidth,
+            );
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = "#e74c3c";
+            ctx.stroke();
+          }
+        }
+
+        isPointOnTrack(x, y) {
+          if (!this.isClosed || this.points.length === 0) return true;
+          let minDistance = Infinity;
+          for (let p of this.points) {
+            let d = Math.hypot(x - p.x, y - p.y);
+            if (d < minDistance) minDistance = d;
+          }
+          return minDistance <= this.trackWidth;
+        }
+      }
+
+      // --- CAR LOGIC CONFIG ---
+      class Car {
+        constructor(x, y, angle) {
+          this.x = x;
+          this.y = y;
+          this.angle = angle;
+          this.width = WIDTH < 600 ? 30 : 42;
+          this.height = WIDTH < 600 ? 15 : 21;
+          this.speed = 0;
+          this.maxSpeed = WIDTH < 600 ? 3.6 : 5.0;
+          this.acceleration = 0.15;
+          this.rotationSpeed = 0.04;
+          this.alive = true;
+        }
+
+        update(track) {
+          if (!this.alive || isBuilderMode) return;
+
+          let turning = false;
+          if (keys.Left) {
+            this.angle -= this.rotationSpeed;
+            turning = true;
+          }
+          if (keys.Right) {
+            this.angle += this.rotationSpeed;
+            turning = true;
+          }
+
+          let targetMaxSpeed = turning ? this.maxSpeed * 0.72 : this.maxSpeed;
+          if (this.speed < targetMaxSpeed) this.speed += this.acceleration;
+          else if (this.speed > targetMaxSpeed) this.speed -= this.acceleration;
+
+          this.x += Math.cos(this.angle) * this.speed;
+          this.y += Math.sin(this.angle) * this.speed;
+
+          if (!track.isPointOnTrack(this.x, this.y)) {
+            this.alive = false;
+          }
+        }
+
+        draw() {
+          if (isBuilderMode) return;
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.angle);
+
+          if (!this.alive) {
+            ctx.beginPath();
+            ctx.arc(0, 0, this.width / 2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(231, 76, 60, 0.4)";
+            ctx.fill();
+            ctx.restore();
+            return;
+          }
+
+          ctx.fillStyle = "#e74c3c";
+          ctx.beginPath();
+          ctx.roundRect(
+            -this.width / 2,
+            -this.height / 2,
+            this.width,
+            this.height,
+            4,
+          );
+          ctx.fill();
+
+          ctx.fillStyle = "#2c3e50";
+          ctx.beginPath();
+          ctx.roundRect(
+            this.width * 0.05,
+            -this.height * 0.35,
+            this.width * 0.3,
+            this.height * 0.7,
+            2,
+          );
+          ctx.fill();
+
+          ctx.fillStyle = "#fff200";
+          ctx.beginPath();
+          ctx.arc(this.width / 2, -this.height * 0.28, 2, 0, Math.PI * 2);
+          ctx.arc(this.width / 2, this.height * 0.28, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      const track = new CustomTrack();
+      let car = new Car(0, 0, 0);
+
+      function resetCarToStart() {
+        const start = track.getStartConfig();
+        car = new Car(start.x, (startPos = start.y), start.angle);
+      }
+
+      // --- MODE MANAGEMENT HOOKS ---
+      modeBtn.addEventListener("click", () => {
+        isBuilderMode = !isBuilderMode;
+        if (isBuilderMode) {
+          modeBtn.innerText = "🏁 Start Race";
+          modeBtn.classList.add("active");
+          clearBtn.style.display = "block";
+          track.clear();
+        } else {
+          // Return to racing loop mode configuration
+          if (track.points.length < 3) {
+            alert("Please draw a track layout loop first before testing!");
+            isBuilderMode = true;
+            return;
+          }
+          track.isClosed = true;
+          modeBtn.innerText = "🛠️ Build Track";
+          modeBtn.classList.remove("active");
+          clearBtn.style.display = "none";
+          resetCarToStart();
+        }
+        checkControlVisibility();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        track.clear();
+      });
+
+      // Capture touch/click canvas placement positions
+      function handlePointerInput(clientX, clientY) {
+        if (!isBuilderMode) {
+          if (!car.alive) resetCarToStart();
+          return;
+        }
+        track.addPoint(clientX, clientY);
+      }
+
+      window.addEventListener("click", (e) => {
+        if (
+          e.target.tagName === "BUTTON" ||
+          e.target.classList.contains("touch-btn")
+        )
+          return;
+        handlePointerInput(e.clientX, e.clientY);
+      });
+
+      window.addEventListener("touchstart", (e) => {
+        if (
+          e.target.tagName === "BUTTON" ||
+          e.target.classList.contains("touch-btn")
+        )
+          return;
+        const touch = e.touches[0];
+        handlePointerInput(touch.clientX, touch.clientY);
+      });
+
+      // --- SYSTEM LOOP RUNNER ---
+      function runGame() {
+        ctx.fillStyle = "#1e1e1e";
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        track.draw();
+        car.update(track);
+        car.draw();
+
+        // HUD Overlays
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 16px 'Segoe UI'";
+
+        if (isBuilderMode) {
+          ctx.fillText("BUILDER MODE", 25, 40);
+          ctx.fillStyle = "#f1c40f";
+          ctx.font = "14px 'Segoe UI'";
+          ctx.fillText(
+            "👉 Tap screen to add points. Tap green start point to CLOSE loop.",
+            25,
+            65,
+          );
+        } else {
+          ctx.fillText("SANDBOX RACE MODE", 25, 40);
+          if (!car.alive) {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.fillStyle = "#e74c3c";
+            ctx.font = "bold 32px 'Segoe UI'";
+            ctx.textAlign = "center";
+            ctx.fillText("CRASHED", WIDTH / 2, HEIGHT / 2);
+            ctx.fillStyle = "#fff";
+            ctx.font = "16px 'Segoe UI'";
+            ctx.fillText(
+              "Tap screen anywhere to retry your track",
+              WIDTH / 2,
+              HEIGHT / 2 + 35,
+            );
+            ctx.textAlign = "left";
+          }
+        }
+
+        gameLoopId = requestAnimationFrame(runGame);
+      }
+
+      // --- KEY EVENT CAPTURING ---
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a")
+          keys.Left = true;
+        if (e.key === "ArrowRight" || e.key.toLowerCase() === "d")
+          keys.Right = true;
+        if (e.key === " " && !car.alive) resetCarToStart();
+      });
+      window.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a")
+          keys.Left = false;
+        if (e.key === "ArrowRight" || e.key.toLowerCase() === "d")
+          keys.Right = false;
+      });
+
+      const btnLeft = document.getElementById("btn-left");
+      const btnRight = document.getElementById("btn-right");
+      btnLeft.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        keys.Left = true;
+      });
+      btnLeft.addEventListener("touchend", () => (keys.Left = false));
+      btnRight.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        keys.Right = true;
+      });
+      btnRight.addEventListener("touchend", () => (keys.Right = false));
+
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        resetCarToStart();
+      });
+
+      // Initial Boot
+      resizeCanvas();
+      resetCarToStart();
+      runGame();
+    </script>
+  </body>
+</html>
