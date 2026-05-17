@@ -49,7 +49,6 @@
         transition: opacity 0.3s ease;
       }
 
-      /* Dramatic Countdown Overlay */
       #countdown-overlay {
         position: fixed;
         inset: 0;
@@ -91,7 +90,7 @@
 
       h1 {
         font-size: 3rem;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         background: linear-gradient(45deg, #ff8c00, #ffea00);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -99,12 +98,58 @@
       }
 
       p {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: #aaa;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
       }
 
-      button {
+      /* Difficulty Toggle Controls */
+      .difficulty-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .diff-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        color: #aaa;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: none;
+        transition: all 0.2s ease;
+      }
+
+      .diff-btn:hover {
+        transform: scale(1.05);
+        color: white;
+      }
+
+      .diff-btn.active[data-diff="easy"] {
+        background: #00ff88;
+        color: #052e16;
+        border-color: #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+      }
+
+      .diff-btn.active[data-diff="medium"] {
+        background: #00d4ff;
+        color: #002b36;
+        border-color: #00d4ff;
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+      }
+
+      .diff-btn.active[data-diff="hard"] {
+        background: #ff3b3b;
+        color: #fff;
+        border-color: #ff3b3b;
+        box-shadow: 0 0 15px rgba(255, 59, 59, 0.4);
+      }
+
+      button.start-btn {
         padding: 16px 36px;
         border: none;
         border-radius: 30px;
@@ -119,19 +164,19 @@
           box-shadow 0.1s;
       }
 
-      button:hover {
+      button.start-btn:hover {
         transform: scale(1.05);
         box-shadow: 0 8px 25px rgba(255, 85, 0, 0.6);
       }
 
-      button:active {
+      button.start-btn:active {
         transform: scale(0.95);
       }
 
       .skins {
         display: flex;
         gap: 15px;
-        margin: 25px;
+        margin: 20px;
       }
 
       .skin {
@@ -160,12 +205,12 @@
 
   <body>
     <div class="hud">
-      Score: <span id="score">0</span> | Global High:
+      Score: <span id="score">0</span> | Mode:
+      <span id="mode-hud" style="color: #ff9900">Easy</span> | Global High:
       <span id="high">Loading...</span> | Power:
       <span id="power" style="color: #00ffff">None</span>
     </div>
 
-    <!-- Countdown Structure -->
     <div id="countdown-overlay"></div>
 
     <canvas id="game"></canvas>
@@ -174,6 +219,31 @@
       <div id="menu-content">
         <h1>🏀 Flappy Basketball 2.0</h1>
         <p>Press <b>Spacebar</b> or <b>Tap Screen</b> to bounce</p>
+
+        <!-- Difficulty Configuration Settings -->
+        <div class="difficulty-container">
+          <button
+            class="diff-btn active"
+            data-diff="easy"
+            onclick="setDifficulty('easy')"
+          >
+            Easy
+          </button>
+          <button
+            class="diff-btn"
+            data-diff="medium"
+            onclick="setDifficulty('medium')"
+          >
+            Medium
+          </button>
+          <button
+            class="diff-btn"
+            data-diff="hard"
+            onclick="setDifficulty('hard')"
+          >
+            Hard
+          </button>
+        </div>
 
         <div class="skins">
           <div
@@ -198,7 +268,9 @@
           ></div>
         </div>
 
-        <button onclick="triggerCountdown()">Start Game</button>
+        <button class="start-btn" onclick="triggerCountdown()">
+          Start Game
+        </button>
       </div>
     </div>
 
@@ -266,6 +338,58 @@
         } catch (e) {}
       }
 
+      // DIFFICULTY CONFIGURATION MATRIX
+      let currentDifficulty = "easy";
+      const difficultySettings = {
+        easy: {
+          gravityNormal: 0.32,
+          jumpStrength: -6.5,
+          baseSpeed: 2.8,
+          gapSize: 240,
+          spawnRateNormal: 90,
+          movingObstacles: false,
+          label: "Easy",
+        },
+        medium: {
+          gravityNormal: 0.38,
+          jumpStrength: -7.0,
+          baseSpeed: 3.4,
+          gapSize: 195,
+          spawnRateNormal: 80,
+          movingObstacles: true,
+          label: "Medium",
+        },
+        hard: {
+          gravityNormal: 0.44, // Original gravity settings
+          jumpStrength: -7.5, // Original jump speed
+          baseSpeed: 4.0, // Original movement speed
+          gapSize: 165, // Original strict gap
+          spawnRateNormal: 70, // Original generation clock
+          movingObstacles: true,
+          label: "Hard",
+        },
+      };
+
+      function setDifficulty(diff) {
+        currentDifficulty = diff;
+        beep(350, 0.08, "triangle");
+
+        // Synchronize button rendering active states
+        document.querySelectorAll(".diff-btn").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.dataset.diff === diff) btn.classList.add("active");
+        });
+
+        document.getElementById("mode-hud").innerText =
+          difficultySettings[diff].label;
+        const colorMap = {
+          easy: "#00ff88",
+          medium: "#00d4ff",
+          hard: "#ff3b3b",
+        };
+        document.getElementById("mode-hud").style.color = colorMap[diff];
+      }
+
       // GAME OBJECTS
       let ball,
         hoops,
@@ -282,16 +406,19 @@
       let animationFrameId;
       let ballRotation = 0;
 
-      document.querySelectorAll(".skin").forEach((s) => {
-        s.onclick = () => {
-          document
-            .querySelectorAll(".skin")
-            .forEach((sk) => sk.classList.remove("active"));
-          s.classList.add("active");
-          skinColor = s.dataset.color;
-          beep(400, 0.05);
-        };
-      });
+      function bindSkinClicks() {
+        document.querySelectorAll(".skin").forEach((s) => {
+          s.onclick = () => {
+            document
+              .querySelectorAll(".skin")
+              .forEach((sk) => sk.classList.remove("active"));
+            s.classList.add("active");
+            skinColor = s.dataset.color;
+            beep(400, 0.05);
+          };
+        });
+      }
+      bindSkinClicks();
 
       function reset() {
         ball = { x: W * 0.25, y: H * 0.5, r: 18 };
@@ -299,15 +426,19 @@
         particles = [];
         score = 0;
         velocity = 0;
-        gravity = 0.4;
+
+        // Inject baseline configurations tailored by active level choice
+        const settings = difficultySettings[currentDifficulty];
+        gravity = settings.gravityNormal;
+
         powerObj = null;
         slowMoTimer = 0;
         spawnInterval = 0;
         ballRotation = 0;
         document.getElementById("score").innerText = score;
+        document.getElementById("mode-hud").innerText = settings.label;
       }
 
-      // 3-2-1 Dramatic Pause Sequence
       function triggerCountdown() {
         if (countingDown) return;
         countingDown = true;
@@ -324,7 +455,6 @@
             el.innerText = counts[step];
             el.style.color = counts[step] === "GO!" ? "#00ffcc" : "#ff8c00";
 
-            // Audio beeps match countdown progression safely
             if (counts[step] === "GO!") {
               beep(880, 0.3, "triangle");
             } else {
@@ -332,15 +462,15 @@
             }
 
             el.classList.remove("count-animate");
-            void el.offsetWidth; // Force CSS Dom reflow trigger
+            void el.offsetWidth;
             el.classList.add("count-animate");
 
             step++;
-            setTimeout(nextCount, 1000); // 1-second clean separation
+            setTimeout(nextCount, 1000);
           } else {
             countingDown = false;
             running = true;
-            update(); // Unpause physics loop engine
+            update();
           }
         }
         nextCount();
@@ -348,10 +478,11 @@
 
       function jump() {
         if (!running || countingDown) return;
-        velocity = -7.5;
+
+        const settings = difficultySettings[currentDifficulty];
+        velocity = settings.jumpStrength;
         beep(580, 0.07, "triangle");
 
-        // Spawn energetic burst particles downwards
         for (let i = 0; i < 6; i++) {
           particles.push({
             x: ball.x,
@@ -401,11 +532,9 @@
 
         ctx.clearRect(0, 0, W, H);
 
-        // Cyber Grid space backdrop
         ctx.fillStyle = "#0c0c1a";
         ctx.fillRect(0, 0, W, H);
 
-        // Render stylized decorative neon line track context
         ctx.strokeStyle = "rgba(255,255,255,0.03)";
         ctx.lineWidth = 2;
         for (let i = 0; i < W; i += 60) {
@@ -415,16 +544,18 @@
           ctx.stroke();
         }
 
-        let gameSpeed = 4;
+        const settings = difficultySettings[currentDifficulty];
+        let gameSpeed = settings.baseSpeed;
+
         if (slowMoTimer > 0) {
-          gravity = 0.18;
-          gameSpeed = 2.0;
+          gravity = settings.gravityNormal * 0.45; // Dynamically scale tracking weights
+          gameSpeed = settings.baseSpeed * 0.5;
           slowMoTimer--;
           document.getElementById("power").innerText =
             `SlowMo (${Math.ceil(slowMoTimer / 60)}s)`;
           document.getElementById("power").style.color = "#00ffff";
         } else {
-          gravity = 0.44;
+          gravity = settings.gravityNormal;
           document.getElementById("power").innerText = "None";
           document.getElementById("power").style.color = "#ffffff";
         }
@@ -433,7 +564,6 @@
         ball.y += velocity;
         ballRotation += 0.05;
 
-        // Passive Trail Spawning Engine
         if (Math.random() > 0.3) {
           particles.push({
             x: ball.x - 5,
@@ -446,7 +576,6 @@
           });
         }
 
-        // Render Particle Buffers
         for (let i = particles.length - 1; i >= 0; i--) {
           let p = particles[i];
           p.x += p.vx;
@@ -462,9 +591,8 @@
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
           ctx.fill();
         }
-        ctx.globalAlpha = 1.0; // Reset canvas transparency states
+        ctx.globalAlpha = 1.0;
 
-        // Render Basketball Player Canvas Matrix
         ctx.save();
         ctx.translate(ball.x, ball.y);
         ctx.rotate(ballRotation);
@@ -474,11 +602,11 @@
         ctx.beginPath();
         ctx.arc(0, 0, ball.r, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0; // Turn off shadows for details
+        ctx.shadowBlur = 0;
         ctx.strokeStyle = "#111";
         ctx.lineWidth = 2;
         ctx.stroke();
-        // Basketball Seam Art curves
+
         ctx.beginPath();
         ctx.arc(0, 0, ball.r, Math.PI * 0.25, Math.PI * 0.75);
         ctx.stroke();
@@ -491,18 +619,24 @@
         ctx.stroke();
         ctx.restore();
 
-        // Object generation clocks
         spawnInterval++;
-        let spawnRate = slowMoTimer > 0 ? 120 : 70;
+        let spawnRate =
+          slowMoTimer > 0
+            ? settings.spawnRateNormal * 1.7
+            : settings.spawnRateNormal;
         if (spawnInterval >= spawnRate) {
-          const gapY = Math.random() * (H - 320) + 160;
+          const gapY = Math.random() * (H - 350) + 175;
+
+          // Only move hoops vertically if difficulty config permits it
+          const canMove = settings.movingObstacles && Math.random() > 0.4;
+
           hoops.push({
             x: W + 100,
             y: gapY,
-            gap: 165,
+            gap: settings.gapSize,
             w: 75,
             passed: false,
-            move: Math.random() > 0.4,
+            move: canMove,
             seed: Math.random() * 50,
           });
           spawnInterval = 0;
@@ -516,25 +650,21 @@
           }
         }
 
-        // Processing Pipe Columns
         for (let i = hoops.length - 1; i >= 0; i--) {
           let h = hoops[i];
           h.x -= gameSpeed;
 
           if (h.move) h.y += Math.sin((Date.now() + h.seed * 10) / 250) * 1.8;
 
-          // Modernized Neon Glowing pillars
           ctx.fillStyle = "rgba(22, 22, 45, 0.9)";
           ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
           ctx.lineWidth = 2;
 
-          // Render structures
           ctx.fillRect(h.x, 0, h.w, h.y - h.gap / 2);
           ctx.strokeRect(h.x, -5, h.w, h.y - h.gap / 2 + 5);
           ctx.fillRect(h.x, h.y + h.gap / 2, h.w, H - (h.y + h.gap / 2));
           ctx.strokeRect(h.x, h.y + h.gap / 2, h.w, H - (h.y + h.gap / 2) + 5);
 
-          // Orange rim indicators
           ctx.fillStyle = "#ff6a00";
           ctx.fillRect(h.x - 8, h.y - h.gap / 2 - 10, h.w + 16, 10);
           ctx.fillRect(h.x - 8, h.y + h.gap / 2, h.w + 16, 10);
@@ -553,7 +683,6 @@
           if (h.x + h.w < -20) hoops.splice(i, 1);
         }
 
-        // Floating Diamond Tokens (SlowMo Buffs)
         if (powerObj) {
           powerObj.x -= gameSpeed;
           ctx.save();
@@ -596,8 +725,15 @@
         document.getElementById("menu-content").innerHTML = `
           <h1>Game Over 🏀</h1>
           <p style="font-size: 1.6rem; color: #ff8c00; font-weight: bold; margin: 5px 0;">Score: ${score}</p>
-          <p style="font-size: 1rem; margin-bottom: 20px;">Global Leaderboard Record: ${globalHighScore}</p>
+          <p style="font-size: 1rem; margin-bottom: 15px;">Global Leaderboard Record: ${globalHighScore}</p>
           
+          <!-- Difficulty Configuration settings inside Game Over menu wrapper -->
+          <div class="difficulty-container">
+            <button class="diff-btn ${currentDifficulty === "easy" ? "active" : ""}" data-diff="easy" onclick="setDifficulty('easy')">Easy</button>
+            <button class="diff-btn ${currentDifficulty === "medium" ? "active" : ""}" data-diff="medium" onclick="setDifficulty('medium')">Medium</button>
+            <button class="diff-btn ${currentDifficulty === "hard" ? "active" : ""}" data-diff="hard" onclick="setDifficulty('hard')">Hard</button>
+          </div>
+
           <div class="skins">
             <div class="skin ${skinColor === "#ff8c00" ? "active" : ""}" style="background: #ff8c00; color: #ff8c00;" data-color="#ff8c00"></div>
             <div class="skin ${skinColor === "#00d4ff" ? "active" : ""}" style="background: #00d4ff; color: #00d4ff;" data-color="#00d4ff"></div>
@@ -605,19 +741,12 @@
             <div class="skin ${skinColor === "#a855f7" ? "active" : ""}" style="background: #a855f7; color: #a855f7;" data-color="#a855f7"></div>
           </div>
           
-          <button onclick="triggerCountdown()">Play Again</button>
+          <button class="start-btn" onclick="triggerCountdown()">Play Again</button>
         `;
 
-        document.querySelectorAll(".skin").forEach((s) => {
-          s.onclick = () => {
-            document
-              .querySelectorAll(".skin")
-              .forEach((sk) => sk.classList.remove("active"));
-            s.classList.add("active");
-            skinColor = s.dataset.color;
-            beep(400, 0.05);
-          };
-        });
+        bindSkinClicks();
+        // Force sync styling elements on HUD refresh loop states
+        setDifficulty(currentDifficulty);
       }
     </script>
   </body>
