@@ -2,554 +2,462 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Step-by-Step BMI Calculator</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Nisha Projects Hub</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       * {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
 
       body {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Inter", sans-serif;
-        color: #f8fafc;
-        line-height: 1.5;
-
-        /* Your exact premium radial gradient background design */
+        font-family: Inter, sans-serif;
+        color: #fff;
         background:
           radial-gradient(
-            circle at left center,
-            rgba(34, 197, 94, 0.22),
-            transparent 42%
+            circle at left,
+            rgba(34, 197, 94, 0.16),
+            transparent 35%
           ),
           radial-gradient(
-            circle at right center,
-            rgba(56, 189, 248, 0.2),
-            transparent 42%
+            circle at right,
+            rgba(56, 189, 248, 0.16),
+            transparent 35%
           ),
-          radial-gradient(circle at center, #050505, #020617, #01030a);
-        background-attachment: fixed;
-        padding: 20px;
+          linear-gradient(135deg, #020617, #07111f, #01030a);
+        min-height: 100vh;
       }
 
-      .calculator-card {
-        background: rgba(15, 23, 42, 0.45);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
+      .wrap7777 {
+        max-width: 100vw;
+        margin: auto;
+        padding: 40px 18px;
+      }
+
+      .top7777 {
+        color: #38bdf8;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .title7777 {
+        font-size: 52px;
+        font-weight: 800;
+        margin-bottom: 26px;
+        color: #fff;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+      }
+
+      .filters7777 {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+      }
+
+      .btn7777 {
+        border: none;
+        cursor: pointer;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: #fff;
+        background: #111827;
+        transition: 0.25s;
+      }
+
+      .btn7777:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+      }
+
+      .active7777 {
+        background: linear-gradient(135deg, #38bdf8, #22c55e);
+        color: #00111a;
+      }
+
+      .grid7777 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+
+      .card7777 {
+        background: rgba(15, 23, 42, 0.88);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 24px;
+        padding: 18px;
+        transition: 0.28s;
+      }
+
+      .card7777:hover {
+        transform: translateY(-8px);
+        border-color: rgba(56, 189, 248, 0.45);
+        box-shadow:
+          0 0 20px rgba(56, 189, 248, 0.15),
+          0 15px 35px rgba(0, 0, 0, 0.45);
+      }
+
+      .thumb7777 {
         width: 100%;
-        max-width: 440px;
-        padding: 30px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        position: relative;
+        height: 185px;
+        border-radius: 16px;
         overflow: hidden;
+        margin-bottom: 14px;
       }
 
-      h1 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        text-align: center;
-        background: linear-gradient(45deg, #38bdf8, #22c55e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -0.5px;
-      }
-
-      .steps-indicator {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 25px;
-      }
-
-      .step-dot {
-        width: 24px;
-        height: 6px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 9999px;
-        transition: all 0.3s ease;
-      }
-
-      .step-dot.active {
-        background: #22c55e;
-        width: 32px;
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
-      }
-
-      .step-view {
-        display: none;
-      }
-
-      .step-view.active {
-        display: block;
-        animation: fadeIn 0.3s ease-out forwards;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .section-title {
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #e2e8f0;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      .input-row-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 25px;
-      }
-
-      .dual-columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-
-      .input-group {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        padding: 14px;
-        border-radius: 14px;
-      }
-
-      .label-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 10px;
-      }
-
-      .label-row label {
-        font-size: 0.85rem;
-        color: #94a3b8;
-        font-weight: 500;
-      }
-
-      .value-display {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #38bdf8;
-      }
-
-      .value-display span {
-        font-size: 0.85rem;
-        color: #64748b;
-        margin-left: 2px;
-        font-weight: 500;
-      }
-
-      .slider {
-        -webkit-appearance: none;
+      .thumb7777 img {
         width: 100%;
-        height: 6px;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.08);
-        outline: none;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.35s;
       }
 
-      .slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: #22c55e;
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-        transition: transform 0.1s;
+      .card7777:hover img {
+        transform: scale(1.05);
       }
 
-      .slider::-webkit-slider-thumb:hover {
-        transform: scale(1.3);
+      .card7777 h3 {
+        font-size: 22px;
+        margin-bottom: 8px;
       }
 
-      .slider::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        border: none;
-        border-radius: 50%;
-        background: #22c55e;
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-        transition: transform 0.1s;
-      }
-
-      .slider::-moz-range-thumb:hover {
-        transform: scale(1.3);
-      }
-
-      .btn-container {
-        display: flex;
-        gap: 12px;
-        margin-top: 20px;
-      }
-
-      .action-btn {
-        flex: 1;
-        padding: 14px;
-        border: none;
-        border-radius: 14px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-align: center;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, #22c55e, #15803d);
-        color: #ffffff;
-        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.25);
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
-      }
-
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.06);
+      .card7777 p {
+        font-size: 14px;
         color: #94a3b8;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        min-height: 42px;
       }
 
-      .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #f8fafc;
-      }
-
-      .result-section {
-        text-align: center;
-        padding: 10px 0;
-      }
-
-      .bmi-score {
-        font-size: 4.2rem;
-        font-weight: 800;
-        line-height: 1;
-        margin-bottom: 12px;
-        color: #f8fafc;
-      }
-
-      .bmi-status {
+      .tag7777 {
         display: inline-block;
-        padding: 6px 18px;
-        border-radius: 9999px;
-        font-size: 0.85rem;
+        margin-top: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 12px;
         font-weight: 700;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 20px;
+        background: #111827;
+        color: #7dd3fc;
       }
 
-      .status-underweight {
-        background: rgba(56, 189, 248, 0.12);
-        color: #38bdf8;
+      .footer7777 {
+        text-align: center;
+        margin-top: 45px;
+        color: #94a3b8;
+        font-size: 14px;
+        padding-bottom: 30px;
       }
-      .status-normal {
-        background: rgba(34, 197, 94, 0.12);
-        color: #22c55e;
+
+      @media (max-width: 980px) {
+        .grid7777 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .title7777 {
+          font-size: 42px;
+        }
       }
-      .status-overweight {
-        background: rgba(234, 179, 8, 0.12);
-        color: #eab308;
-      }
-      .status-obese {
-        background: rgba(239, 68, 68, 0.12);
-        color: #ef4444;
+
+      @media (max-width: 680px) {
+        .grid7777 {
+          grid-template-columns: 1fr;
+        }
+        .title7777 {
+          font-size: 32px;
+        }
+        .btn7777 {
+          padding: 10px 14px;
+          font-size: 13px;
+        }
       }
     </style>
   </head>
+
   <body>
-    <div class="calculator-card">
-      <h1>BMI Calculator</h1>
+    <script src="js/loadhtml.js"></script>
+    <div id="navbar-placeholder"></div>
+    <script>
+      loadHTML("navbar-placeholder", "navbar.html");
+    </script>
 
-      <!-- Top Step Pagination Tracker -->
-      <div class="steps-indicator">
-        <div class="step-dot active" id="dot-1"></div>
-        <div class="step-dot" id="dot-2"></div>
-        <div class="step-dot" id="dot-3"></div>
+    <div class="wrap7777">
+      <div class="top7777">projects.run()</div>
+      <h1 class="title7777">My Projects Hub</h1>
+
+      <div class="filters7777">
+        <button class="btn7777 active7777" onclick="filter7777('all', this)">
+          ALL
+        </button>
+        <button class="btn7777" onclick="filter7777('game', this)">
+          GAMES
+        </button>
+        <button class="btn7777" onclick="filter7777('health', this)">
+          HEALTH
+        </button>
+        <button class="btn7777" onclick="filter7777('tool', this)">
+          TOOLS
+        </button>
+        <button class="btn7777" onclick="filter7777('pdf', this)">PDF</button>
       </div>
 
-      <!-- STAGE 1: WEIGHT SYSTEM INPUTS FIRST -->
-      <div class="step-view active" id="step-1">
-        <div class="section-title">1. Put Your Weight</div>
-        <div class="input-row-grid">
-          <!-- Weight Imperial (Lbs) -->
-          <div class="input-group">
-            <div class="label-row">
-              <label for="weight-lbs">Pounds</label>
-              <div class="value-display">
-                <span id="val-lbs">132</span><span>lbs</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              id="weight-lbs"
-              class="slider"
-              min="50"
-              max="400"
-              value="132"
-              oninput="syncFromLbs()"
-            />
-          </div>
-
-          <!-- Weight Metric (Kg) -->
-          <div class="input-group">
-            <div class="label-row">
-              <label for="weight-kg">Kilograms</label>
-              <div class="value-display">
-                <span id="val-kg">60</span><span>kg</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              id="weight-kg"
-              class="slider"
-              min="20"
-              max="180"
-              value="60"
-              oninput="syncFromKg()"
-            />
-          </div>
+      <div class="grid7777" id="grid7777">
+        <!-- TOOLS -->
+        <div class="card7777" data-cat="tool" data-date="37">
+          <a href="qr.html">
+            <div class="thumb7777"><img src="images/qr.jpg" /></div>
+            <h3>QR Generator</h3>
+            <p>Create payment QR instantly.</p>
+            <span class="tag7777">Tool</span></a
+          >
+        </div>
+        <!-- GAMES -->
+        <div class="card7777" data-cat="game" data-date="36">
+          <a href="flappy.html">
+            <div class="thumb7777"><img src="images/flappy.png" /></div>
+            <h3>Flappy Basketball</h3>
+            <p>Control the ball and avoid obstacles.</p>
+            <span class="tag7777">Game</span></a
+          >
+        </div>
+        <div class="card7777" data-cat="game" data-date="35">
+          <a href="aalucross.html">
+            <div class="thumb7777"><img src="images/tiktaktoe.png" /></div>
+            <h3>Tic Tac Toe</h3>
+            <p>Classic neon board battle.</p>
+            <span class="tag7777">Game</span></a
+          >
         </div>
 
-        <div class="btn-container">
-          <button class="action-btn btn-primary" onclick="navigateToStep(2)">
-            Next: Height &rarr;
-          </button>
+        <div class="card7777" data-cat="game" data-date="34">
+          <a href="runnerdash.html">
+            <div class="thumb7777"><img src="images/runner.jpg" /></div>
+            <h3>Runner Dash</h3>
+            <p>Jump and survive endless mode.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="28">
+          <a href="rock_paper_scissors.html">
+            <div class="thumb7777"><img src="images/rockpaper.png" /></div>
+            <h3>Rock Paper Scissors</h3>
+            <p>Beat the CPU instantly.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="32">
+          <a href="snake.html">
+            <div class="thumb7777"><img src="images/snake.png" /></div>
+            <h3>Snake Game</h3>
+            <p>Arcade snake with speed levels.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="31">
+          <a href="2048game.html">
+            <div class="thumb7777"><img src="images/2048.jpg" /></div>
+            <h3>2048 Puzzle</h3>
+            <p>Merge blocks to 2048.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+        <div class="card7777" data-cat="game" data-date="30">
+          <a href="wordleeefrojs.html">
+            <div class="thumb7777">
+              <img src="images/wordle.jpg" alt="Wordle Game" />
+            </div>
+
+            <h3>Wordle Pro</h3>
+            <p>Guess the hidden 5-letter word in 6 tries.</p>
+
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="33">
+          <a href="typer.html">
+            <div class="thumb7777"><img src="images/typer.jpg" /></div>
+            <h3>SpeedType</h3>
+            <p>Check your typing speed and accuracy.</p>
+          </a>
+        </div>
+
+        <div class="card7777" data-cat="game" data-date="29">
+          <a href="memoryflip.html">
+            <div class="thumb7777"><img src="images/memory.jpg" /></div>
+            <h3>Memory Flip</h3>
+            <p>Train memory with cards.</p>
+            <span class="tag7777">Game</span>
+          </a>
+        </div>
+
+        <!-- HEALTH -->
+        <div class="card7777" data-cat="health" data-date="27">
+          <a href="bmi.html" class="bmi">
+            <div class="thumb7777"><img src="images/bmi.jpg" /></div>
+            <h3>BMI Calculator</h3>
+            <p>Check body mass instantly.</p>
+            <span class="tag7777">Health</span></a
+          >
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="26">
+          <div class="thumb7777"><img src="images/health.jpg" /></div>
+          <h3>Health Predictor</h3>
+          <p>AI based health estimate.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="25">
+          <div class="thumb7777"><img src="images/water.jpg" /></div>
+          <h3>Water Tracker</h3>
+          <p>Daily hydration reminder.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="24">
+          <div class="thumb7777"><img src="images/calorie.jpg" /></div>
+          <h3>Calorie Calculator</h3>
+          <p>Daily calorie estimate tool.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="23">
+          <div class="thumb7777"><img src="images/step.jpg" /></div>
+          <h3>Step Goal Planner</h3>
+          <p>Track your walking goals.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="health" data-date="22">
+          <div class="thumb7777"><img src="images/sleep.jpg" /></div>
+          <h3>Sleep Timer</h3>
+          <p>Better bedtime schedule planner.</p>
+          <span class="tag7777">Health</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="20">
+          <div class="thumb7777"><img src="images/date.jpg" /></div>
+          <h3>Nepali Date Converter</h3>
+          <p>BS to AD / AD to BS.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="19">
+          <div class="thumb7777"><img src="images/unit.jpg" /></div>
+          <h3>Unit Converter</h3>
+          <p>Length, weight and speed.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="18">
+          <div class="thumb7777"><img src="images/password.jpg" /></div>
+          <h3>Password Generator</h3>
+          <p>Create secure passwords.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="17">
+          <div class="thumb7777"><img src="images/interest.jpg" /></div>
+          <h3>Interest Calculator</h3>
+          <p>Simple & compound interest.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <div class="card7777" data-cat="tool" data-date="16">
+          <div class="thumb7777"><img src="images/todo.jpg" /></div>
+          <h3>Todo Planner</h3>
+          <p>Organize daily tasks fast.</p>
+          <span class="tag7777">Tool</span>
+        </div>
+
+        <!-- PDF -->
+        <div class="card7777" data-cat="pdf" data-date="15">
+          <div class="thumb7777"><img src="images/pdf1.jpg" /></div>
+          <h3>Docs to PDF</h3>
+          <p>Convert docs into PDF file.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="14">
+          <div class="thumb7777"><img src="images/pdf2.jpg" /></div>
+          <h3>Merge PDF</h3>
+          <p>Combine many PDFs.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="13">
+          <div class="thumb7777"><img src="images/pdf3.jpg" /></div>
+          <h3>Split PDF</h3>
+          <p>Extract selected pages.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="12">
+          <div class="thumb7777"><img src="images/pdf4.jpg" /></div>
+          <h3>Compress PDF</h3>
+          <p>Reduce PDF size quickly.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="11">
+          <div class="thumb7777"><img src="images/pdf5.jpg" /></div>
+          <h3>Image to PDF</h3>
+          <p>Convert photos to PDF.</p>
+          <span class="tag7777">PDF</span>
+        </div>
+
+        <div class="card7777" data-cat="pdf" data-date="10">
+          <div class="thumb7777"><img src="images/pdf6.jpg" /></div>
+          <h3>PDF Lock</h3>
+          <p>Add password security.</p>
+          <span class="tag7777">PDF</span>
         </div>
       </div>
 
-      <!-- STAGE 2: HEIGHT SYSTEM INPUTS SECOND -->
-      <div class="step-view" id="step-2">
-        <div class="section-title">2. Put Your Height</div>
-        <div class="input-row-grid">
-          <!-- Imperial Height Options (Ft / In) -->
-          <div class="dual-columns">
-            <div class="input-group">
-              <div class="label-row">
-                <label for="height-ft">Feet</label>
-                <div class="value-display">
-                  <span id="val-ft">5</span><span>ft</span>
-                </div>
-              </div>
-              <input
-                type="range"
-                id="height-ft"
-                class="slider"
-                min="3"
-                max="7"
-                value="5"
-                oninput="syncFromImperialHeight()"
-              />
-            </div>
-            <div class="input-group">
-              <div class="label-row">
-                <label for="height-in">Inches</label>
-                <div class="value-display">
-                  <span id="val-in">5</span><span>in</span>
-                </div>
-              </div>
-              <input
-                type="range"
-                id="height-in"
-                class="slider"
-                min="0"
-                max="11"
-                value="5"
-                oninput="syncFromImperialHeight()"
-              />
-            </div>
-          </div>
-
-          <!-- Metric Height Option (CM) -->
-          <div class="input-group">
-            <div class="label-row">
-              <label for="height-cm">Centimeters</label>
-              <div class="value-display">
-                <span id="val-cm">165</span><span>cm</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              id="height-cm"
-              class="slider"
-              min="90"
-              max="240"
-              value="165"
-              oninput="syncFromMetricHeight()"
-            />
-          </div>
-        </div>
-
-        <div class="btn-container">
-          <button class="action-btn btn-secondary" onclick="navigateToStep(1)">
-            &larr; Back
-          </button>
-          <button class="action-btn btn-primary" onclick="processFinalBMI()">
-            Calculate BMI
-          </button>
-        </div>
-      </div>
-
-      <!-- STAGE 3: OUTPUT RESULT CARD DISPLAY -->
-      <div class="step-view" id="step-3">
-        <div class="section-title">Your Result</div>
-        <div class="result-section">
-          <div class="bmi-score" id="bmi-val">22.0</div>
-          <div class="bmi-status status-normal" id="bmi-status">
-            Normal Weight
-          </div>
-        </div>
-
-        <div class="btn-container">
-          <button class="action-btn btn-secondary" onclick="navigateToStep(2)">
-            Edit Info
-          </button>
-        </div>
-      </div>
+      <div class="footer7777">© 2026 Nisha Kiran Gnawaly</div>
     </div>
 
     <script>
-      // Universal state values
-      let globalHeightCm = 165;
-      let globalWeightKg = 60;
+      function filter7777(cat, btn) {
+        document.querySelectorAll(".btn7777").forEach((b) => {
+          b.classList.remove("active7777");
+        });
 
-      // Converts CM into clean Feet + Inches values
-      function cmToFtIn(cm) {
-        const realInches = cm / 2.54;
-        const ft = Math.floor(realInches / 12);
-        const inch = Math.round(realInches % 12);
-        if (inch === 12) {
-          return { ft: ft + 1, inch: 0 };
-        }
-        return { ft: ft, inch: inch };
-      }
+        btn.classList.add("active7777");
 
-      // Wizard Panels Navigation Engine
-      function navigateToStep(stepNumber) {
-        document
-          .querySelectorAll(".step-view")
-          .forEach((view) => view.classList.remove("active"));
-        document.getElementById(`step-${stepNumber}`).classList.add("active");
+        const cards = [...document.querySelectorAll(".card7777")];
 
-        document
-          .querySelectorAll(".step-dot")
-          .forEach((dot) => dot.classList.remove("active"));
-        document.getElementById(`dot-${stepNumber}`).classList.add("active");
-      }
-
-      // Real-time synchronization functions
-      function syncFromImperialHeight() {
-        const ft = parseInt(document.getElementById("height-ft").value);
-        const inch = parseInt(document.getElementById("height-in").value);
-
-        const totalInches = ft * 12 + inch;
-        globalHeightCm = totalInches * 2.54;
-
-        document.getElementById("height-cm").value = Math.round(globalHeightCm);
-        updateUIStrings();
-      }
-
-      function syncFromMetricHeight() {
-        globalHeightCm = parseFloat(document.getElementById("height-cm").value);
-
-        const converted = cmToFtIn(globalHeightCm);
-        document.getElementById("height-ft").value = converted.ft;
-        document.getElementById("height-in").value = converted.inch;
-        updateUIStrings();
-      }
-
-      function syncFromLbs() {
-        const lbs = parseFloat(document.getElementById("weight-lbs").value);
-        globalWeightKg = lbs / 2.20462;
-
-        document.getElementById("weight-kg").value = Math.round(globalWeightKg);
-        updateUIStrings();
-      }
-
-      function syncFromKg() {
-        globalWeightKg = parseFloat(document.getElementById("weight-kg").value);
-
-        document.getElementById("weight-lbs").value = Math.round(
-          globalWeightKg * 2.20462,
-        );
-        updateUIStrings();
-      }
-
-      // Refresh display labels
-      function updateUIStrings() {
-        // Height Strings
-        document.getElementById("val-cm").innerText =
-          Math.round(globalHeightCm);
-        const convertedHeight = cmToFtIn(globalHeightCm);
-        document.getElementById("val-ft").innerText = convertedHeight.ft;
-        document.getElementById("val-in").innerText = convertedHeight.inch;
-
-        // Weight Strings
-        document.getElementById("val-kg").innerText =
-          Math.round(globalWeightKg);
-        document.getElementById("val-lbs").innerText = Math.round(
-          globalWeightKg * 2.20462,
-        );
-      }
-
-      // Calculate final metrics
-      function processFinalBMI() {
-        const meters = globalHeightCm / 100;
-        const bmi = globalWeightKg / (meters * meters);
-
-        const scoreDisplay = document.getElementById("bmi-val");
-        const statusDisplay = document.getElementById("bmi-status");
-
-        if (!isFinite(bmi) || bmi <= 0) {
-          scoreDisplay.innerText = "0.0";
-          statusDisplay.innerText = "Missing Info";
-          statusDisplay.className = "bmi-status status-normal";
-        } else {
-          scoreDisplay.innerText = bmi.toFixed(1);
-          statusDisplay.className = "bmi-status";
-
-          if (bmi < 18.5) {
-            statusDisplay.innerText = "Underweight";
-            statusDisplay.classList.add("status-underweight");
-          } else if (bmi >= 18.5 && bmi < 25) {
-            statusDisplay.innerText = "Normal Weight";
-            statusDisplay.classList.add("status-normal");
-          } else if (bmi >= 25 && bmi < 30) {
-            statusDisplay.innerText = "Overweight";
-            statusDisplay.classList.add("status-overweight");
+        cards.forEach((card) => {
+          if (cat === "all" || card.dataset.cat === cat) {
+            card.style.display = "block";
           } else {
-            statusDisplay.innerText = "Obese";
-            statusDisplay.classList.add("status-obese");
+            card.style.display = "none";
           }
-        }
+        });
 
-        navigateToStep(3);
+        sort7777();
       }
 
-      // Run calibration update on loading
-      updateUIStrings();
+      function sort7777() {
+        const grid = document.getElementById("grid7777");
+        const cards = [...document.querySelectorAll(".card7777")];
+
+        cards.sort((a, b) => {
+          return Number(b.dataset.date) - Number(a.dataset.date);
+        });
+
+        cards.forEach((card) => grid.appendChild(card));
+      }
+
+      sort7777();
     </script>
   </body>
 </html>
